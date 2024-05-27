@@ -1,0 +1,9 @@
+be/kuleuven/dsgt4/auth/WebSecurityConfig.class
+be/kuleuven/dsgt4/ViewController.class
+be/kuleuven/dsgt4/User.class
+be/kuleuven/dsgt4/auth/SecurityFilter$FirebaseAuthentication.class
+be/kuleuven/dsgt4/UserMessage.class
+be/kuleuven/dsgt4/auth/SecurityFilter.class
+be/kuleuven/dsgt4/Dsgt4Application.class
+Broker.class
+be/kuleuven/dsgt4/RequestController.class
