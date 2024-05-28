@@ -16,7 +16,7 @@ wireUpAuthChange();
 
 let token;
 
-//setup authentication with local or cloud configuration. 
+//setup authentication with local or cloud configuration.
 function setupAuth() {
   let firebaseConfig;
   if (location.hostname === "localhost") {
@@ -121,7 +121,7 @@ function wireUpAuthChange() {
 
       console.log("Token: " + idTokenResult.token);
 
-      //fetch data from server when authentication was successful. 
+      //fetch data from server when authentication was successful.
       token = idTokenResult.token;
     });
 
@@ -143,31 +143,40 @@ function showUnAuthenticated() {
   document.getElementById("contentdiv").style.display = "none";
 }
 
-function addContent() {
+function addContent(text) {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
     document.getElementById("contentdiv").innerHTML = (htmlContent);
 
     var available = document.getElementById("getAvailabilities");
         available.addEventListener("click", function () {
-        fetch('/broker/getAllAvailable', {
+        fetch(`/broker/getAllAvailable`, {
             headers: { Authorization: 'Bearer {token}'}
         })
         .then((response) => {
-            return response.json();
+            return response.text();
+        })
+        .then((text) => {
+            let new_text =
+            text + `
+            <div class="login-button" id='chooseSelection'>Choose Selected</div>`;
+            document.getElementById("contentdiv").innerHTML = new_text;
+
+            var select = document.getElementById("chooseSelection");
+                select.addEventListener("click", function () {
+                    const data = JSON.parse(text);
+                    fetch(`/broker/request/${data.bus[0].departure_time}/${data.bus[0].round_trip}/${data.bus[0].start_place}/${data.camping[0].type}/${data.ticket[0].type}`, {
+                        headers: { Authorization: 'Bearer {token}'}
+                    })
+                })
         })
         .then((data) => {
             console.log(data);
-            handlerBrokerResponse(data);
         })
         .catch(function (error) {
             console.log(error);
         });
     })
-}
-
-function handlerBrokerResponse(data) {
-
 }
 
 // calling /api/hello on the rest service to illustrate text based data retrieval

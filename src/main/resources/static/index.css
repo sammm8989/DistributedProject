@@ -72,12 +72,12 @@ img {
     margin-top: 4px;
     outline: none;
     overflow: hidden;
-    padding: 0 24px;
     position: relative;
     user-select: none;
     white-space: nowrap;
     width: 100%;
     vertical-align: middle;
+    width: 300px;
 }
 
 .signup-button {
@@ -87,6 +87,7 @@ img {
 .textfield {
     position: relative;
     margin: 45px 0;
+    width: 300px;
 }
 
 textarea {
@@ -96,9 +97,9 @@ textarea {
 input, textarea {
     background: none;
     font-size: 18px;
-    padding: 10px 10px 10px 5px;
+    padding: 10px 10px 10px 10px;
     display: block;
-    width: 320px;
+    width: 300px;
     border: none;
     border-radius: 0;
     border-bottom: 1px solid #777;
