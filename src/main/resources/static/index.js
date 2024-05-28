@@ -191,7 +191,9 @@ function addContent(text) {
             <option value="SUNDAY">SUNDAY</option>
         </select>
     </div>
-    <div class='login-button' id='btnAsk'>Ask</div>`;
+    <div class='login-button' id='btnAsk'>Ask</div>
+
+    <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
 
   document.getElementById("contentdiv").innerHTML = (htmlContent);
 
@@ -221,7 +223,20 @@ function addContent(text) {
     });
 
     })
-  }
+
+  var available = document.getElementById("getAvailabilities");
+  available.addEventListener("click", function () {
+    fetch(`/api/getAvailable`, {headers: { Authorization: `Bearer ${token}`}})
+    .then((data) => {
+        console.log(response.text())
+    })
+    .then((data) => {
+        console.log(data);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
 
 // calling /api/hello on the rest service to illustrate text based data retrieval
 function getHello(token) {
