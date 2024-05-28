@@ -1,6 +1,6 @@
 package be.kuleuven.dsgt4;
 
-import net.minidev.json.JSONArray;
+
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -8,8 +8,6 @@ import net.minidev.json.parser.ParseException;
 import java.util.ArrayList;
 
 public class Broker {
-
-    public ArrayList<User> not_handled_user = new ArrayList<User>();
 
     JSONParser parser = new JSONParser();
 
@@ -26,17 +24,21 @@ public class Broker {
             + "\"ticket\": " + ticket_string_all
             + "}";
 
-    public JSONObject getAllAvailable() throws ParseException {
+    public JSONObject get_all_available() throws ParseException {
         return (JSONObject) parser.parse(all_available_string);
     }
 
-    public JSONObject doRequest(JSONObject request, User user){
+    public JSONObject do_request(JSONObject request, User user){
         request.put("price", 20.0f);
         return request;
     }
 
     public JSONObject confirm(User user){
         return new JSONObject();
+    }
+
+    public void remove_order(String bus, String ticket, String camping){
+
     }
 
 

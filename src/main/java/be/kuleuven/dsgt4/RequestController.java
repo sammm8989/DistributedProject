@@ -1,12 +1,8 @@
 package be.kuleuven.dsgt4;
 
-import com.google.cloud.firestore.Firestore;
-import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,15 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 class RequestController {
 
     @Autowired
-    Firestore db;
-
     public Broker broker= new Broker();
 
+
+    //Inputs: none
+    //Outputs: All available products in a JSON
     @GetMapping("/broker/getAllAvailable")
     public ResponseEntity<JSONObject> getAllAvailable(
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
-            JSONObject json = broker.getAllAvailable();
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            JSONObject json = broker.get_all_available();
             return ResponseEntity.ok(json);
         }
         else{
@@ -36,6 +33,10 @@ class RequestController {
         }
     }
 
+
+    //Inputs: all information for one trip + token
+    //Output: same as input + combined prices
+    //Output on failure: http status code 410
     @GetMapping("/broker/request/{bus_departure_time}/{round_trip}/{start_place}/{camping_type}/{festival_type}")
     public ResponseEntity<JSONObject> handleRequest(
             @PathVariable String bus_departure_time,
@@ -45,7 +46,7 @@ class RequestController {
             @PathVariable String festival_type,
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ) {
 
             JSONObject master_json = new JSONObject();
             JSONObject bus_json = new JSONObject();
@@ -61,7 +62,7 @@ class RequestController {
             master_json.put("camping", camping_json);
             master_json.put("ticket", ticket_json);
 
-            JSONObject return_value = broker.doRequest(master_json, user_from_token(authorizationHeader.substring(7)));
+            JSONObject return_value = broker.do_request(master_json, user_from_token(authorizationHeader.substring(7)));
 
             return ResponseEntity.ok(return_value);
         } else {
@@ -71,10 +72,14 @@ class RequestController {
         }
     }
 
+
+    //Inputs: token
+    //Output: confirmation of products
+    //Output on failure: if payment was to late returns http status code of 422
     @GetMapping("/broker/paid")
     public ResponseEntity<JSONObject> orderHasBeenPaid(
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             JSONObject return_value = broker.confirm(user_from_token(authorizationHeader.substring(7)));
             return ResponseEntity.ok(return_value);
         }
@@ -86,10 +91,17 @@ class RequestController {
     }
 
 
-
-    public boolean test_token(String Token){
-        return true;
+    //Inputs: token
+    //Output: confirmation of products
+    //Output on failure: if payment was to late returns http status code of 422
+    @GetMapping("/broker/remove/{order_ID_bus}/{order_ID_camping}/{order_ID_ticket}")
+    public void removeOrder(
+            @PathVariable String order_ID_bus,
+            @PathVariable String order_ID_camping,
+            @PathVariable String order_ID_ticket){
+    broker.remove_order(order_ID_bus, order_ID_ticket, order_ID_camping);
     }
+
 
     public User user_from_token(String Token){
         return new User("samwinant@gmail.com","superAdmin");
