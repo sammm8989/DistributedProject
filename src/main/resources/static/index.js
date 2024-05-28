@@ -145,77 +145,46 @@ function showUnAuthenticated() {
 
 function addContent(text) {
     const htmlContent = `
-    <div id="bus">
-        <h2>Bus</h2>
-        <label for="busDatetime">Pick a DateTime:</label>
-        <input type="datetime-local" id="busDatetime" name="busDatetime"><br><br>
-
-        <label for="roundtrip">Roundtrip:</label>
-        <input type="checkbox" id="roundtrip" name="roundtrip"><br><br>
-
-        <label for="pickupPlace">Place to get up the bus:</label>
-        <select id="pickupPlace" name="pickupPlace">
-            <option value="LEUVEN">LEUVEN</option>
-            <option value="AARSCHOT">AARSCHOT</option>
-            <option value="TIENEN">TIENEN</option>
-            <option value="HOEGAARDEN">HOEGAARDEN</option>
-            <option value="SINT_TRUIDEN">SINT_TRUIDEN</option>
-            <option value="BEAUVECHAIN">BEAUVECHAIN</option>
-            <option value="JODOIGNE">JODOIGNE</option>
-        </select>
-    </div>
-
-    <div id="camping">
-        <h2>Camping</h2>
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate"><br><br>
-
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate"><br><br>
-
-        <label for="package">Package:</label>
-        <select id="package" name="package">
-            <option value="TENT">TENT</option>
-            <option value="CAMPER">CAMPER</option>
-            <option value="HOTEL">HOTEL</option>
-        </select>
-    </div>
-
-    <div id="festival">
-        <h2>Festival</h2>
-        <label for="festivalType">Type:</label>
-        <select id="festivalType" name="festivalType">
-            <option value="COMBI">COMBI</option>
-            <option value="FRIDAY">FRIDAY</option>
-            <option value="SATURDAY">SATURDAY</option>
-            <option value="SUNDAY">SUNDAY</option>
-        </select>
-    </div>
-    <div class='login-button' id='btnAsk'>Ask</div>`;
+    <div class="login-button" id='btn_available'>All Available</div>
+    `;
 
   document.getElementById("contentdiv").innerHTML = (htmlContent);
 
-  var ask = document.getElementById("btnAsk");
-  ask.addEventListener("click", function () {
-    var busDate = document.getElementById("busDatetime").value;
-    var roundTrip = document.getElementById("roundtrip").value;
-    var pickup = document.getElementById("pickupPlace").value;
-    var startDate = document.getElementById("startDate").value;
-    var endDate = document.getElementById("endDate").value;
-    var packageFestival = document.getElementById("package").value;
-    var festivalType = document.getElementById("festivalType").value;
-
-
-    fetch(`/api/request/${busDate}/${roundTrip}/${pickup}/${startDate}/${endDate}/${packageFestival}/${festivalType}`, {
+  var available = document.getElementById("btn_available");
+  available.addEventListener("click", function () {
+    fetch(`/broker/getAllAvailable`, {
     headers: { Authorization: `Bearer ${token}` }
     })
     .then((response) => {
-      console.log(response.text());
+      return response.text();
     })
-    .then((data) => {
+    .then((text) => {
+        let new_text =
+        text +
+        `
+        <div class="login-button" id='btn_need'>Need these</div>
+        `;
+        document.getElementById("contentdiv").innerHTML = new_text;
+        var need = document.getElementById("btn_need");
 
-      console.log(data);
-    })
+            need.addEventListener("click", function () {
+                const data = JSON.parse(text);
+                fetch(`/broker/request/${data.bus[0].departure_time}/${data.bus[0].round_trip}/${data.bus[0].start_place}/${data.camping[0].type}/${data.ticket[0].type}`, {
+                headers: { Authorization: `Bearer ${token}` }
+                })
+                .then((response) => {
+                  return response.text();
+                })
+                .then((newer_text) => {
+                    document.getElementById("contentdiv").innerHTML = newer_text;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+
+                })
+    }
+    )
     .catch(function (error) {
       console.log(error);
     });

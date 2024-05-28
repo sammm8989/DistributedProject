@@ -1,6 +1,10 @@
 package be.kuleuven.dsgt4;
 
 import com.google.cloud.firestore.Firestore;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,56 +20,69 @@ class RequestController {
     @Autowired
     Firestore db;
 
-    @GetMapping("/broker/getAllAvailable")
-    public ResponseEntity<String> getAllAvailable() {
-        // Hardcoded JSON string
-        String json = "{"
-                + "\"busData\":\"2022-05-01T10:00\","
-                + "\"roundTrip\":\"true\","
-                + "\"pickup\":\"LEUVEN\","
-                + "\"startDate\":\"2022-07-01\","
-                + "\"endDate\":\"2022-07-05\","
-                + "\"packageFestival\":\"TENT\","
-                + "\"festivalType\":\"COMBI\""
-                + "}";
+    JSONParser parser = new JSONParser();
 
-        // Return the JSON string with content type set to application/json
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header("Content-Type", "application/json")
-                .body(json);
+
+    String camping_string_all = "[{\"type\": \"TENT\"}, {\"type\": \"CAMPER\"}, {\"type\": \"HOTEL\"}]";
+
+    String bus_string_all = "[{\"departure_time\": \"2023-05-27T15:30:00Z\", \"round_trip\": true, \"start_place\": \"LEUVEN\"}, {\"departure_time\": \"2023-05-27T16:30:00Z\", \"round_trip\": true, \"start_place\": \"HOEGAARDEN\"}]";
+
+    String ticket_string_all = "[{\"type\": \"COMBI\"}, {\"type\": \"FRIDAY\"}, {\"type\": \"SATURDAY\"}, {\"type\": \"SUNDAY\"}, {\"type\": \"MONDAY\"}]";
+
+    String all_available_string = "{"
+            + "\"camping\": " + camping_string_all + ", "
+            + "\"bus\": " + bus_string_all + ", "
+            + "\"ticket\": " + ticket_string_all
+            + "}";
+
+
+    RequestController() throws ParseException {
     }
 
-    @GetMapping("/api/request/{busData}/{roundTrip}/{pickup}/{startDate}/{endDate}/{packageFestival}/{festivalType}")
-    public ResponseEntity<String> handleRequest(
-            @PathVariable String busData,
-            @PathVariable String roundTrip,
-            @PathVariable String pickup,
-            @PathVariable String startDate,
-            @PathVariable String endDate,
-            @PathVariable String packageFestival,
-            @PathVariable String festivalType,
-            @RequestHeader("Authorization") String authorizationHeader) {
-
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7); // Remove "Bearer " from the string
-
-            // Log the token and the email parameters
-            System.out.println("Token: " + token);
-            System.out.println("Bus Data: " + busData);
-            System.out.println("Round Trip: " + roundTrip);
-            System.out.println("Pickup: " + pickup);
-            System.out.println("Start Date: " + startDate);
-            System.out.println("End Date: " + endDate);
-            System.out.println("Package Festival: " + packageFestival);
-            System.out.println("Festival Type: " + festivalType);
-
-            // Respond with a message including the token and emails
-            String response = "OK";
-            return ResponseEntity.ok(response);
-        } else {
-            // Respond with an error message if the Authorization header is missing or invalid
-            return ResponseEntity.status(401).body("Unauthorized: No token provided or invalid format");
+    @GetMapping("/broker/getAllAvailable")
+    public ResponseEntity<JSONObject> getAllAvailable(@RequestHeader("Authorization") String authorizationHeader) throws ParseException {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
+            JSONObject json = (JSONObject) parser.parse(all_available_string);
+            // Return the JSON string with content type set to application/json
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(json);
         }
+        else{
+            String response_JSON = "{\"Unauthorized\": \"No token provided or invalid format\"}";
+            JSONObject json = (JSONObject) parser.parse(response_JSON);
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+    @GetMapping("/broker/request/{bus_departure_time}/{round_trip}/{start_place}/{camping_type}/{festival_type}")
+    public ResponseEntity<JSONObject> handleRequest(
+            @PathVariable String bus_departure_time,
+            @PathVariable String round_trip,
+            @PathVariable String start_place,
+            @PathVariable String camping_type,
+            @PathVariable String festival_type,
+            @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
+            JSONObject json = new JSONObject();
+            json.put("bus_departure_time", bus_departure_time);
+            json.put("round_trip", round_trip);
+            json.put("start_place", start_place);
+            json.put("camping_type", camping_type);
+            json.put("festival_type", festival_type);
+            return ResponseEntity.ok(json);
+        } else {
+            String response_JSON = "{\"Unauthorized\": \"No token provided or invalid format\"}";
+            JSONObject json = (JSONObject) parser.parse(response_JSON);
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+
+
+    public boolean test_token(String Token){
+        return true;
     }
 }
