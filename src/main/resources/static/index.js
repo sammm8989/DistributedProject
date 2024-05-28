@@ -176,7 +176,29 @@ function addContent(text) {
                   return response.text();
                 })
                 .then((newer_text) => {
-                    document.getElementById("contentdiv").innerHTML = newer_text;
+                    let new_text =
+                        newer_text +
+                        `
+                        <div class="login-button" id='btn_pay'>Pay</div>
+                        `;
+                    document.getElementById("contentdiv").innerHTML = new_text;
+                    var pay = document.getElementById("btn_pay");
+
+                        pay.addEventListener("click", function () {
+                    fetch("/broker/paid", {
+                        headers: { Authorization: `Bearer ${token}` }
+                    })
+                    .then((response) => {
+                        // Check the response status code
+                        if (response.ok) {
+                            console.log("Request was successful:", response.status);
+                            return response.json(); // or response.text(), depending on your expected response type
+                        } else {
+                            console.error("Request failed with status code:", response.status);
+                            return Promise.reject(response.status); // Reject the promise to handle errors
+                        }
+                    })
+                        });
                 })
                 .catch(function (error) {
                   console.log(error);

@@ -20,38 +20,18 @@ class RequestController {
     @Autowired
     Firestore db;
 
-    JSONParser parser = new JSONParser();
-
-
-    String camping_string_all = "[{\"type\": \"TENT\"}, {\"type\": \"CAMPER\"}, {\"type\": \"HOTEL\"}]";
-
-    String bus_string_all = "[{\"departure_time\": \"2023-05-27T15:30:00Z\", \"round_trip\": true, \"start_place\": \"LEUVEN\"}, {\"departure_time\": \"2023-05-27T16:30:00Z\", \"round_trip\": true, \"start_place\": \"HOEGAARDEN\"}]";
-
-    String ticket_string_all = "[{\"type\": \"COMBI\"}, {\"type\": \"FRIDAY\"}, {\"type\": \"SATURDAY\"}, {\"type\": \"SUNDAY\"}, {\"type\": \"MONDAY\"}]";
-
-    String all_available_string = "{"
-            + "\"camping\": " + camping_string_all + ", "
-            + "\"bus\": " + bus_string_all + ", "
-            + "\"ticket\": " + ticket_string_all
-            + "}";
-
-
-    RequestController() throws ParseException {
-    }
+    public Broker broker= new Broker();
 
     @GetMapping("/broker/getAllAvailable")
-    public ResponseEntity<JSONObject> getAllAvailable(@RequestHeader("Authorization") String authorizationHeader) throws ParseException {
+    public ResponseEntity<JSONObject> getAllAvailable(
+            @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
-            JSONObject json = (JSONObject) parser.parse(all_available_string);
-            // Return the JSON string with content type set to application/json
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .header("Content-Type", "application/json")
-                    .body(json);
+            JSONObject json = broker.getAllAvailable();
+            return ResponseEntity.ok(json);
         }
         else{
-            String response_JSON = "{\"Unauthorized\": \"No token provided or invalid format\"}";
-            JSONObject json = (JSONObject) parser.parse(response_JSON);
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
             return ResponseEntity.status(401).body(json);
         }
     }
@@ -66,16 +46,41 @@ class RequestController {
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
-            JSONObject json = new JSONObject();
-            json.put("bus_departure_time", bus_departure_time);
-            json.put("round_trip", round_trip);
-            json.put("start_place", start_place);
-            json.put("camping_type", camping_type);
-            json.put("festival_type", festival_type);
-            return ResponseEntity.ok(json);
+
+            JSONObject master_json = new JSONObject();
+            JSONObject bus_json = new JSONObject();
+            JSONObject ticket_json = new JSONObject();
+            JSONObject camping_json = new JSONObject();
+
+            bus_json.put("bus_departure_time", bus_departure_time);
+            bus_json.put("round_trip", round_trip);
+            bus_json.put("start_place", start_place);
+            camping_json.put("camping_type", camping_type);
+            ticket_json.put("festival_type", festival_type);
+            master_json.put("bus", bus_json);
+            master_json.put("camping", camping_json);
+            master_json.put("ticket", ticket_json);
+
+            JSONObject return_value = broker.doRequest(master_json, user_from_token(authorizationHeader.substring(7)));
+
+            return ResponseEntity.ok(return_value);
         } else {
-            String response_JSON = "{\"Unauthorized\": \"No token provided or invalid format\"}";
-            JSONObject json = (JSONObject) parser.parse(response_JSON);
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+    @GetMapping("/broker/paid")
+    public ResponseEntity<JSONObject> orderHasBeenPaid(
+            @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && test_token(authorizationHeader.substring(7))) {
+            JSONObject return_value = broker.confirm(user_from_token(authorizationHeader.substring(7)));
+            return ResponseEntity.ok(return_value);
+        }
+        else{
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
             return ResponseEntity.status(401).body(json);
         }
     }
@@ -84,5 +89,9 @@ class RequestController {
 
     public boolean test_token(String Token){
         return true;
+    }
+
+    public User user_from_token(String Token){
+        return new User("samwinant@gmail.com","superAdmin");
     }
 }
