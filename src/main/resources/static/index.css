@@ -4,42 +4,45 @@ body {
 }
 
 a {
-    color: initial;
+    color: inherit;
     text-decoration: none;
 }
 
 .header-menu {
     background: #008200;
     display: flex;
-    height: 64px;
     justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px; /* Adjusted for consistent padding */
     margin-bottom: 16px;
 }
 
 .header-title {
     color: white;
     font-size: 32px;
-    line-height: 56px;
-    padding-left: 16px;
+    line-height: 64px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
 }
 
 .header-icon {
     cursor: pointer;
-    line-height: 72px;
-}
-
-.header-icon > img {
-    margin-right: 16px;
+    line-height: 64px;
+    padding-right: 16px;
 }
 
 .header-name {
     color: #fff;
     font-size: 12px;
-    height: 16px;
-    line-height: 72px;
-    text-align: right;
-    top: 12px;
+    margin-right: 10px; /* Adjusted for spacing between name and logout icon */
+}
 
+img {
+    vertical-align: middle;
 }
 
 .page {
@@ -47,7 +50,6 @@ a {
     margin-right: auto;
     max-width: 700px;
 }
-
 
 .login {
     max-width: 320px;
@@ -76,6 +78,10 @@ a {
     white-space: nowrap;
     width: 100%;
     vertical-align: middle;
+}
+
+.signup-button {
+    background-color: grey;
 }
 
 .textfield {

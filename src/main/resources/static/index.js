@@ -143,26 +143,31 @@ function showUnAuthenticated() {
   document.getElementById("contentdiv").style.display = "none";
 }
 
-function addContent(token) {
+function addContent() {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
     document.getElementById("contentdiv").innerHTML = (htmlContent);
 
     var available = document.getElementById("getAvailabilities");
         available.addEventListener("click", function () {
-        fetch('/api/getAllAvailable', {
+        fetch('/broker/getAllAvailable', {
             headers: { Authorization: 'Bearer {token}'}
         })
-        .then((data) => {
-            console.log(response.text())
+        .then((response) => {
+            return response.json();
         })
         .then((data) => {
             console.log(data);
+            handlerBrokerResponse(data);
         })
         .catch(function (error) {
             console.log(error);
         });
     })
+}
+
+function handlerBrokerResponse(data) {
+
 }
 
 // calling /api/hello on the rest service to illustrate text based data retrieval

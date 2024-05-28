@@ -143,14 +143,14 @@ function showUnAuthenticated() {
   document.getElementById("contentdiv").style.display = "none";
 }
 
-function addContent(token) {
+function addContent() {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
     document.getElementById("contentdiv").innerHTML = (htmlContent);
 
     var available = document.getElementById("getAvailabilities");
         available.addEventListener("click", function () {
-        fetch('/api/getAllAvailable', {
+        fetch('/broker/getAllAvailable', {
             headers: { Authorization: 'Bearer {token}'}
         })
         .then((data) => {
@@ -202,7 +202,5 @@ function whoami(token) {
     .catch(function (error) {
       console.log(error);
     });
-
-
 }
 
