@@ -166,7 +166,8 @@ function addContent() {
                                     <label for="${key}">${key}:</label>
                                     <select id="${key}">`;
                     data[key].forEach(item => {
-                        new_text += `<option value="${item}">${item}</option>`;
+                        // For dropdowns, we need to handle objects, so we stringify the object for the value
+                        new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}</option>`;
                     });
                     new_text += `</select>
                                 </div>`;
@@ -185,22 +186,33 @@ function addContent() {
 
             var select = document.getElementById("chooseSelection");
             select.addEventListener("click", function () {
-                // Assuming you need to send all key-value pairs back to the server
                 const requestData = {};
                 Object.keys(data).forEach(key => {
                     const element = document.getElementById(key);
                     if (element) {
-                        requestData[key] = element.value || data[key];
+                        requestData[key] = JSON.parse(element.value) || data[key];
                     } else {
                         requestData[key] = data[key];
                     }
                 });
 
-                fetch(`/api/request/${requestData.busData}/${requestData.roundTrip}/${requestData.pickup}/${requestData.startDate}/${requestData.endDate}/${requestData.packageFestival}/${requestData.festivalType}`, {
-                    headers: { Authorization: 'Bearer ' + token }
+                // Construct the request URL based on the selected options
+                const bus_departure_time = requestData.bus.departure_time;
+                const round_trip = requestData.bus.round_trip;
+                const start_place = requestData.bus.start_place;
+                const camping_type = requestData.camping.type;
+                const festival_type = requestData.ticket.type;
+
+                fetch(`/broker/request/${bus_departure_time}/${round_trip}/${start_place}/${camping_type}/${festival_type}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
                 })
                 .then((response) => {
-                    return response.text();
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
                 })
                 .then((data) => {
                     console.log(data); // Log the response from the server
@@ -215,6 +227,7 @@ function addContent() {
         });
     });
 }
+
 
 
 // calling /api/hello on the rest service to illustrate text based data retrieval
