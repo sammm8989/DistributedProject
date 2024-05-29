@@ -1,1 +1,1 @@
-curl -X PUT localhost:8080/camping/confirm/2
+curl -X PUT localhost:8090/camping/confirm/2
