@@ -4,42 +4,45 @@ body {
 }
 
 a {
-    color: initial;
+    color: inherit;
     text-decoration: none;
 }
 
 .header-menu {
-    background: #4a9cc2;
+    background: #008200;
     display: flex;
-    height: 64px;
     justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px; /* Adjusted for consistent padding */
     margin-bottom: 16px;
 }
 
 .header-title {
     color: white;
     font-size: 32px;
-    line-height: 56px;
-    padding-left: 16px;
+    line-height: 64px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
 }
 
 .header-icon {
     cursor: pointer;
-    line-height: 72px;
-}
-
-.header-icon > img {
-    margin-right: 16px;
+    line-height: 64px;
+    padding-right: 16px;
 }
 
 .header-name {
     color: #fff;
     font-size: 12px;
-    height: 16px;
-    line-height: 72px;
-    text-align: right;
-    top: 12px;
+    margin-right: 10px; /* Adjusted for spacing between name and logout icon */
+}
 
+img {
+    vertical-align: middle;
 }
 
 .page {
@@ -47,7 +50,6 @@ a {
     margin-right: auto;
     max-width: 700px;
 }
-
 
 .login {
     max-width: 320px;
@@ -58,7 +60,7 @@ a {
 
 .login-button {
     align-items: center;
-    background-color: #4a9cc2;
+    background-color: #008200;
     border: none;
     border-radius: 2px;
     box-sizing: border-box;
@@ -70,17 +72,22 @@ a {
     margin-top: 4px;
     outline: none;
     overflow: hidden;
-    padding: 0 24px;
     position: relative;
     user-select: none;
     white-space: nowrap;
     width: 100%;
     vertical-align: middle;
+    width: 300px;
+}
+
+.signup-button {
+    background-color: grey;
 }
 
 .textfield {
     position: relative;
     margin: 45px 0;
+    width: 300px;
 }
 
 textarea {
@@ -90,9 +97,9 @@ textarea {
 input, textarea {
     background: none;
     font-size: 18px;
-    padding: 10px 10px 10px 5px;
+    padding: 10px 10px 10px 10px;
     display: block;
-    width: 320px;
+    width: 300px;
     border: none;
     border-radius: 0;
     border-bottom: 1px solid #777;
@@ -138,4 +145,39 @@ label {
     background: #2196f3;
     transition: 300ms ease all;
     left: 0;
+}
+
+/* New styles for labels and selections */
+.selection {
+    margin-bottom: 10px;
+}
+
+.selection label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+}
+
+.selection select {
+    width: 200px;
+}
+
+#responseContainer {
+    margin-top: 20px;
+}
+
+.login-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.signup-button {
+    background-color: grey;
 }

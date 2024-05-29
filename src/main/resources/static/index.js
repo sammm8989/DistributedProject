@@ -16,7 +16,7 @@ wireUpAuthChange();
 
 let token;
 
-//setup authentication with local or cloud configuration. 
+//setup authentication with local or cloud configuration.
 function setupAuth() {
   let firebaseConfig;
   if (location.hostname === "localhost") {
@@ -121,7 +121,7 @@ function wireUpAuthChange() {
 
       console.log("Token: " + idTokenResult.token);
 
-      //fetch data from server when authentication was successful. 
+      //fetch data from server when authentication was successful.
       token = idTokenResult.token;
     });
 
@@ -143,76 +143,92 @@ function showUnAuthenticated() {
   document.getElementById("contentdiv").style.display = "none";
 }
 
-function addContent(text) {
+function addContent() {
     const htmlContent = `
-    <div class="login-button" id='btn_available'>All Available</div>
-    `;
+    <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
+    document.getElementById("contentdiv").innerHTML = htmlContent;
 
-  document.getElementById("contentdiv").innerHTML = (htmlContent);
+    var available = document.getElementById("getAvailabilities");
+    available.addEventListener("click", function () {
+        fetch(`/broker/getAllAvailable`, {
+            headers: { Authorization: 'Bearer ' + token } // Correct token usage
+        })
+        .then((response) => {
+            return response.json(); // Parse response as JSON
+        })
+        .then((data) => {
+            let new_text = `<div id="responseContainer">`;
 
-  var available = document.getElementById("btn_available");
-  available.addEventListener("click", function () {
-    fetch(`/broker/getAllAvailable`, {
-    headers: { Authorization: `Bearer ${token}` }
-    })
-    .then((response) => {
-      return response.text();
-    })
-    .then((text) => {
-        let new_text =
-        text +
-        `
-        <div class="login-button" id='btn_need'>Need these</div>
-        `;
-        document.getElementById("contentdiv").innerHTML = new_text;
-        var need = document.getElementById("btn_need");
+            // Iterate over each key in the JSON object and create dropdowns or display values
+            Object.keys(data).forEach(key => {
+                if (Array.isArray(data[key])) {
+                    new_text += `<div class="selection">
+                                    <label for="${key}">${key}:</label>
+                                    <select id="${key}">`;
+                    data[key].forEach(item => {
+                        // For dropdowns, we need to handle objects, so we stringify the object for the value
+                        new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}</option>`;
+                    });
+                    new_text += `</select>
+                                </div>`;
+                } else {
+                    new_text += `<div class="selection">
+                                    <label>${key}:</label>
+                                    <span>${data[key]}</span>
+                                </div>`;
+                }
+            });
 
-            need.addEventListener("click", function () {
-                const data = JSON.parse(text);
-                fetch(`/broker/request/${data.bus[0].departure_time}/${data.bus[0].round_trip}/${data.bus[0].start_place}/${data.camping[0].type}/${data.ticket[0].type}`, {
-                headers: { Authorization: `Bearer ${token}` }
-                })
-                .then((response) => {
-                  return response.text();
-                })
-                .then((newer_text) => {
-                    let new_text =
-                        newer_text +
-                        `
-                        <div class="login-button" id='btn_pay'>Pay</div>
-                        `;
-                    document.getElementById("contentdiv").innerHTML = new_text;
-                    var pay = document.getElementById("btn_pay");
+            new_text += `
+                </div>
+                <div class="login-button" id='chooseSelection'>Choose Selected</div>`;
+            document.getElementById("contentdiv").innerHTML = new_text;
 
-                        pay.addEventListener("click", function () {
-                    fetch("/broker/paid", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    })
-                    .then((response) => {
-                        // Check the response status code
-                        if (response.ok) {
-                            console.log("Request was successful:", response.status);
-                            return response.json(); // or response.text(), depending on your expected response type
-                        } else {
-                            console.error("Request failed with status code:", response.status);
-                            return Promise.reject(response.status); // Reject the promise to handle errors
-                        }
-                    })
-                        });
-                })
-                .catch(function (error) {
-                  console.log(error);
+            var select = document.getElementById("chooseSelection");
+            select.addEventListener("click", function () {
+                const requestData = {};
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        requestData[key] = JSON.parse(element.value) || data[key];
+                    } else {
+                        requestData[key] = data[key];
+                    }
                 });
 
-                })
-    }
-    )
-    .catch(function (error) {
-      console.log(error);
-    });
+                // Construct the request URL based on the selected options
+                const bus_departure_time = requestData.bus.departure_time;
+                const round_trip = requestData.bus.round_trip;
+                const start_place = requestData.bus.start_place;
+                const camping_type = requestData.camping.type;
+                const festival_type = requestData.ticket.type;
 
-    })
-  }
+                fetch(`/broker/request/${bus_departure_time}/${round_trip}/${start_place}/${camping_type}/${festival_type}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data); // Log the response from the server
+                })
+                .catch(function (error) {
+                    console.log(error); // Log any errors
+                });
+            });
+        })
+        .catch(function (error) {
+            console.log("Error fetching data:", error); // Log any errors
+        });
+    });
+}
+
+
 
 // calling /api/hello on the rest service to illustrate text based data retrieval
 function getHello(token) {
@@ -251,7 +267,4 @@ function whoami(token) {
     .catch(function (error) {
       console.log(error);
     });
-
-
 }
-
