@@ -143,45 +143,79 @@ function showUnAuthenticated() {
   document.getElementById("contentdiv").style.display = "none";
 }
 
-function addContent(text) {
+function addContent() {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
-    document.getElementById("contentdiv").innerHTML = (htmlContent);
+    document.getElementById("contentdiv").innerHTML = htmlContent;
 
     var available = document.getElementById("getAvailabilities");
-        available.addEventListener("click", function () {
+    available.addEventListener("click", function () {
         fetch(`/broker/getAllAvailable`, {
-            headers: { Authorization: 'Bearer {token}'}
+            headers: { Authorization: 'Bearer ' + token } // Correct token usage
         })
         .then((response) => {
-            return response.text();
+            return response.json(); // Parse response as JSON
         })
-        .then((text) => {
-            let new_text =
-            text + `
-            <div class="login-button" id='chooseSelection'>Choose Selected</div>`;
+        .then((data) => {
+            let new_text = `<div id="responseContainer">`;
+
+            // Iterate over each key in the JSON object and create dropdowns or display values
+            Object.keys(data).forEach(key => {
+                if (Array.isArray(data[key])) {
+                    new_text += `<div class="selection">
+                                    <label for="${key}">${key}:</label>
+                                    <select id="${key}">`;
+                    data[key].forEach(item => {
+                        new_text += `<option value="${item}">${item}</option>`;
+                    });
+                    new_text += `</select>
+                                </div>`;
+                } else {
+                    new_text += `<div class="selection">
+                                    <label>${key}:</label>
+                                    <span>${data[key]}</span>
+                                </div>`;
+                }
+            });
+
+            new_text += `
+                </div>
+                <div class="login-button" id='chooseSelection'>Choose Selected</div>`;
             document.getElementById("contentdiv").innerHTML = new_text;
 
             var select = document.getElementById("chooseSelection");
-                select.addEventListener("click", function () {
-                    const data = JSON.parse(text);
-                    fetch(`/broker/request/${data.bus[0].departure_time}/${data.bus[0].round_trip}/${data.bus[0].start_place}/${data.camping[0].type}/${data.ticket[0].type}`, {
-                        headers: { Authorization: 'Bearer {token}'}
-                    })
+            select.addEventListener("click", function () {
+                // Assuming you need to send all key-value pairs back to the server
+                const requestData = {};
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        requestData[key] = element.value || data[key];
+                    } else {
+                        requestData[key] = data[key];
+                    }
+                });
+
+                fetch(`/api/request/${requestData.busData}/${requestData.roundTrip}/${requestData.pickup}/${requestData.startDate}/${requestData.endDate}/${requestData.packageFestival}/${requestData.festivalType}`, {
+                    headers: { Authorization: 'Bearer ' + token }
                 })
-        })
-        .then((data) => {
-            console.log(data);
+                .then((response) => {
+                    return response.text();
+                })
+                .then((data) => {
+                    console.log(data); // Log the response from the server
+                })
+                .catch(function (error) {
+                    console.log(error); // Log any errors
+                });
+            });
         })
         .catch(function (error) {
-            console.log(error);
+            console.log("Error fetching data:", error); // Log any errors
         });
-    })
+    });
 }
 
-function handlerBrokerResponse(data) {
-
-}
 
 // calling /api/hello on the rest service to illustrate text based data retrieval
 function getHello(token) {
