@@ -1,8 +1,8 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
-import be.kuleuven.dsgt4.Camping.Exceptions.AvailableTicketsNotFoundException;
-import be.kuleuven.dsgt4.Camping.Exceptions.CampingNotFoundException;
-import be.kuleuven.dsgt4.Camping.Exceptions.NoAvailableTicketsException;
-import be.kuleuven.dsgt4.Camping.Exceptions.OrderAlreadyExistsException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.CampingNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.NoAvailableTicketsException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -43,7 +44,7 @@ public class CampingController {
                 linkTo(methodOn(CampingController.class).getAllCampings()).withSelfRel());
      }
     @GetMapping("/camping/tickets/{pack}")
-    EntityModel<AvailableTickets> getTicketByPackage(@PathVariable Package pack) {
+    EntityModel<AvailableTickets> getTicketByPackage(@PathVariable Pack pack) {
         AvailableTickets availableTickets = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundException(pack));
         return availableTicketsToEntityModel(pack, availableTickets);
     }
@@ -93,11 +94,11 @@ public class CampingController {
         return campingToEntityModel(camping.getId(), camping);
     }
 
-//    @DeleteMapping("/camping/delete/{id}")
-//    EntityModel<Camping> deleteCampingOrder(@PathVariable Integer id){
-//        Camping camping = campingRepository.deleteOrder(id);
-//        return campingToEntityModel(camping.getId(), camping);
-//    }
+    @DeleteMapping("/camping/delete/{id}")
+    EntityModel<Camping> deleteCampingOrder(@PathVariable Integer id){
+        Camping camping = campingRepository.remove(id);
+        return campingToEntityModel(id, camping);
+    }
 
     private EntityModel<Camping> campingToEntityModel(Integer id, Camping camping){
         return EntityModel.of(camping,
@@ -105,7 +106,7 @@ public class CampingController {
                 linkTo(methodOn(CampingController.class).getAllCampings()).withRel("camping/order"));
     }
 
-    private EntityModel<AvailableTickets> availableTicketsToEntityModel(Package p, AvailableTickets availableTickets){
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(Pack p, AvailableTickets availableTickets){
         return EntityModel.of(availableTickets,
                 linkTo(methodOn(CampingController.class).getTicketByPackage(p)).withSelfRel(),
                 linkTo(methodOn(CampingController.class).getAllTickets()).withRel("camping/tickets"));

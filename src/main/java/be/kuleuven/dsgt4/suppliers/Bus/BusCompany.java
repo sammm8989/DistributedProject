@@ -1,4 +1,4 @@
-package be.kuleuven.dsgt4;
+package be.kuleuven.dsgt4.suppliers.Bus;
 
 import java.util.Date;
 

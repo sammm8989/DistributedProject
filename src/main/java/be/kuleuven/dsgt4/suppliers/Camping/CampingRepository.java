@@ -1,8 +1,8 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
 
-import be.kuleuven.dsgt4.Camping.Exceptions.AvailableTicketsNotFoundException;
-import be.kuleuven.dsgt4.Camping.Exceptions.CampingNotFoundException;
-import be.kuleuven.dsgt4.Camping.Exceptions.OrderAlreadyConfirmedException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.CampingNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyConfirmedException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CampingRepository {
 
     private static final ConcurrentHashMap<Integer, Camping> camping_tickets = new ConcurrentHashMap<>( );
-    private static final ConcurrentHashMap<Package, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void initData(){
-        AvailableTickets tent = new AvailableTickets(Package.TENT, 10);
-        AvailableTickets camper = new AvailableTickets(Package.CAMPER, 5);
-        AvailableTickets hotel = new AvailableTickets(Package.HOTEL,2);
+        AvailableTickets tent = new AvailableTickets(Pack.TENT, 10);
+        AvailableTickets camper = new AvailableTickets(Pack.CAMPER, 5);
+        AvailableTickets hotel = new AvailableTickets(Pack.HOTEL,2);
         hotel.setSold(2);
         tent.setSold(10);
         camper.setSold(4);
@@ -43,7 +43,7 @@ public class CampingRepository {
 
     public Collection<AvailableTickets> getAllTickets(){return available_tickets.values();}
 
-    public Optional<AvailableTickets> findTicket(Package p) {
+    public Optional<AvailableTickets> findTicket(Pack p) {
         Assert.notNull(p, "The package type can't be Null");
         AvailableTickets availableTickets = available_tickets.get(p);
         return Optional.ofNullable(availableTickets);
@@ -69,6 +69,16 @@ public class CampingRepository {
             throw new OrderAlreadyConfirmedException(id);
         }
         camping.setConfirmed(true);
+        return camping;
+    }
+
+    public synchronized Camping remove(Integer id){
+        Camping camping = camping_tickets.get(id);
+        if(camping == null){
+            throw new CampingNotFoundException(id);
+        }
+        available_tickets.get(camping.getCamping_package()).restockCampingTicket();
+        camping_tickets.remove(id);
         return camping;
     }
 

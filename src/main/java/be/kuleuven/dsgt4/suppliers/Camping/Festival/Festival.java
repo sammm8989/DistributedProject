@@ -1,4 +1,4 @@
-package be.kuleuven.dsgt4;
+package be.kuleuven.dsgt4.suppliers.Camping.Festival;
 
 public class Festival {
     protected Integer id;

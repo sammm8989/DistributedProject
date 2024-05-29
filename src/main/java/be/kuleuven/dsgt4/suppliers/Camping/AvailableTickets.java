@@ -1,12 +1,12 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
 
 public class AvailableTickets {
-    protected java.lang.Package camping_package;
+    protected Pack camping_package;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTickets(java.lang.Package camping_package, int available) {
+    public AvailableTickets(Pack camping_package, int available) {
         this.camping_package = camping_package;
         this.total = available;
         this.sold = 0;
@@ -16,26 +16,23 @@ public class AvailableTickets {
         return (sold < total);
     }
 
-    public synchronized boolean sellCampingTicket() {
+    public synchronized void sellCampingTicket() {
         if (sold < total) {
             sold++;
-            return true;
         }
-        return false;
     }
 
-    public synchronized boolean restockCampingTicket(){
+    public synchronized void restockCampingTicket(){
         if (sold >0){
             sold--;
-            return true;
         }
-        return false;
     }
-    public java.lang.Package getCampingPackage() {
+
+    public Pack getCampingPackage() {
         return camping_package;
     }
 
-    public void setCampingPackage(java.lang.Package camping_package) {
+    public void setCampingPackage(Pack camping_package) {
         this.camping_package = camping_package;
     }
 
