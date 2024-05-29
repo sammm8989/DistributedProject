@@ -216,6 +216,49 @@ function addContent() {
                 })
                 .then((data) => {
                     console.log(data); // Log the response from the server
+
+                    // Update the screen with the chosen data and price
+                    let confirmation_text = `
+                        <div id="confirmationContainer">
+                            <h2>Selected Options</h2>
+                            <div class="selection"><label>Bus Departure Time:</label><span>${bus_departure_time}</span></div>
+                            <div class="selection"><label>Round Trip:</label><span>${round_trip}</span></div>
+                            <div class="selection"><label>Start Place:</label><span>${start_place}</span></div>
+                            <div class="selection"><label>Camping Type:</label><span>${camping_type}</span></div>
+                            <div class="selection"><label>Festival Type:</label><span>${festival_type}</span></div>
+                            <div class="selection"><label>Price:</label><span>${data.price}</span></div>
+                            <div class="login-button" id='payNow'>Pay</div>
+                            <div id="payStatus"></div>
+                        </div>`;
+
+                    document.getElementById("contentdiv").innerHTML = confirmation_text;
+
+                    // Add event listener for the 'Pay' button
+                    var payNow = document.getElementById("payNow");
+                    payNow.addEventListener("click", function () {
+                        fetch(`/broker/paid`, {
+                            headers: {
+                                Authorization: 'Bearer ' + token
+                            }
+                        })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            console.log(data); // Log the response from the server
+                            alert("Payment successful! Confirmation received.");
+                            // Remove the "Pay" button after successful payment
+                            payNow.style.display = 'none';
+                            document.getElementById("payStatus").innerHTML = `<div class="selection"><label>Status:</label><span>Paid</span></div>`;
+                        })
+                        .catch(function (error) {
+                            console.log(error); // Log any errors
+                            alert("Payment failed. Please try again.");
+                        });
+                    });
                 })
                 .catch(function (error) {
                     console.log(error); // Log any errors
@@ -227,6 +270,7 @@ function addContent() {
         });
     });
 }
+
 
 
 
