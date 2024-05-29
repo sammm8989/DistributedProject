@@ -59,25 +59,17 @@ img {
 }
 
 .login-button {
-    align-items: center;
-    background-color: #008200;
+    background-color: #4CAF50; /* Green */
     border: none;
-    border-radius: 2px;
-    box-sizing: border-box;
-    color: #fff;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    border-radius: 4px;
     cursor: pointer;
-    display: inline-flex;
-    height: 40px;
-    justify-content: center;
-    margin-top: 4px;
-    outline: none;
-    overflow: hidden;
-    position: relative;
-    user-select: none;
-    white-space: nowrap;
-    width: 100%;
-    vertical-align: middle;
-    width: 300px;
+    width: 300px; /* Fixed size */
+    margin: 10px auto; /* Center horizontally and add margin above */
 }
 
 .signup-button {
@@ -123,10 +115,7 @@ label {
     color: #777;
     font-size: 16px;
     font-weight: normal;
-    position: absolute;
     pointer-events: none;
-    left: 5px;
-    top: 10px;
     transition: 300ms ease all;
 }
 
@@ -156,6 +145,7 @@ label {
     display: inline-block;
     width: 150px;
     font-weight: bold;
+    position: relative; /* Remove absolute positioning */
 }
 
 .selection select {
@@ -164,20 +154,8 @@ label {
 
 #responseContainer {
     margin-top: 20px;
-}
-
-.login-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 10px 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.signup-button {
-    background-color: grey;
 }
