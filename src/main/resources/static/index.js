@@ -261,12 +261,12 @@ function addContent() {
                     });
                 })
                 .catch(function (error) {
-                    console.log(error); // Log any errors
+                    console.log("Error getting confirmation of selection:", error); // Log any errors
                 });
             });
         })
         .catch(function (error) {
-            console.log("Error fetching data:", error); // Log any errors
+            console.log("Error getting available:", error); // Log any errors
         });
     });
 }
