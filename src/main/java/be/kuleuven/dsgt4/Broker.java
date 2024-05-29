@@ -4,9 +4,9 @@ package be.kuleuven.dsgt4;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
+@Component
 public class Broker {
 
     JSONParser parser = new JSONParser();
@@ -23,6 +23,7 @@ public class Broker {
             + "\"bus\": " + bus_string_all + ", "
             + "\"ticket\": " + ticket_string_all
             + "}";
+
 
     public JSONObject get_all_available() throws ParseException {
         return (JSONObject) parser.parse(all_available_string);
