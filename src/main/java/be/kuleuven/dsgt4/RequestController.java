@@ -104,6 +104,7 @@ class RequestController {
 
 
     public User user_from_token(String Token){
+
         return new User("samwinant@gmail.com","superAdmin");
     }
 }
