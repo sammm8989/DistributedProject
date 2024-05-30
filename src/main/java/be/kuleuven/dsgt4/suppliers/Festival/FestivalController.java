@@ -1,11 +1,10 @@
 package be.kuleuven.dsgt4.suppliers.Festival;
 
 
-import be.kuleuven.dsgt4.suppliers.Camping.Camping;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyExistsException;
-import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.AvailableTicketsNotFoundExceptionFestival;
 import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.FestivalNotFoundException;
-import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.NoAvailableTicketsException;
+import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.NoAvailableTicketsExceptionFestival;
+import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.OrderAlreadyExistsExceptionFestival;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -34,18 +33,18 @@ public class FestivalController {
     @GetMapping("/festival/order")
     CollectionModel<EntityModel<Festival>> getAllFestivals() {
         Collection<Festival> festivals = festivalRepository.getAllFestivals();
-        List<EntityModel<Festival>> campingEntityModels = new ArrayList<>();
+        List<EntityModel<Festival>> festivalEntityModels = new ArrayList<>();
         for (Festival f: festivals){
             EntityModel<Festival> ef = festivalToEntityModel(f.getId(), f);
-            campingEntityModels.add(ef);
+            festivalEntityModels.add(ef);
         }
-        return CollectionModel.of(campingEntityModels,
+        return CollectionModel.of(festivalEntityModels,
                 linkTo(methodOn(FestivalController.class).getAllFestivals()).withSelfRel());
     }
 
-    @GetMapping("/festival/tickets/{pack}")
+    @GetMapping("/festival/tickets/{ticketType}")
     EntityModel<AvailableTicketsFestival> getTicketByType(@PathVariable TicketType ticketType) {
-        AvailableTicketsFestival availableTicketsFestival = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundException(ticketType));
+        AvailableTicketsFestival availableTicketsFestival = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundExceptionFestival(ticketType));
         return availableTicketsToEntityModel(ticketType, availableTicketsFestival);
     }
 
@@ -73,7 +72,7 @@ public class FestivalController {
         }
         if (availableTicketsEntityModels.isEmpty()) {
             System.out.println("empty");
-            throw new NoAvailableTicketsException();
+            throw new NoAvailableTicketsExceptionFestival();
         }
         return CollectionModel.of(availableTicketsEntityModels,
                 linkTo(methodOn(FestivalController.class).getAvailableTickets()).withSelfRel());
@@ -83,7 +82,7 @@ public class FestivalController {
     @PostMapping("/festival/order")
     EntityModel<Festival> addFestivalOrder(@RequestBody Festival festival){
         if(festivalRepository.findFestival(festival.getId()).isPresent()){
-            throw new OrderAlreadyExistsException(festival.getId());
+            throw new OrderAlreadyExistsExceptionFestival(festival.getId());
         }
         festivalRepository.add(festival);
         return festivalToEntityModel(festival.getId(), festival);
@@ -104,7 +103,7 @@ public class FestivalController {
     private EntityModel<Festival> festivalToEntityModel(Integer id, Festival festival){
         return EntityModel.of(festival,
                 linkTo(methodOn(FestivalController.class).getFestivalById(id)).withSelfRel(),
-                linkTo(methodOn(FestivalController.class).getAllFestivals()).withRel("camping/order"));
+                linkTo(methodOn(FestivalController.class).getAllFestivals()).withRel("festival/order"));
     }
 
 
@@ -112,6 +111,6 @@ public class FestivalController {
     private EntityModel<AvailableTicketsFestival> availableTicketsToEntityModel(TicketType t, AvailableTicketsFestival availableTicketsFestival){
         return EntityModel.of(availableTicketsFestival,
                 linkTo(methodOn(FestivalController.class).getTicketByType(t)).withSelfRel(),
-                linkTo(methodOn(FestivalController.class).getAllTickets()).withRel("camping/tickets"));
+                linkTo(methodOn(FestivalController.class).getAllTickets()).withRel("festival/tickets"));
     }
 }

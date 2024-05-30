@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class AvailableTicketsNotFoundAdvice {
+public class AvailableTicketsNotFoundAdviceCamping {
     @ResponseBody
-    @ExceptionHandler(AvailableTicketsNotFoundException.class)
+    @ExceptionHandler(AvailableTicketsNotFoundExceptionCamping.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String availableTicketsNotFoundAdvice(AvailableTicketsNotFoundException ex){return ex.getMessage();}
+    String availableTicketsNotFoundAdvice(AvailableTicketsNotFoundExceptionCamping ex){return ex.getMessage();}
 }

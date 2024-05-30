@@ -1,8 +1,8 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
 
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundExceptionCamping;
 import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.CampingNotFoundException;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyConfirmedException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyConfirmedExceptionCamping;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -58,7 +58,7 @@ public class CampingRepository {
         Optional<AvailableTicketsCamping> tickets = findTicket(camping.getCamping_package());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundException(camping.getCamping_package());
+                throw new AvailableTicketsNotFoundExceptionCamping(camping.getCamping_package());
             }
         }
         camping_tickets.put(camping.getId(), camping);
@@ -71,7 +71,7 @@ public class CampingRepository {
             throw new CampingNotFoundException(id);
         }
         if (camping.getConfirmed()){
-            throw new OrderAlreadyConfirmedException(id);
+            throw new OrderAlreadyConfirmedExceptionCamping(id);
         }
         camping.setConfirmed(true);
         return camping;

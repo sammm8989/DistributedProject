@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class NoAvailableTicketsAdvice {
+public class NoAvailableTicketsAdviceFestival {
 
     @ResponseBody
-    @ExceptionHandler(NoAvailableTicketsException.class)
+    @ExceptionHandler(NoAvailableTicketsExceptionFestival.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String noAvailableTicketsException(NoAvailableTicketsException ex){return ex.getMessage();}
+    String noAvailableTicketsExceptionFestival(NoAvailableTicketsExceptionFestival ex){return ex.getMessage();}
 
 }

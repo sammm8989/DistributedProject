@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class OrderAlreadyExistsAdvice {
+public class OrderAlreadyConfirmedAdviceFestival {
 
     @ResponseBody
-    @ExceptionHandler(OrderAlreadyExistsException.class)
+    @ExceptionHandler(OrderAlreadyConfirmedExceptionFestival.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String orderAlreadyExistsException(OrderAlreadyExistsException ex){return ex.getMessage();}
+    String orderAlreadyConfirmedAdvice(OrderAlreadyConfirmedExceptionFestival ex){return ex.getMessage();}
 
 }

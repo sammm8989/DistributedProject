@@ -1,8 +1,8 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.AvailableTicketsNotFoundExceptionCamping;
 import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.CampingNotFoundException;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.NoAvailableTicketsException;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyExistsException;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.NoAvailableTicketsExceptionCamping;
+import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.OrderAlreadyExistsExceptionCamping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -44,7 +44,7 @@ public class CampingController {
      }
     @GetMapping("/camping/tickets/{pack}")
     EntityModel<AvailableTicketsCamping> getTicketByPackage(@PathVariable Pack pack) {
-        AvailableTicketsCamping availableTicketsCamping = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundException(pack));
+        AvailableTicketsCamping availableTicketsCamping = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundExceptionCamping(pack));
         return availableTicketsToEntityModel(pack, availableTicketsCamping);
     }
     @GetMapping("/camping/tickets")
@@ -71,7 +71,7 @@ public class CampingController {
         }
         if (availableTicketsEntityModels.isEmpty()) {
             System.out.println("empty");
-            throw new NoAvailableTicketsException();
+            throw new NoAvailableTicketsExceptionCamping();
         }
         return CollectionModel.of(availableTicketsEntityModels,
                 linkTo(methodOn(CampingController.class).getAvailableTickets()).withSelfRel());
@@ -81,7 +81,7 @@ public class CampingController {
     @PostMapping("/camping/order")
     EntityModel<Camping> addCampingOrder(@RequestBody Camping camping){
         if(campingRepository.findCamping(camping.getId()).isPresent()){
-            throw new OrderAlreadyExistsException(camping.getId());
+            throw new OrderAlreadyExistsExceptionCamping(camping.getId());
         }
         campingRepository.add(camping);
         return campingToEntityModel(camping.getId(), camping);

@@ -1,11 +1,8 @@
 package be.kuleuven.dsgt4.suppliers.Festival;
 
-import be.kuleuven.dsgt4.suppliers.Camping.Camping;
-import be.kuleuven.dsgt4.suppliers.Camping.Exceptions.CampingNotFoundException;
-import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.AvailableTicketsNotFoundExceptionFestival;
 import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.FestivalNotFoundException;
-import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.OrderAlreadyConfirmedException;
-import be.kuleuven.dsgt4.suppliers.Festival.TicketType;
+import be.kuleuven.dsgt4.suppliers.Festival.Exceptions.OrderAlreadyConfirmedExceptionFestival;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -61,7 +58,7 @@ public class FestivalRepository {
         Optional<AvailableTicketsFestival> tickets = findTicket(festival.getTicket_type());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundException(festival.getTicket_type());
+                throw new AvailableTicketsNotFoundExceptionFestival(festival.getTicket_type());
             }
         }
         festival_tickets.put(festival.getId(), festival);
@@ -74,7 +71,7 @@ public class FestivalRepository {
             throw new FestivalNotFoundException(id);
         }
         if (festival.getConfirmed()){
-            throw new OrderAlreadyConfirmedException(id);
+            throw new OrderAlreadyConfirmedExceptionFestival(id);
         }
         festival.setConfirmed(true);
         return festival;
@@ -83,7 +80,7 @@ public class FestivalRepository {
     public synchronized Festival remove(Integer id){
         Festival festival = festival_tickets.get(id);
         if(festival == null){
-            throw new CampingNotFoundException(id);
+            throw new FestivalNotFoundException(id);
         }
         available_tickets.get(festival.getTicket_type()).restockFestivalTicket();
         festival_tickets.remove(id);
