@@ -1,0 +1,8 @@
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/exceptions/MealNotFoundAdvice.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/domain/Meal.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/domain/MealsRepository.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/FoodRestServiceApplication.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/exceptions/MealNotFoundException.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/domain/MealType.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/controllers/MealsRestRpcStyleController.java
+/home/sam/Desktop/Distributed/Suppliers/festival/src/main/java/be/kuleuven/foodrestservice/controllers/MealsRestController.java

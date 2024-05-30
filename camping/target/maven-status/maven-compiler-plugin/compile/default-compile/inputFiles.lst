@@ -1,0 +1,16 @@
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/CampingNotFoundException.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyExistsExceptionCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundAdviceCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/NoAvailableTicketsAdviceCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Pack.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/CampingRepository.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyExistsAdviceCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/NoAvailableTicketsExceptionCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Camping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/CampingNotFoundAdvice.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedExceptionCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/CampingController.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundExceptionCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/RestServiceApplication.java
+/home/sam/Desktop/Distributed/Suppliers/camping/src/main/java/be/kuleuven/camping/AvailableTicketsCamping.java

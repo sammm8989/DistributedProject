@@ -1,0 +1,16 @@
+be/kuleuven/camping/Exceptions/CampingNotFoundException.class
+be/kuleuven/camping/AvailableTicketsCamping.class
+be/kuleuven/camping/Exceptions/OrderAlreadyExistsAdviceCamping.class
+be/kuleuven/camping/CampingRepository.class
+be/kuleuven/camping/Exceptions/OrderAlreadyExistsExceptionCamping.class
+be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.class
+be/kuleuven/camping/Exceptions/CampingNotFoundAdvice.class
+be/kuleuven/camping/Exceptions/NoAvailableTicketsExceptionCamping.class
+be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundExceptionCamping.class
+be/kuleuven/camping/Exceptions/NoAvailableTicketsAdviceCamping.class
+be/kuleuven/camping/CampingController.class
+be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedExceptionCamping.class
+be/kuleuven/camping/Camping.class
+be/kuleuven/camping/RestServiceApplication.class
+be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundAdviceCamping.class
+be/kuleuven/camping/Pack.class
