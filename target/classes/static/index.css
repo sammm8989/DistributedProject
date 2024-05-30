@@ -1,0 +1,161 @@
+body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.header-menu {
+    background: #008200;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px; /* Adjusted for consistent padding */
+    margin-bottom: 16px;
+}
+
+.header-title {
+    color: white;
+    font-size: 32px;
+    line-height: 64px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-icon {
+    cursor: pointer;
+    line-height: 64px;
+    padding-right: 16px;
+}
+
+.header-name {
+    color: #fff;
+    font-size: 12px;
+    margin-right: 10px; /* Adjusted for spacing between name and logout icon */
+}
+
+img {
+    vertical-align: middle;
+}
+
+.page {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+}
+
+.login {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 128px;
+}
+
+.login-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 300px; /* Fixed size */
+    margin: 10px auto; /* Center horizontally and add margin above */
+}
+
+.signup-button {
+    background-color: grey;
+}
+
+.textfield {
+    position: relative;
+    margin: 45px 0;
+    width: 300px;
+}
+
+textarea {
+    resize: none;
+}
+
+input, textarea {
+    background: none;
+    font-size: 18px;
+    padding: 10px 10px 10px 10px;
+    display: block;
+    width: 300px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #777;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+}
+
+input:focus ~ label, textarea:focus ~ label, input:valid ~ label, textarea:valid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #4a9cc2;
+}
+
+input:focus ~ .bar:before, textarea:focus ~ .bar:before {
+    width: 335px;
+}
+
+label {
+    color: #777;
+    font-size: 16px;
+    font-weight: normal;
+    pointer-events: none;
+    transition: 300ms ease all;
+}
+
+.bar {
+    position: relative;
+    display: block;
+    width: 320px;
+}
+
+.bar:before {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 0;
+    position: absolute;
+    background: #2196f3;
+    transition: 300ms ease all;
+    left: 0;
+}
+
+/* New styles for labels and selections */
+.selection {
+    margin-bottom: 10px;
+}
+
+.selection label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+    position: relative; /* Remove absolute positioning */
+}
+
+.selection select {
+    width: 200px;
+}
+
+#responseContainer {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    text-align: center;
+}
