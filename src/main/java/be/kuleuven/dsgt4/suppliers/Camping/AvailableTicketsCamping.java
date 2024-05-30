@@ -1,14 +1,14 @@
 package be.kuleuven.dsgt4.suppliers.Camping;
 
-public class AvailableTickets {
+public class AvailableTicketsCamping {
     protected Pack camping_package;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTickets(Pack camping_package, int available) {
+    public AvailableTicketsCamping(Pack camping_package, int total) {
         this.camping_package = camping_package;
-        this.total = available;
+        this.total = total;
         this.sold = 0;
     }
 

@@ -9,5 +9,4 @@ public class BusCompany {
     protected Boolean to_festival;
     protected BoardingLocation location;
     protected Boolean confirmed;
-
 }

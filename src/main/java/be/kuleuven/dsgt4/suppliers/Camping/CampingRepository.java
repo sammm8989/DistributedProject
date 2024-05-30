@@ -15,16 +15,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CampingRepository {
 
     private static final ConcurrentHashMap<Integer, Camping> camping_tickets = new ConcurrentHashMap<>( );
-    private static final ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Pack, AvailableTicketsCamping> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void initData(){
-        AvailableTickets tent = new AvailableTickets(Pack.TENT, 10);
-        AvailableTickets camper = new AvailableTickets(Pack.CAMPER, 5);
-        AvailableTickets hotel = new AvailableTickets(Pack.HOTEL,2);
+        AvailableTicketsCamping tent = new AvailableTicketsCamping(Pack.TENT, 10);
+        tent.setPrice(20.0f);
+        AvailableTicketsCamping camper = new AvailableTicketsCamping(Pack.CAMPER, 5);
+        camper.setPrice(25.0f);
+        AvailableTicketsCamping hotel = new AvailableTicketsCamping(Pack.HOTEL,2);
+        hotel.setPrice(60.0f);
+
         hotel.setSold(2);
         tent.setSold(10);
         camper.setSold(4);
+
         available_tickets.put(tent.getCampingPackage(), tent);
         available_tickets.put(camper.getCampingPackage(), camper);
         available_tickets.put(hotel.getCampingPackage(), hotel);
@@ -41,16 +46,16 @@ public class CampingRepository {
     }
 
 
-    public Collection<AvailableTickets> getAllTickets(){return available_tickets.values();}
+    public Collection<AvailableTicketsCamping> getAllTickets(){return available_tickets.values();}
 
-    public Optional<AvailableTickets> findTicket(Pack p) {
+    public Optional<AvailableTicketsCamping> findTicket(Pack p) {
         Assert.notNull(p, "The package type can't be Null");
-        AvailableTickets availableTickets = available_tickets.get(p);
-        return Optional.ofNullable(availableTickets);
+        AvailableTicketsCamping availableTicketsCamping = available_tickets.get(p);
+        return Optional.ofNullable(availableTicketsCamping);
     }
 
     public synchronized void add(Camping camping) {
-        Optional<AvailableTickets> tickets = findTicket(camping.getCamping_package());
+        Optional<AvailableTicketsCamping> tickets = findTicket(camping.getCamping_package());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
                 throw new AvailableTicketsNotFoundException(camping.getCamping_package());
