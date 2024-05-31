@@ -2,16 +2,18 @@ package be.kuleuven.dsgt4.suppliers.Bus;
 
 import com.google.type.DateTime;
 
+import java.time.LocalDateTime;
+
 public class AvailableTicketsBus {
     protected String ticket_type;
     protected BoardingLocation boardingLocation;
-    protected DateTime dateTime;
+    protected LocalDateTime dateTime;
     protected Boolean toFestival;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTicketsBus(String ticket_type, int total, BoardingLocation boardingLocation, DateTime dateTime,Float price, Boolean toFestival){
+    public AvailableTicketsBus(String ticket_type, int total, BoardingLocation boardingLocation,LocalDateTime dateTime,Float price, Boolean toFestival){
         this.ticket_type = ticket_type;
         this.boardingLocation = boardingLocation;
         this.dateTime = dateTime;
@@ -49,11 +51,11 @@ public class AvailableTicketsBus {
         this.boardingLocation = boardingLocation;
     }
 
-    public DateTime getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(DateTime dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

@@ -1,12 +1,12 @@
 package be.kuleuven.dsgt4.suppliers.Bus;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Bus {
     protected Integer id;
     protected String type;
-    protected Date date;
-    protected Boolean to_festival;
+    protected LocalDateTime to_festival;
+    protected LocalDateTime from_festival;
     protected BoardingLocation location;
     protected Boolean confirmed;
 
@@ -26,20 +26,20 @@ public class Bus {
         this.type = type;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Boolean getTo_festival() {
+    public LocalDateTime getTo_festival() {
         return to_festival;
     }
 
-    public void setTo_festival(Boolean to_festival) {
+    public void setTo_festival(LocalDateTime to_festival) {
         this.to_festival = to_festival;
+    }
+
+    public LocalDateTime getFrom_festival() {
+        return from_festival;
+    }
+
+    public void setFrom_festival(LocalDateTime from_festival) {
+        this.from_festival = from_festival;
     }
 
     public BoardingLocation getLocation() {
