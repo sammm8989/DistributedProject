@@ -12,6 +12,7 @@ be/kuleuven/dsgt4/suppliers/Festival/FestivalController.class
 be/kuleuven/dsgt4/auth/WebSecurityConfig.class
 be/kuleuven/dsgt4/suppliers/Camping/Exceptions/NoAvailableTicketsAdviceCamping.class
 be/kuleuven/dsgt4/suppliers/Festival/Exceptions/NoAvailableTicketsAdviceFestival.class
+be/kuleuven/dsgt4/suppliers/Bus/AvailableTicketsBus.class
 be/kuleuven/dsgt4/User.class
 be/kuleuven/dsgt4/suppliers/Festival/Exceptions/NoAvailableTicketsExceptionFestival.class
 be/kuleuven/dsgt4/suppliers/Camping/CampingRepository.class
@@ -30,7 +31,6 @@ be/kuleuven/dsgt4/Dsgt4Application.class
 be/kuleuven/dsgt4/suppliers/Camping/Exceptions/OrderAlreadyExistsExceptionCamping.class
 be/kuleuven/dsgt4/suppliers/Camping/AvailableTicketsCamping.class
 be/kuleuven/dsgt4/suppliers/Camping/Exceptions/NoAvailableTicketsExceptionCamping.class
-be/kuleuven/dsgt4/suppliers/Bus/AvailableTickets.class
 be/kuleuven/dsgt4/suppliers/Camping/Exceptions/OrderAlreadyExistsAdviceCamping.class
 be/kuleuven/dsgt4/suppliers/Camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.class
 be/kuleuven/dsgt4/suppliers/Festival/AvailableTicketsFestival.class

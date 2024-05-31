@@ -21,6 +21,7 @@
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/Broker.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Bus/BoardingLocation.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/Exceptions/NoAvailableTicketsAdviceFestival.java
+/home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Bus/AvailableTicketsBus.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/Exceptions/FestivalNotFoundAdvice.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/Festival.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/FestivalRepository.java
@@ -33,7 +34,6 @@
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Camping/Exceptions/NoAvailableTicketsExceptionCamping.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/User.java
-/home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Bus/AvailableTickets.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/UserMessage.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/Exceptions/OrderAlreadyExistsExceptionFestival.java
 /home/jens/Documents/school/dapp/FinalProject/src/main/java/be/kuleuven/dsgt4/suppliers/Festival/Exceptions/OrderAlreadyConfirmedAdviceFestival.java
