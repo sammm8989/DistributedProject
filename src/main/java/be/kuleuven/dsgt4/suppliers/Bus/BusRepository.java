@@ -154,14 +154,22 @@ public class BusRepository {
     }
 
     public synchronized void add(Bus bus) {
-        Optional<AvailableTicketsBus> tickets = findTicket(bus.getType());
-        if(tickets.isPresent()){
-            if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundExceptionBus(bus.getType());
+        Optional<AvailableTicketsBus> ticket_to = findTicket(bus.getType_to());
+        if(ticket_to.isPresent()){
+            if(!ticket_to.get().isAvailable()){
+                throw new AvailableTicketsNotFoundExceptionBus(bus.getType_to());
+            }
+        }
+        Optional<AvailableTicketsBus> ticket_from = findTicket(bus.getType_from());
+        if(ticket_from.isPresent()){
+            if(!ticket_from.get().isAvailable()){
+                throw new AvailableTicketsNotFoundExceptionBus(bus.getType_from());
             }
         }
         bus_tickets.put(bus.getId(), bus);
-        available_tickets.get(bus.getType()).sellBusTicket();
+        available_tickets.get(bus.getType_to()).sellBusTicket();
+        available_tickets.get(bus.getType_from()).sellBusTicket();
+
     }
 
     public synchronized Bus updateConfirmed(Integer id) {
@@ -181,7 +189,8 @@ public class BusRepository {
         if(bus == null){
             throw new BusNotFoundException(id);
         }
-        available_tickets.get(bus.getType()).restockBusTicket();
+        available_tickets.get(bus.getType_from()).restockBusTicket();
+        available_tickets.get(bus.getType_to()).restockBusTicket();
         bus_tickets.remove(id);
         return bus;
     }

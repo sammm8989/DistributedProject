@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 
 public class Bus {
     protected Integer id;
-    protected String type;
+    protected String type_to;
     protected LocalDateTime to_festival;
+    protected String type_from;
     protected LocalDateTime from_festival;
     protected BoardingLocation location;
     protected Boolean confirmed;
@@ -18,12 +19,20 @@ public class Bus {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getType_to() {
+        return type_to;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType_to(String type_to) {
+        this.type_to = type_to;
+    }
+
+    public String getType_from() {
+        return type_from;
+    }
+
+    public void setType_from(String type_from) {
+        this.type_from = type_from;
     }
 
     public LocalDateTime getTo_festival() {
