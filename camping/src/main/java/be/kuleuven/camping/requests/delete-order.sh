@@ -1,1 +1,1 @@
-curl -X DELETE localhost:8090/camping/delete/2
+curl -X DELETE localhost:8100/camping/delete/2

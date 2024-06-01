@@ -1,5 +1,6 @@
 {
-  "id": "2",
-  "camping_package": "CAMPER",
-  "confirmed": false
+  "id": "3",
+  "type": "CAMPER",
+  "confirmed": false,
+  "price": 50.0
 }
