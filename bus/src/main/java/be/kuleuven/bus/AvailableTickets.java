@@ -1,8 +1,10 @@
 package be.kuleuven.bus;
 
+import java.time.LocalDateTime;
+
 
 public class AvailableTickets {
-    protected String ticket_type;
+    protected String type;
     protected BoardingLocation boardingLocation;
     protected LocalDateTime dateTime;
     protected Boolean toFestival;
@@ -10,8 +12,8 @@ public class AvailableTickets {
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTicketsBus(String ticket_type, int total, BoardingLocation boardingLocation,LocalDateTime dateTime,Float price, Boolean toFestival){
-        this.ticket_type = ticket_type;
+    public AvailableTickets(String type, int total, BoardingLocation boardingLocation,LocalDateTime dateTime,Float price, Boolean toFestival){
+        this.type = type;
         this.boardingLocation = boardingLocation;
         this.dateTime = dateTime;
         this.toFestival  = toFestival;
@@ -32,12 +34,12 @@ public class AvailableTickets {
         }
     }
 
-    public String getTicket_type() {
-        return ticket_type;
+    public String getType() {
+        return type;
     }
 
-    public void setTicket_type(String ticket_type) {
-        this.ticket_type = ticket_type;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public BoardingLocation getBoardingLocation() {

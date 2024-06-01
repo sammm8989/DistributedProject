@@ -1,10 +1,11 @@
 package be.kuleuven.bus;
 
 
-import be.kuleuven.bus.Exceptions.AvailableTicketsNotFoundExceptionCamping;
-import be.kuleuven.bus.Exceptions.CampingNotFoundException;
-import be.kuleuven.bus.Exceptions.NoAvailableTicketsExceptionCamping;
-import be.kuleuven.bus.Exceptions.OrderAlreadyExistsExceptionCamping;
+
+import be.kuleuven.bus.Exceptions.AvailableTicketsNotFoundException;
+import be.kuleuven.bus.Exceptions.BusNotFoundException;
+import be.kuleuven.bus.Exceptions.NoAvailableTicketsException;
+import be.kuleuven.bus.Exceptions.OrderAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -45,17 +46,17 @@ public class BusController {
     }
 
     @GetMapping("/bus/tickets/{type}")
-    EntityModel<AvailableTicketsBus> getTicketByType(@PathVariable String type) {
-        AvailableTicketsBus availableTicketsBus = busRepository.findTicket(type).orElseThrow(()->new AvailableTicketsNotFoundExceptionBus(type));
-        return availableTicketsToEntityModel(type, availableTicketsBus);
+    EntityModel<AvailableTickets> getTicketByType(@PathVariable String type) {
+        AvailableTickets availableTickets = busRepository.findTicket(type).orElseThrow(()->new AvailableTicketsNotFoundException(type));
+        return availableTicketsToEntityModel(type, availableTickets);
     }
 
     @GetMapping("/bus/tickets")
-    CollectionModel<EntityModel<AvailableTicketsBus>> getAllTickets() {
-        Collection<AvailableTicketsBus> tickets = busRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsBus>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsBus at : tickets) {
-            EntityModel<AvailableTicketsBus> ea = availableTicketsToEntityModel(at.getTicket_type(), at);
+    CollectionModel<EntityModel<AvailableTickets>> getAllTickets() {
+        Collection<AvailableTickets> tickets = busRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at : tickets) {
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
             availableTicketsEntityModels.add(ea);
         }
         return CollectionModel.of(availableTicketsEntityModels,
@@ -63,18 +64,18 @@ public class BusController {
     }
 
     @GetMapping("/bus/tickets/available")
-    CollectionModel<EntityModel<AvailableTicketsBus>> getAvailableTickets(){
-        Collection<AvailableTicketsBus> tickets = busRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsBus>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsBus at: tickets){
+    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(){
+        Collection<AvailableTickets> tickets = busRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTicketsBus> ea = availableTicketsToEntityModel(at.getTicket_type(), at);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
                 availableTicketsEntityModels.add(ea);
             }
         }
         if (availableTicketsEntityModels.isEmpty()) {
             System.out.println("empty");
-            throw new NoAvailableTicketsExceptionBus();
+            throw new NoAvailableTicketsException();
         }
         return CollectionModel.of(availableTicketsEntityModels,
                 linkTo(methodOn(BusController.class).getAvailableTickets()).withSelfRel());
@@ -82,16 +83,16 @@ public class BusController {
     }
 
     @PostMapping("/bus/order")
-    EntityModel<Bus> addBOrder(@RequestBody Bus bus){
+    EntityModel<Bus> addOrder(@RequestBody Bus bus){
         if(busRepository.findBus(bus.getId()).isPresent()){
-            throw new OrderAlreadyExistsExceptionBus(bus.getId());
+            throw new OrderAlreadyExistsException(bus.getId());
         }
         busRepository.add(bus);
         return busToEntityModel(bus.getId(), bus);
     }
 
     @PutMapping("/bus/confirm/{id}")
-    EntityModel<Bus> confirmBusOrder(@PathVariable Integer id){
+    EntityModel<Bus> confirmOrder(@PathVariable Integer id){
         Bus bus = busRepository.updateConfirmed(id);
         return busToEntityModel(bus.getId(), bus);
     }
@@ -108,7 +109,7 @@ public class BusController {
                 linkTo(methodOn(BusController.class).getAllBusses()).withRel("bus/order"));
     }
 
-    private EntityModel<AvailableTicketsBus> availableTicketsToEntityModel(String t, AvailableTicketsBus availableTicketsBus){
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(String t, AvailableTickets availableTicketsBus){
         return EntityModel.of(availableTicketsBus,
                 linkTo(methodOn(BusController.class).getTicketByType(t)).withSelfRel(),
                 linkTo(methodOn(BusController.class).getAllTickets()).withRel("camping/tickets"));

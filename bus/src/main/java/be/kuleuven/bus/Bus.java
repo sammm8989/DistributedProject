@@ -1,4 +1,4 @@
-package be.kuleuven.Bus;
+package be.kuleuven.bus;
 
 import java.time.LocalDateTime;
 
