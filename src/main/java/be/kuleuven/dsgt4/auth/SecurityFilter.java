@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
@@ -26,12 +29,55 @@ public class SecurityFilter extends OncePerRequestFilter {
         // TODO: (level 1) decode Identity Token and assign correct email and role
         // TODO: (level 2) verify Identity Token
 
-        var user = new User("test1@example.com", "manager");
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new FirebaseAuthentication(user));
+        String token = extractToken(request);
+        if (token == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Inside your doFilterInternal method
+
+        try {
+            Claims claims = Jwts.parser()
+                    .parseClaimsJwt(token)
+                    .getBody();
+
+            String email = claims.getSubject(); // Extract email from the subject
+            String role = (String) claims.get("role"); // Extract role from claims
+
+            if (email == null || role == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            User user = new User(email, role);
+
+            // Log user information to server logs
+            logger.info("Authenticated user: Email - " + email + ", Role - " + role);
+
+            SecurityContext context = SecurityContextHolder.getContext();
+            context.setAuthentication(new FirebaseAuthentication(user));
+
+            // Add custom header containing user information
+            response.setHeader("X-Authenticated-User", "Email: " + email + ", Role: " + role);
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
 
         filterChain.doFilter(request, response);
     }
+
+    private String extractToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7); // Extract token without "Bearer " prefix
+        }
+        return null;
+    }
+
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
