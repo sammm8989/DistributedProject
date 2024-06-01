@@ -149,19 +149,27 @@ public class BusRepository {
 
     public Optional<AvailableTickets> findTicket(String ticket) {
         Assert.notNull(ticket, "The ticket type can't be Null");
-        AvailableTickets availableTickets = available_tickets.get(ticket);
+        AvailableTickets availableTickets= available_tickets.get(ticket);
         return Optional.ofNullable(availableTickets);
     }
 
     public synchronized void add(Bus bus) {
-        Optional<AvailableTickets> tickets = findTicket(bus.getTypeTo());
-        if(tickets.isPresent()){
-            if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundException(bus.getTypeTo());
+        Optional<AvailableTickets> ticket_to = findTicket(bus.getType_to());
+        if(ticket_to.isPresent()){
+            if(!ticket_to.get().isAvailable()){
+                throw new AvailableTicketsNotFoundException(bus.getType_to());
+            }
+        }
+        Optional<AvailableTickets> ticket_from = findTicket(bus.getType_from());
+        if(ticket_from.isPresent()){
+            if(!ticket_from.get().isAvailable()){
+                throw new AvailableTicketsNotFoundException(bus.getType_from());
             }
         }
         bus_tickets.put(bus.getId(), bus);
-        available_tickets.get(bus.getTypeTo()).sellBusTicket();
+        available_tickets.get(bus.getType_to()).sellBusTicket();
+        available_tickets.get(bus.getType_from()).sellBusTicket();
+
     }
 
     public synchronized Bus updateConfirmed(Integer id) {
@@ -181,7 +189,8 @@ public class BusRepository {
         if(bus == null){
             throw new BusNotFoundException(id);
         }
-        available_tickets.get(bus.getTypeTo()).restockBusTicket();
+        available_tickets.get(bus.getType_from()).restockBusTicket();
+        available_tickets.get(bus.getType_to()).restockBusTicket();
         bus_tickets.remove(id);
         return bus;
     }

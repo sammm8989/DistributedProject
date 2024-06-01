@@ -9,6 +9,7 @@ public class Bus {
     protected String type_from;
     protected LocalDateTime from_festival;
     protected BoardingLocation location;
+    protected Float price;
     protected Boolean confirmed;
 
     public Integer getId() {
@@ -19,35 +20,43 @@ public class Bus {
         this.id = id;
     }
 
-    public String getTypeTo() {
+    public String getType_to() {
         return type_to;
     }
 
-    public void setTypeTo(String type) {
-        this.type_to = type;
+    public void setType_to(String type_to) {
+        this.type_to = type_to;
     }
 
-    public LocalDateTime getToFestival() {
-        return to_festival;
-    }
-
-    public void setToFestival(LocalDateTime to_festival) {
-        this.to_festival = to_festival;
-    }
-
-    public String getTypeFrom() {
+    public String getType_from() {
         return type_from;
     }
 
-    public void setTypeFrom(String type) {
-        this.type_from = type;
+    public void setType_from(String type_from) {
+        this.type_from = type_from;
     }
 
-    public LocalDateTime getFromFestival() {
+    public LocalDateTime getTo_festival() {
+        return to_festival;
+    }
+
+    public void setTo_festival(LocalDateTime to_festival) {
+        this.to_festival = to_festival;
+    }
+
+    public LocalDateTime getFrom_festival() {
         return from_festival;
     }
 
-    public void setFromFestival(LocalDateTime from_festival) {
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
+    public void setFrom_festival(LocalDateTime from_festival) {
         this.from_festival = from_festival;
     }
 

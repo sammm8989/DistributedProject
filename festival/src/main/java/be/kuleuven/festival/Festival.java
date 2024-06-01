@@ -3,6 +3,7 @@ package be.kuleuven.festival;
 public class Festival {
     protected Integer id;
     protected TicketType ticket_type;
+    protected Float price;
     protected Boolean confirmed;
 
     public Integer getId() {
@@ -20,6 +21,10 @@ public class Festival {
     public void setTicket_type(TicketType ticket_type) {
         this.ticket_type = ticket_type;
     }
+
+    public Float getPrice() {return price;}
+
+    public void setPrice(Float price) {this.price = price;}
 
     public Boolean getConfirmed() {
         return confirmed;
