@@ -30,10 +30,10 @@ public class FestivalRepository {
         saturday.setPrice(50.0f);
         sunday.setPrice(50.0f);
 
-        available_tickets.put(combi.getTicketType(), combi);
-        available_tickets.put(friday.getTicketType(), friday);
-        available_tickets.put(saturday.getTicketType(), saturday);
-        available_tickets.put(sunday.getTicketType(), sunday);
+        available_tickets.put(combi.getType(), combi);
+        available_tickets.put(friday.getType(), friday);
+        available_tickets.put(saturday.getType(), saturday);
+        available_tickets.put(sunday.getType(), sunday);
 
     }
     public Optional<Festival> findFestival(Integer id){
@@ -55,14 +55,14 @@ public class FestivalRepository {
     }
 
     public synchronized void add(Festival festival) {
-        Optional<AvailableTicketsFestival> tickets = findTicket(festival.getTicket_type());
+        Optional<AvailableTicketsFestival> tickets = findTicket(festival.getType());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundExceptionFestival(festival.getTicket_type());
+                throw new AvailableTicketsNotFoundExceptionFestival(festival.getType());
             }
         }
         festival_tickets.put(festival.getId(), festival);
-        available_tickets.get(festival.getTicket_type()).sellFestivalTicket();
+        available_tickets.get(festival.getType()).sellFestivalTicket();
     }
 
     public synchronized Festival updateConfirmed(Integer id) {
@@ -82,7 +82,7 @@ public class FestivalRepository {
         if(festival == null){
             throw new FestivalNotFoundException(id);
         }
-        available_tickets.get(festival.getTicket_type()).restockFestivalTicket();
+        available_tickets.get(festival.getType()).restockFestivalTicket();
         festival_tickets.remove(id);
         return festival;
     }

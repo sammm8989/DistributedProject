@@ -2,7 +2,7 @@ package be.kuleuven.festival;
 
 public class Festival {
     protected Integer id;
-    protected TicketType ticket_type;
+    protected TicketType type;
     protected Float price;
     protected Boolean confirmed;
 
@@ -14,12 +14,12 @@ public class Festival {
         this.id = id;
     }
 
-    public TicketType getTicket_type() {
-        return ticket_type;
+    public TicketType getType() {
+        return type;
     }
 
-    public void setTicket_type(TicketType ticket_type) {
-        this.ticket_type = ticket_type;
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     public Float getPrice() {return price;}

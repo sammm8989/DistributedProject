@@ -53,7 +53,7 @@ public class FestivalController {
         Collection<AvailableTicketsFestival> tickets = festivalRepository.getAllTickets();
         List<EntityModel<AvailableTicketsFestival>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTicketsFestival at : tickets) {
-            EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getTicketType(), at);
+            EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getType(), at);
             availableTicketsEntityModels.add(ea);
         }
         return CollectionModel.of(availableTicketsEntityModels,
@@ -66,7 +66,7 @@ public class FestivalController {
         List<EntityModel<AvailableTicketsFestival>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTicketsFestival at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getTicketType(), at);
+                EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getType(), at);
                 availableTicketsEntityModels.add(ea);
             }
         }

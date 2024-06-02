@@ -1,13 +1,13 @@
 package be.kuleuven.festival;
 
 public class AvailableTicketsFestival {
-    protected TicketType ticketType;
+    protected TicketType type;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTicketsFestival(TicketType ticketType, int total){
-        this.ticketType = ticketType;
+    public AvailableTicketsFestival(TicketType type, int total){
+        this.type = type;
         this.total = total;
         this.sold = 0;
     }
@@ -28,12 +28,12 @@ public class AvailableTicketsFestival {
         }
     }
 
-    public TicketType getTicketType() {
-        return ticketType;
+    public TicketType getType() {
+        return type;
     }
 
-    public void setTicketType(TicketType ticketType) {
-        this.ticketType = ticketType;
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     public Float getPrice() {
