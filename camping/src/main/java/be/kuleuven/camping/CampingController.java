@@ -44,16 +44,16 @@ public class CampingController {
                 linkTo(methodOn(CampingController.class).getAllCampings()).withSelfRel());
      }
     @GetMapping("/camping/tickets/{pack}")
-    EntityModel<AvailableTicketsCamping> getTicketByPackage(@PathVariable Pack pack) {
-        AvailableTicketsCamping availableTicketsCamping = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundExceptionCamping(pack));
-        return availableTicketsToEntityModel(pack, availableTicketsCamping);
+    EntityModel<AvailableTickets> getTicketByPackage(@PathVariable Pack pack) {
+        AvailableTickets availableTickets = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundExceptionCamping(pack));
+        return availableTicketsToEntityModel(pack, availableTickets);
     }
     @GetMapping("/camping/tickets")
-    CollectionModel<EntityModel<AvailableTicketsCamping>> getAllTickets() {
-        Collection<AvailableTicketsCamping> tickets = campingRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsCamping>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsCamping at : tickets) {
-            EntityModel<AvailableTicketsCamping> ea = availableTicketsToEntityModel(at.getCampingPackage(), at);
+    CollectionModel<EntityModel<AvailableTickets>> getAllTickets() {
+        Collection<AvailableTickets> tickets = campingRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at : tickets) {
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
             availableTicketsEntityModels.add(ea);
         }
         return CollectionModel.of(availableTicketsEntityModels,
@@ -61,12 +61,12 @@ public class CampingController {
     }
 
     @GetMapping("/camping/tickets/available")
-    CollectionModel<EntityModel<AvailableTicketsCamping>> getAvailableTickets(){
-        Collection<AvailableTicketsCamping> tickets = campingRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsCamping>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsCamping at: tickets){
+    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(){
+        Collection<AvailableTickets> tickets = campingRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTicketsCamping> ea = availableTicketsToEntityModel(at.getCampingPackage(), at);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
                 availableTicketsEntityModels.add(ea);
             }
         }
@@ -106,8 +106,8 @@ public class CampingController {
                 linkTo(methodOn(CampingController.class).getAllCampings()).withRel("camping/order"));
     }
 
-    private EntityModel<AvailableTicketsCamping> availableTicketsToEntityModel(Pack p, AvailableTicketsCamping availableTicketsCamping){
-        return EntityModel.of(availableTicketsCamping,
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(Pack p, AvailableTickets availableTickets){
+        return EntityModel.of(availableTickets,
                 linkTo(methodOn(CampingController.class).getTicketByPackage(p)).withSelfRel(),
                 linkTo(methodOn(CampingController.class).getAllTickets()).withRel("camping/tickets"));
     }

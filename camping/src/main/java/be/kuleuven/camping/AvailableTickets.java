@@ -1,12 +1,12 @@
-package be.kuleuven.festival;
+package be.kuleuven.camping;
 
-public class AvailableTicketsFestival {
-    protected TicketType type;
+public class AvailableTickets {
+    protected Pack type;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTicketsFestival(TicketType type, int total){
+    public AvailableTickets(Pack type, int total) {
         this.type = type;
         this.total = total;
         this.sold = 0;
@@ -16,43 +16,39 @@ public class AvailableTicketsFestival {
         return (sold < total);
     }
 
-    public synchronized void sellFestivalTicket() {
+    public synchronized void sellCampingTicket() {
         if (sold < total) {
             sold++;
         }
     }
 
-    public synchronized void restockFestivalTicket(){
+    public synchronized void restockCampingTicket(){
         if (sold >0){
             sold--;
         }
     }
 
-    public TicketType getType() {
+    public Pack getType() {
         return type;
     }
 
-    public void setType(TicketType type) {
+    public void setType(Pack type) {
         this.type = type;
     }
 
-    public Float getPrice() {
-        return price;
-    }
+    public Float getPrice(){return price;}
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
+    public void setPrice(Float price) {this.price = price;}
 
     public Integer getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public synchronized void setTotal(Integer total) {
         this.total = total;
     }
 
-    public Integer getSold() {
+    public synchronized Integer getSold() {
         return sold;
     }
 

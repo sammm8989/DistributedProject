@@ -16,14 +16,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FestivalRepository {
 
     private static final ConcurrentHashMap<Integer, Festival> festival_tickets = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<TicketType, AvailableTicketsFestival> available_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<TicketType, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void initData() {
-        AvailableTicketsFestival combi = new AvailableTicketsFestival(TicketType.COMBI, 500);
-        AvailableTicketsFestival friday = new AvailableTicketsFestival(TicketType.FRIDAY, 100);
-        AvailableTicketsFestival saturday = new AvailableTicketsFestival(TicketType.SATURDAY, 200);
-        AvailableTicketsFestival sunday = new AvailableTicketsFestival(TicketType.SUNDAY, 200);
+        AvailableTickets combi = new AvailableTickets(TicketType.COMBI, 500);
+        AvailableTickets friday = new AvailableTickets(TicketType.FRIDAY, 100);
+        AvailableTickets saturday = new AvailableTickets(TicketType.SATURDAY, 200);
+        AvailableTickets sunday = new AvailableTickets(TicketType.SUNDAY, 200);
 
         combi.setPrice(100.0f);
         friday.setPrice(40.0f);
@@ -46,16 +46,16 @@ public class FestivalRepository {
         return festival_tickets.values();
     }
 
-    public Collection<AvailableTicketsFestival> getAllTickets(){return available_tickets.values();}
+    public Collection<AvailableTickets> getAllTickets(){return available_tickets.values();}
 
-    public Optional<AvailableTicketsFestival> findTicket(TicketType t){
+    public Optional<AvailableTickets> findTicket(TicketType t){
         Assert.notNull(t, "The ticket type can't be Null");
-        AvailableTicketsFestival availableTicketsFestival = available_tickets.get(t);
-        return Optional.ofNullable(availableTicketsFestival);
+        AvailableTickets availableTickets = available_tickets.get(t);
+        return Optional.ofNullable(availableTickets);
     }
 
     public synchronized void add(Festival festival) {
-        Optional<AvailableTicketsFestival> tickets = findTicket(festival.getType());
+        Optional<AvailableTickets> tickets = findTicket(festival.getType());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
                 throw new AvailableTicketsNotFoundExceptionFestival(festival.getType());

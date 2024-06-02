@@ -13,4 +13,4 @@ be/kuleuven/festival/Exceptions/OrderAlreadyConfirmedAdviceFestival.class
 be/kuleuven/festival/Exceptions/NoAvailableTicketsAdviceFestival.class
 be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundExceptionFestival.class
 be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundAdviceFestival.class
-be/kuleuven/festival/AvailableTicketsFestival.class
+be/kuleuven/festival/AvailableTickets.class

@@ -43,17 +43,17 @@ public class FestivalController {
     }
 
     @GetMapping("/festival/tickets/{ticketType}")
-    EntityModel<AvailableTicketsFestival> getTicketByType(@PathVariable TicketType ticketType) {
-        AvailableTicketsFestival availableTicketsFestival = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundExceptionFestival(ticketType));
-        return availableTicketsToEntityModel(ticketType, availableTicketsFestival);
+    EntityModel<AvailableTickets> getTicketByType(@PathVariable TicketType ticketType) {
+        AvailableTickets availableTickets = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundExceptionFestival(ticketType));
+        return availableTicketsToEntityModel(ticketType, availableTickets);
     }
 
     @GetMapping("/festival/tickets")
-    CollectionModel<EntityModel<AvailableTicketsFestival>> getAllTickets() {
-        Collection<AvailableTicketsFestival> tickets = festivalRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsFestival>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsFestival at : tickets) {
-            EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getType(), at);
+    CollectionModel<EntityModel<AvailableTickets>> getAllTickets() {
+        Collection<AvailableTickets> availableTickets = festivalRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at : availableTickets) {
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
             availableTicketsEntityModels.add(ea);
         }
         return CollectionModel.of(availableTicketsEntityModels,
@@ -61,12 +61,12 @@ public class FestivalController {
     }
 
     @GetMapping("/festival/tickets/available")
-    CollectionModel<EntityModel<AvailableTicketsFestival>> getAvailableTickets(){
-        Collection<AvailableTicketsFestival> tickets = festivalRepository.getAllTickets();
-        List<EntityModel<AvailableTicketsFestival>> availableTicketsEntityModels = new ArrayList<>();
-        for (AvailableTicketsFestival at: tickets){
+    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(){
+        Collection<AvailableTickets> tickets = festivalRepository.getAllTickets();
+        List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
+        for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTicketsFestival> ea = availableTicketsToEntityModel(at.getType(), at);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at);
                 availableTicketsEntityModels.add(ea);
             }
         }
@@ -100,16 +100,16 @@ public class FestivalController {
         return festivalToEntityModel(id, festival);
     }
 
-    private EntityModel<Festival> festivalToEntityModel(Integer id, Festival festival){
-        return EntityModel.of(festival,
+    private EntityModel<Festival> festivalToEntityModel(Integer id, Festival order){
+        return EntityModel.of(order,
                 linkTo(methodOn(FestivalController.class).getFestivalById(id)).withSelfRel(),
                 linkTo(methodOn(FestivalController.class).getAllFestivals()).withRel("festival/order"));
     }
 
 
 
-    private EntityModel<AvailableTicketsFestival> availableTicketsToEntityModel(TicketType t, AvailableTicketsFestival availableTicketsFestival){
-        return EntityModel.of(availableTicketsFestival,
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(TicketType t, AvailableTickets availableTickets){
+        return EntityModel.of(availableTickets,
                 linkTo(methodOn(FestivalController.class).getTicketByType(t)).withSelfRel(),
                 linkTo(methodOn(FestivalController.class).getAllTickets()).withRel("festival/tickets"));
     }
