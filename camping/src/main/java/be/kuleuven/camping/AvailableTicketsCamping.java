@@ -1,13 +1,13 @@
 package be.kuleuven.camping;
 
 public class AvailableTicketsCamping {
-    protected Pack camping_package;
+    protected Pack type;
     protected Float price;
     protected Integer total;
     protected Integer sold;
 
-    public AvailableTicketsCamping(Pack camping_package, int total) {
-        this.camping_package = camping_package;
+    public AvailableTicketsCamping(Pack type, int total) {
+        this.type = type;
         this.total = total;
         this.sold = 0;
     }
@@ -29,11 +29,11 @@ public class AvailableTicketsCamping {
     }
 
     public Pack getCampingPackage() {
-        return camping_package;
+        return type;
     }
 
     public void setCampingPackage(Pack camping_package) {
-        this.camping_package = camping_package;
+        this.type = camping_package;
     }
 
     public Float getPrice(){return price;}

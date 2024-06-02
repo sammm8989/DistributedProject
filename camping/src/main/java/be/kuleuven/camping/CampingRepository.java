@@ -55,14 +55,14 @@ public class CampingRepository {
     }
 
     public synchronized void add(Camping camping) {
-        Optional<AvailableTicketsCamping> tickets = findTicket(camping.getCamping_package());
+        Optional<AvailableTicketsCamping> tickets = findTicket(camping.getType());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
-                throw new AvailableTicketsNotFoundExceptionCamping(camping.getCamping_package());
+                throw new AvailableTicketsNotFoundExceptionCamping(camping.getType());
             }
         }
         camping_tickets.put(camping.getId(), camping);
-        available_tickets.get(camping.getCamping_package()).sellCampingTicket();
+        available_tickets.get(camping.getType()).sellCampingTicket();
     }
 
     public synchronized Camping updateConfirmed(Integer id) {
@@ -82,7 +82,7 @@ public class CampingRepository {
         if(camping == null){
             throw new CampingNotFoundException(id);
         }
-        available_tickets.get(camping.getCamping_package()).restockCampingTicket();
+        available_tickets.get(camping.getType()).restockCampingTicket();
         camping_tickets.remove(id);
         return camping;
     }

@@ -2,7 +2,7 @@ package be.kuleuven.camping;
 
 public class Camping {
         protected Integer id;
-        protected Pack camping_package;
+        protected Pack type;
         protected Float price;
         protected Boolean confirmed;
 
@@ -14,12 +14,12 @@ public class Camping {
             this.id = id;
         }
 
-        public Pack getCamping_package() {
-            return camping_package;
+        public Pack getType() {
+            return type;
         }
 
-        public void setCamping_package(Pack camping_package) {
-            this.camping_package = camping_package;
+        public void setType(Pack type) {
+            this.type = type;
         }
 
         public Float getPrice() {return price;}
