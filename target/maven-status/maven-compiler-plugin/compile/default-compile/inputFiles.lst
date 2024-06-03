@@ -1,8 +1,8 @@
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/UserMessage.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/auth/SecurityFilter.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/auth/WebSecurityConfig.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/Broker.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/ViewController.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/RequestController.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/Dsgt4Application.java
-/home/antoon/dapp2024work/DistributedProject/src/main/java/be/kuleuven/dsgt4/User.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/Dsgt4Application.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/UserMessage.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/auth/WebSecurityConfig.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/ViewController.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/RequestController.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/User.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/Broker.java
+/home/antoon/dapp2024work/DistributedSystem/src/main/java/be/kuleuven/dsgt4/auth/SecurityFilter.java

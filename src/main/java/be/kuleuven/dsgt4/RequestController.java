@@ -9,34 +9,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-// Add the controller.
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 class RequestController {
 
     @Autowired
-    public Broker broker= new Broker();
+    public Broker broker;
 
-
-    //Inputs: none
-    //Outputs: All available products in a JSON
     @GetMapping("/broker/getAllAvailable")
     public ResponseEntity<JSONObject> getAllAvailable(
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             JSONObject json = broker.get_all_available();
             return ResponseEntity.ok(json);
-        }
-        else{
+        } else {
             JSONObject json = new JSONObject();
             json.put("Unauthorized", "No token provided or invalid format");
             return ResponseEntity.status(401).body(json);
         }
     }
 
-
-    //Inputs: all information for one trip + token
-    //Output: same as input + combined prices
-    //Output on failure: http status code 410
     @GetMapping("/broker/request/{bus_departure_time}/{round_trip}/{start_place}/{camping_type}/{festival_type}")
     public ResponseEntity<JSONObject> handleRequest(
             @PathVariable String bus_departure_time,
@@ -46,8 +40,7 @@ class RequestController {
             @PathVariable String festival_type,
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ) {
-
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             JSONObject master_json = new JSONObject();
             JSONObject bus_json = new JSONObject();
             JSONObject ticket_json = new JSONObject();
@@ -63,7 +56,6 @@ class RequestController {
             master_json.put("ticket", ticket_json);
 
             JSONObject return_value = broker.do_request(master_json, user_from_token(authorizationHeader.substring(7)));
-
             return ResponseEntity.ok(return_value);
         } else {
             JSONObject json = new JSONObject();
@@ -72,39 +64,41 @@ class RequestController {
         }
     }
 
-
-    //Inputs: token
-    //Output: confirmation of products
-    //Output on failure: if payment was to late returns http status code of 422
     @GetMapping("/broker/paid")
     public ResponseEntity<JSONObject> orderHasBeenPaid(
             @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             JSONObject return_value = broker.confirm(user_from_token(authorizationHeader.substring(7)));
             return ResponseEntity.ok(return_value);
-        }
-        else{
+        } else {
             JSONObject json = new JSONObject();
             json.put("Unauthorized", "No token provided or invalid format");
             return ResponseEntity.status(401).body(json);
         }
     }
 
-
-    //Inputs: token
-    //Output: confirmation of products
-    //Output on failure: if payment was to late returns http status code of 422
     @GetMapping("/broker/remove/{order_ID_bus}/{order_ID_camping}/{order_ID_ticket}")
     public void removeOrder(
             @PathVariable String order_ID_bus,
             @PathVariable String order_ID_camping,
-            @PathVariable String order_ID_ticket){
-    broker.remove_order(order_ID_bus, order_ID_ticket, order_ID_camping);
+            @PathVariable String order_ID_ticket) {
+        broker.remove_order(order_ID_bus, order_ID_ticket, order_ID_camping);
     }
 
+    // New endpoint to add data to Firestore
+    @GetMapping("/broker/addData/{collectionName}/{documentId}")
+    public ResponseEntity<String> addDataToFirestore(
+            @PathVariable String collectionName,
+            @PathVariable String documentId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", "Sample Item");
+        data.put("description", "This is a sample description");
 
-    public User user_from_token(String Token){
+        String result = broker.addDataToFirestore(collectionName, documentId, data);
+        return ResponseEntity.ok(result);
+    }
 
-        return new User("samwinant@gmail.com","superAdmin");
+    public User user_from_token(String Token) {
+        return new User("samwinant@gmail.com", "superAdmin");
     }
 }
