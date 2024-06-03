@@ -1,5 +1,6 @@
 package be.kuleuven.dsgt4;
 
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
@@ -54,6 +55,23 @@ public class Broker {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return "Error adding data: " + e.getMessage();
+        }
+    }
+
+    public JSONObject getDataFromFirestore(String collectionName, String documentId) {
+        try {
+            DocumentReference docRef = db.collection(collectionName).document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                return new JSONObject(document.getData());
+            } else {
+                return null;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            JSONObject error = new JSONObject();
+            error.put("error", e.getMessage());
+            return error;
         }
     }
 }

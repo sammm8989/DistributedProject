@@ -98,6 +98,28 @@ class RequestController {
         return ResponseEntity.ok(result);
     }
 
+    // New endpoint to get data from Firestore
+    @GetMapping("/broker/getData/{collectionName}/{documentId}")
+    public ResponseEntity<JSONObject> getDataFromFirestore(
+            @PathVariable String collectionName,
+            @PathVariable String documentId,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            JSONObject data = broker.getDataFromFirestore(collectionName, documentId);
+            if (data != null) {
+                return ResponseEntity.ok(data);
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("Not Found", "Document not found");
+                return ResponseEntity.status(404).body(json);
+            }
+        } else {
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
     public User user_from_token(String Token) {
         return new User("samwinant@gmail.com", "superAdmin");
     }
