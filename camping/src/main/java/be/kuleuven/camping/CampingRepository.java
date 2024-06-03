@@ -61,6 +61,7 @@ public class CampingRepository {
                 throw new AvailableTicketsNotFoundExceptionCamping(camping.getType());
             }
         }
+        camping.setPrice(camping.getPrice() + tickets.get().getPrice());
         camping_tickets.put(camping.getId(), camping);
         available_tickets.get(camping.getType()).sellCampingTicket();
     }
