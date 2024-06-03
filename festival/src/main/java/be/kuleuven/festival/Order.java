@@ -1,6 +1,6 @@
 package be.kuleuven.festival;
 
-public class Festival {
+public class Order {
     protected Integer id;
     protected TicketType type;
     protected Float price;

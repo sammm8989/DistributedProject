@@ -25,17 +25,17 @@ public class FestivalController {
     FestivalController(FestivalRepository festivalRepository){this.festivalRepository = festivalRepository;}
 
     @GetMapping("/festival/order/{id}")
-    EntityModel<Festival> getFestivalById(@PathVariable Integer id) {
-        Festival festival = festivalRepository.findFestival(id).orElseThrow(()->new FestivalNotFoundException(id));
+    EntityModel<Order> getFestivalById(@PathVariable Integer id) {
+        Order festival = festivalRepository.findFestival(id).orElseThrow(()->new FestivalNotFoundException(id));
         return festivalToEntityModel(id, festival);
     }
 
     @GetMapping("/festival/order")
-    CollectionModel<EntityModel<Festival>> getAllFestivals() {
-        Collection<Festival> festivals = festivalRepository.getAllFestivals();
-        List<EntityModel<Festival>> festivalEntityModels = new ArrayList<>();
-        for (Festival f: festivals){
-            EntityModel<Festival> ef = festivalToEntityModel(f.getId(), f);
+    CollectionModel<EntityModel<Order>> getAllFestivals() {
+        Collection<Order> festivals = festivalRepository.getAllFestivals();
+        List<EntityModel<Order>> festivalEntityModels = new ArrayList<>();
+        for (Order f: festivals){
+            EntityModel<Order> ef = festivalToEntityModel(f.getId(), f);
             festivalEntityModels.add(ef);
         }
         return CollectionModel.of(festivalEntityModels,
@@ -80,7 +80,7 @@ public class FestivalController {
     }
 
     @PostMapping("/festival/order")
-    EntityModel<Festival> addFestivalOrder(@RequestBody Festival festival){
+    EntityModel<Order> addFestivalOrder(@RequestBody Order festival){
         if(festivalRepository.findFestival(festival.getId()).isPresent()){
             throw new OrderAlreadyExistsExceptionFestival(festival.getId());
         }
@@ -89,18 +89,18 @@ public class FestivalController {
     }
 
     @PutMapping("/festival/confirm/{id}")
-    EntityModel<Festival> confirmFestivalOrder(@PathVariable Integer id){
-        Festival festival = festivalRepository.updateConfirmed(id);
+    EntityModel<Order> confirmFestivalOrder(@PathVariable Integer id){
+        Order festival = festivalRepository.updateConfirmed(id);
         return festivalToEntityModel(festival.getId(), festival);
     }
 
     @DeleteMapping("/festival/delete/{id}")
-    EntityModel<Festival> deleteFestivalOrder(@PathVariable Integer id){
-        Festival festival = festivalRepository.remove(id);
+    EntityModel<Order> deleteFestivalOrder(@PathVariable Integer id){
+        Order festival = festivalRepository.remove(id);
         return festivalToEntityModel(id, festival);
     }
 
-    private EntityModel<Festival> festivalToEntityModel(Integer id, Festival order){
+    private EntityModel<Order> festivalToEntityModel(Integer id, Order order){
         return EntityModel.of(order,
                 linkTo(methodOn(FestivalController.class).getFestivalById(id)).withSelfRel(),
                 linkTo(methodOn(FestivalController.class).getAllFestivals()).withRel("festival/order"));

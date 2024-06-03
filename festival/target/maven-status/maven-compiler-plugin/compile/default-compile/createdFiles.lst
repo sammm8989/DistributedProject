@@ -3,12 +3,12 @@ be/kuleuven/festival/Exceptions/OrderAlreadyConfirmedExceptionFestival.class
 be/kuleuven/festival/Exceptions/OrderAlreadyExistsExceptionFestival.class
 be/kuleuven/festival/Exceptions/OrderAlreadyExistsAdviceFestival.class
 be/kuleuven/festival/RestServiceApplication.class
+be/kuleuven/festival/Order.class
 be/kuleuven/festival/Exceptions/NoAvailableTicketsExceptionFestival.class
 be/kuleuven/festival/TicketType.class
 be/kuleuven/festival/FestivalRepository.class
 be/kuleuven/festival/Exceptions/FestivalNotFoundAdvice.class
 be/kuleuven/festival/FestivalController.class
-be/kuleuven/festival/Festival.class
 be/kuleuven/festival/Exceptions/OrderAlreadyConfirmedAdviceFestival.class
 be/kuleuven/festival/Exceptions/NoAvailableTicketsAdviceFestival.class
 be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundExceptionFestival.class

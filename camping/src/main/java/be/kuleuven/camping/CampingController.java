@@ -27,17 +27,17 @@ public class CampingController {
 
 
     @GetMapping("/camping/order/{id}")
-    EntityModel<Camping> getCampingById(@PathVariable Integer id) {
-        Camping camping = campingRepository.findCamping(id).orElseThrow(()->new CampingNotFoundException(id));
+    EntityModel<Order> getCampingById(@PathVariable Integer id) {
+        Order camping = campingRepository.findCamping(id).orElseThrow(()->new CampingNotFoundException(id));
         return campingToEntityModel(id, camping);
     }
 
     @GetMapping("/camping/order")
-    CollectionModel<EntityModel<Camping>> getAllCampings() {
-        Collection<Camping> campings = campingRepository.getAllCampings();
-        List<EntityModel<Camping>> campingEntityModels = new ArrayList<>();
-        for (Camping c: campings){
-            EntityModel<Camping> ec = campingToEntityModel(c.getId(), c);
+    CollectionModel<EntityModel<Order>> getAllCampings() {
+        Collection<Order> campings = campingRepository.getAllCampings();
+        List<EntityModel<Order>> campingEntityModels = new ArrayList<>();
+        for (Order c: campings){
+            EntityModel<Order> ec = campingToEntityModel(c.getId(), c);
             campingEntityModels.add(ec);
         }
         return CollectionModel.of(campingEntityModels,
@@ -80,7 +80,7 @@ public class CampingController {
     }
 
     @PostMapping("/camping/order")
-    EntityModel<Camping> addCampingOrder(@RequestBody Camping camping){
+    EntityModel<Order> addCampingOrder(@RequestBody Order camping){
         if(campingRepository.findCamping(camping.getId()).isPresent()){
             throw new OrderAlreadyExistsExceptionCamping(camping.getId());
         }
@@ -89,18 +89,18 @@ public class CampingController {
     }
 
     @PutMapping("/camping/confirm/{id}")
-    EntityModel<Camping> confirmCampingOrder(@PathVariable Integer id){
-        Camping camping = campingRepository.updateConfirmed(id);
+    EntityModel<Order> confirmCampingOrder(@PathVariable Integer id){
+        Order camping = campingRepository.updateConfirmed(id);
         return campingToEntityModel(camping.getId(), camping);
     }
 
     @DeleteMapping("/camping/delete/{id}")
-    EntityModel<Camping> deleteCampingOrder(@PathVariable Integer id){
-        Camping camping = campingRepository.remove(id);
+    EntityModel<Order> deleteCampingOrder(@PathVariable Integer id){
+        Order camping = campingRepository.remove(id);
         return campingToEntityModel(id, camping);
     }
 
-    private EntityModel<Camping> campingToEntityModel(Integer id, Camping camping){
+    private EntityModel<Order> campingToEntityModel(Integer id, Order camping){
         return EntityModel.of(camping,
                 linkTo(methodOn(CampingController.class).getCampingById(id)).withSelfRel(),
                 linkTo(methodOn(CampingController.class).getAllCampings()).withRel("camping/order"));

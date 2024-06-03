@@ -2,7 +2,7 @@ package be.kuleuven.bus;
 
 import java.time.LocalDateTime;
 
-public class Bus {
+public class Order {
     protected Integer id;
     protected String type_to;
     protected String type_from;

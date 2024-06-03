@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class FestivalRepository {
 
-    private static final ConcurrentHashMap<Integer, Festival> festival_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer, Order> festival_tickets = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<TicketType, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -36,13 +36,13 @@ public class FestivalRepository {
         available_tickets.put(sunday.getType(), sunday);
 
     }
-    public Optional<Festival> findFestival(Integer id){
+    public Optional<Order> findFestival(Integer id){
         Assert.notNull(id, "The Festival id must not be Null");
-        Festival festival = festival_tickets.get(id);
+        Order festival = festival_tickets.get(id);
         return Optional.ofNullable(festival);
     }
 
-    public Collection<Festival> getAllFestivals() {
+    public Collection<Order> getAllFestivals() {
         return festival_tickets.values();
     }
 
@@ -54,7 +54,7 @@ public class FestivalRepository {
         return Optional.ofNullable(availableTickets);
     }
 
-    public synchronized void add(Festival festival) {
+    public synchronized void add(Order festival) {
         Optional<AvailableTickets> tickets = findTicket(festival.getType());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
@@ -65,8 +65,8 @@ public class FestivalRepository {
         available_tickets.get(festival.getType()).sellFestivalTicket();
     }
 
-    public synchronized Festival updateConfirmed(Integer id) {
-        Festival festival = festival_tickets.get(id);
+    public synchronized Order updateConfirmed(Integer id) {
+        Order festival = festival_tickets.get(id);
         if (festival == null) {
             throw new FestivalNotFoundException(id);
         }
@@ -77,8 +77,8 @@ public class FestivalRepository {
         return festival;
     }
 
-    public synchronized Festival remove(Integer id){
-        Festival festival = festival_tickets.get(id);
+    public synchronized Order remove(Integer id){
+        Order festival = festival_tickets.get(id);
         if(festival == null){
             throw new FestivalNotFoundException(id);
         }

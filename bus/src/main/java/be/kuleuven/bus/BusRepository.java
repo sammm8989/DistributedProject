@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class BusRepository {
-    private static final ConcurrentHashMap<Integer, Bus> bus_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer, Order> bus_tickets = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -135,13 +135,13 @@ public class BusRepository {
 
     }
 
-    public Optional<Bus> findBus(Integer id){
+    public Optional<Order> findBus(Integer id){
         Assert.notNull(id, "The Bus id must not be null");
-        Bus bus = bus_tickets.get(id);
+        Order bus = bus_tickets.get(id);
         return Optional.ofNullable(bus);
     }
 
-    public Collection<Bus> getAllBusses() {
+    public Collection<Order> getAllBusses() {
         return bus_tickets.values();
     }
 
@@ -153,7 +153,7 @@ public class BusRepository {
         return Optional.ofNullable(availableTickets);
     }
 
-    public synchronized void add(Bus bus) {
+    public synchronized void add(Order bus) {
         Optional<AvailableTickets> ticket_to = findTicket(bus.getType_to());
         if(ticket_to.isPresent()){
             if(!ticket_to.get().isAvailable()){
@@ -172,8 +172,8 @@ public class BusRepository {
 
     }
 
-    public synchronized Bus updateConfirmed(Integer id) {
-        Bus bus = bus_tickets.get(id);
+    public synchronized Order updateConfirmed(Integer id) {
+        Order bus = bus_tickets.get(id);
         if (bus == null) {
             throw new BusNotFoundException(id);
         }
@@ -184,8 +184,8 @@ public class BusRepository {
         return bus;
     }
 
-    public synchronized Bus remove(Integer id){
-        Bus bus = bus_tickets.get(id);
+    public synchronized Order remove(Integer id){
+        Order bus = bus_tickets.get(id);
         if(bus == null){
             throw new BusNotFoundException(id);
         }

@@ -1,6 +1,6 @@
 package be.kuleuven.camping;
 
-public class Camping {
+public class Order {
         protected Integer id;
         protected Pack type;
         protected Float price;

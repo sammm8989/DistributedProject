@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class CampingRepository {
 
-    private static final ConcurrentHashMap<Integer, Camping> camping_tickets = new ConcurrentHashMap<>( );
+    private static final ConcurrentHashMap<Integer, Order> camping_tickets = new ConcurrentHashMap<>( );
     private static final ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -35,13 +35,13 @@ public class CampingRepository {
         available_tickets.put(hotel.getType(), hotel);
 
     }
-    public Optional<Camping> findCamping(Integer id){
-        Assert.notNull(id, "The Camping id must not be Null");
-        Camping camping = camping_tickets.get(id);
+    public Optional<Order> findCamping(Integer id){
+        Assert.notNull(id, "The Order id must not be Null");
+        Order camping = camping_tickets.get(id);
         return Optional.ofNullable(camping);
     }
 
-    public Collection<Camping> getAllCampings() {
+    public Collection<Order> getAllCampings() {
         return camping_tickets.values();
     }
 
@@ -54,7 +54,7 @@ public class CampingRepository {
         return Optional.ofNullable(availableTickets);
     }
 
-    public synchronized void add(Camping camping) {
+    public synchronized void add(Order camping) {
         Optional<AvailableTickets> tickets = findTicket(camping.getType());
         if(tickets.isPresent()){
             if(!tickets.get().isAvailable()){
@@ -65,8 +65,8 @@ public class CampingRepository {
         available_tickets.get(camping.getType()).sellCampingTicket();
     }
 
-    public synchronized Camping updateConfirmed(Integer id) {
-        Camping camping = camping_tickets.get(id);
+    public synchronized Order updateConfirmed(Integer id) {
+        Order camping = camping_tickets.get(id);
         if (camping == null) {
             throw new CampingNotFoundException(id);
         }
@@ -77,8 +77,8 @@ public class CampingRepository {
         return camping;
     }
 
-    public synchronized Camping remove(Integer id){
-        Camping camping = camping_tickets.get(id);
+    public synchronized Order remove(Integer id){
+        Order camping = camping_tickets.get(id);
         if(camping == null){
             throw new CampingNotFoundException(id);
         }

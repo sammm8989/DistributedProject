@@ -27,18 +27,18 @@ public class BusController {
     BusController(BusRepository busRepository){this.busRepository = busRepository;}
 
     @GetMapping("/bus/order/{id}")
-    EntityModel<Bus> getBusById(@PathVariable Integer id){
-        Bus bus = busRepository.findBus(id).orElseThrow(() -> new BusNotFoundException(id));
+    EntityModel<Order> getBusById(@PathVariable Integer id){
+        Order bus = busRepository.findBus(id).orElseThrow(() -> new BusNotFoundException(id));
         return busToEntityModel(id, bus);
 
     }
 
     @GetMapping("/bus/order")
-    CollectionModel<EntityModel<Bus>> getAllBusses() {
-        Collection<Bus> bus = busRepository.getAllBusses();
-        List<EntityModel<Bus>> busEntityModels = new ArrayList<>();
-        for (Bus b: bus){
-            EntityModel<Bus> eb = busToEntityModel(b.getId(), b);
+    CollectionModel<EntityModel<Order>> getAllBusses() {
+        Collection<Order> bus = busRepository.getAllBusses();
+        List<EntityModel<Order>> busEntityModels = new ArrayList<>();
+        for (Order b: bus){
+            EntityModel<Order> eb = busToEntityModel(b.getId(), b);
             busEntityModels.add(eb);
         }
         return CollectionModel.of(busEntityModels,
@@ -83,7 +83,7 @@ public class BusController {
     }
 
     @PostMapping("/bus/order")
-    EntityModel<Bus> addOrder(@RequestBody Bus bus){
+    EntityModel<Order> addOrder(@RequestBody Order bus){
         if(busRepository.findBus(bus.getId()).isPresent()){
             throw new OrderAlreadyExistsException(bus.getId());
         }
@@ -92,18 +92,18 @@ public class BusController {
     }
 
     @PutMapping("/bus/confirm/{id}")
-    EntityModel<Bus> confirmOrder(@PathVariable Integer id){
-        Bus bus = busRepository.updateConfirmed(id);
+    EntityModel<Order> confirmOrder(@PathVariable Integer id){
+        Order bus = busRepository.updateConfirmed(id);
         return busToEntityModel(bus.getId(), bus);
     }
 
     @DeleteMapping("/bus/delete/{id}")
-    EntityModel<Bus> deleteBusOrder(@PathVariable Integer id){
-        Bus bus = busRepository.remove(id);
+    EntityModel<Order> deleteBusOrder(@PathVariable Integer id){
+        Order bus = busRepository.remove(id);
         return busToEntityModel(id, bus);
     }
 
-    private EntityModel<Bus> busToEntityModel(Integer id, Bus bus){
+    private EntityModel<Order> busToEntityModel(Integer id, Order bus){
         return EntityModel.of(bus,
                 linkTo(methodOn(BusController.class).getBusById(id)).withSelfRel(),
                 linkTo(methodOn(BusController.class).getAllBusses()).withRel("bus/order"));
