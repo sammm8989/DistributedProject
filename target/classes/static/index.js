@@ -148,13 +148,29 @@ function addContent() {
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
     document.getElementById("contentdiv").innerHTML = htmlContent;
 
+    const prices = {};
+
+    // Function to update the total price
+    function updateTotalPrice() {
+        let totalPrice = 0;
+        Object.values(prices).forEach(price => {
+            totalPrice += price;
+        });
+        console.log('Total Price: €' + totalPrice);
+        document.getElementById("price").innerText = totalPrice;
+    }
+
     var available = document.getElementById("getAvailabilities");
     available.addEventListener("click", function () {
         fetch(`/broker/getAllAvailable`, {
             headers: { Authorization: 'Bearer ' + token } // Correct token usage
         })
         .then((response) => {
-            return response.json(); // Parse response as JSON
+            console.log('HTTP Status Code:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
         .then((data) => {
             let new_text = `<div id="responseContainer">`;
@@ -166,9 +182,9 @@ function addContent() {
                                     <label for="${key}">${key}:</label>
                                     <select id="${key}">`;
                     data[key].forEach(item => {
+                        const extraInfo = item.extra_information ? `, time: ${item.extra_information}` : '';
                         // For dropdowns, we need to handle objects, so we stringify the object for the value
-                        new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}</option>`;
-                    });
+                    new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}, price: €${item.price}${extraInfo}</option>`;                    });
                     new_text += `</select>
                                 </div>`;
                 } else {
@@ -180,9 +196,24 @@ function addContent() {
             });
 
             new_text += `
-                </div>
+                <div class="selection"><label>Price:</label><span id="price"></span></div>
                 <div class="login-button" id='chooseSelection'>Choose Selected</div>`;
             document.getElementById("contentdiv").innerHTML = new_text;
+
+            document.querySelectorAll('select').forEach(select => {
+                // Initialize prices with the default selected value
+                const selectedItem = JSON.parse(select.value);
+                prices[select.id] = selectedItem.price;
+
+                select.addEventListener('change', (event) => {
+                    const selectedOption = event.target.value;
+                    const selectedItem = JSON.parse(selectedOption);
+                    prices[select.id] = selectedItem.price;
+                    updateTotalPrice();
+                });
+            });
+
+            updateTotalPrice();
 
             var select = document.getElementById("chooseSelection");
             select.addEventListener("click", function () {
@@ -197,13 +228,14 @@ function addContent() {
                 });
 
                 // Construct the request URL based on the selected options
-                const bus_departure_time = requestData.bus.departure_time;
-                const round_trip = requestData.bus.round_trip;
-                const start_place = requestData.bus.start_place;
+                const bus_from_dep = requestData.bus_from_festival.extra_information
+                const bus_to_dep = requestData.bus_from_festival.extra_information;
+                const bus_from = requestData.bus_from_festival.type;
+                const bus_to = requestData.bus_to_festival.type;
                 const camping_type = requestData.camping.type;
-                const festival_type = requestData.ticket.type;
+                const festival_type = requestData.festival.type;
 
-                fetch(`/broker/request/${bus_departure_time}/${round_trip}/${start_place}/${camping_type}/${festival_type}`, {
+                fetch(`/broker/request/${camping_type}/${festival_type}/${bus_to}/${bus_from}`, {
                     headers: {
                         Authorization: 'Bearer ' + token
                     }
@@ -221,9 +253,8 @@ function addContent() {
                     let confirmation_text = `
                         <div id="confirmationContainer">
                             <h2>Selected Options</h2>
-                            <div class="selection"><label>Bus Departure Time:</label><span>${bus_departure_time}</span></div>
-                            <div class="selection"><label>Round Trip:</label><span>${round_trip}</span></div>
-                            <div class="selection"><label>Start Place:</label><span>${start_place}</span></div>
+                            <div class="selection"><label>Bus To Festival:</label><span>${data.bus.type_from} @ ${bus_to_dep}</span></div>
+                            <div class="selection"><label>Bus From Festival:</label><span>${data.bus.type_to} @ ${bus_from_dep}</span></div>
                             <div class="selection"><label>Camping Type:</label><span>${camping_type}</span></div>
                             <div class="selection"><label>Festival Type:</label><span>${festival_type}</span></div>
                             <div class="selection"><label>Price:</label><span>${data.price}</span></div>
@@ -271,44 +302,3 @@ function addContent() {
     });
 }
 
-
-
-
-// calling /api/hello on the rest service to illustrate text based data retrieval
-function getHello(token) {
-
-  fetch('/api/hello', {
-    headers: { Authorization: 'Bearer {token}' }
-  })
-    .then((response) => {
-      return response.text();
-    })
-    .then((data) => {
-
-      console.log(data);
-      addContent(data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-
-}
-// calling /api/whoami on the rest service to illustrate JSON based data retrieval
-function whoami(token) {
-
-  fetch('/api/whoami', {
-    headers: { Authorization: 'Bearer ' + token }
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data.email + data.role);
-      addContent("Whoami at rest service: " + data.email + " - " + data.role);
-
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
