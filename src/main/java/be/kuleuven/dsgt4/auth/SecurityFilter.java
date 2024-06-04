@@ -4,9 +4,6 @@ import be.kuleuven.dsgt4.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import net.minidev.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +26,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
         String token = extractToken(request);
         if (token == null) {
             filterChain.doFilter(request, response);
@@ -40,7 +36,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             DecodedJWT jwt = JWT.decode(token);
             Map<String, Claim> info = jwt.getClaims();
-            System.out.println(info);
 
             if(info.get("role") != null){
                 role = info.get("role").toString();
@@ -49,11 +44,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             email = email.replace("\"","");
             role = role.replace("\"","");
-
-            if (email == null || role == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
 
             if(requestURI.contains("/api/") && !(role.contains("admin"))){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -66,8 +56,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(new FirebaseAuthentication(user));
-
-
 
         } catch (Exception e) {
             System.out.println(e);

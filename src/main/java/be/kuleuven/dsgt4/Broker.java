@@ -30,11 +30,9 @@ public class Broker {
     @Autowired
     private Firestore db;
 
-    int i = 0;
     JSONParser parser = new JSONParser();
 
-    String[] urls = {"http://localhost:8100/camping/tickets/available", "http://localhost:8090/festival/tickets/available",
-            "http://localhost:8110/bus/tickets/available"};
+    String[] urls = {"http://localhost:8100/camping/", "http://localhost:8090/festival/", "http://localhost:8110/bus/"};
     String[] names = {"camping", "festival", "bus"};
 
     ApiWorker AW = new ApiWorker();
@@ -62,7 +60,7 @@ public class Broker {
         for (int i = 0; i < urls.length; i++) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.getForEntity(urls[i], String.class);
+                ResponseEntity<String> response = restTemplate.getForEntity(urls[i]+"tickets/available", String.class);
 
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode rootNode = mapper.readTree(response.getBody());
@@ -102,7 +100,6 @@ public class Broker {
             }
 
         }
-        System.out.println(master_JSON);
         return master_JSON;
     }
 
@@ -112,54 +109,39 @@ public class Broker {
     //the suppliers also returns aN order_id that should be put in the database
     //if a suppliers returns with an error a rollback should be done
     public JSONObject do_request(JSONObject request, String email){
-        JSONObject camping = (JSONObject) request.get("camping");
-        JSONObject bus = (JSONObject) request.get("bus");
-        JSONObject ticket = (JSONObject) request.get("ticket");
+        double total_price = 0.0;
 
-        bus.put("id", email);
-        bus.put("confirmed",false);
-        bus.put("price", 0.0);
+        for (String url : urls) {
+            JSONObject request_json = (JSONObject) request.get("camping");
 
+            request_json.put("id", email);
+            request_json.put("confirmed", false);
+            request_json.put("price", 0.0);
 
-        ticket.put("id", email);
-        ticket.put("confirmed",false);
-        ticket.put("price", 0.0);
-
-        camping.put("id", email);
-        camping.put("confirmed",false);
-        camping.put("price", 0.0);
-
-        System.out.println(ticket);
-        System.out.println(camping);
-        System.out.println(bus);
-
-        Map<String, Object> db_info = request;
-        db_info.put("total_confirmed", false);
-
-        addDataToFirestore("orders", email, db_info);
-        Double price_ticket = do_call_with_JSON("http://localhost:8090/festival/order",ticket);
-        Double price_camping = do_call_with_JSON("http://localhost:8100/camping/order",camping);
-        Double price_bus = do_call_with_JSON("http://localhost:8110/bus/order",bus);
-
-        if(price_ticket != null && price_camping != null && price_bus != null){
-            request.put("price", price_camping + price_ticket + price_bus);
-            return request;
+            Double price = do_call_with_JSON(url + "order", request_json);
+            if (price != null) {
+                remove_order(email);
+                return null;
+            }
+            total_price += price;
         }
-        else{
-            remove_order(email);
 
-            return null;
-        }
+        request.put("price", total_price);
+
+        request.put("total_confirmed", false);
+        add_data_to_firestore("orders", email, request);
+
+        return request;
     }
 
-    public String addDataToFirestore(String collectionName, String documentId, Map<String, Object> data) {
+
+
+    public void add_data_to_firestore(String collectionName, String documentId, Map<String, Object> data) {
         try {
             DocumentReference docRef = db.collection(collectionName).document(documentId);
             WriteResult result = docRef.set(data).get();
-            return "Data added at: " + result.getUpdateTime();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return "Error adding data: " + e.getMessage();
         }
     }
 
@@ -178,7 +160,7 @@ public class Broker {
     }
 
 
-    public JSONObject getDataFromFirestore(String collectionName, String documentId) {
+    public JSONObject get_data_from_firestore(String collectionName, String documentId) {
         try {
             DocumentReference docRef = db.collection(collectionName).document(documentId);
             DocumentSnapshot document = docRef.get().get();
@@ -196,7 +178,7 @@ public class Broker {
     }
 
 
-    public List<String> getAllDocumentIds(String collectionName) {
+    public List<String> get_all_document_IDs(String collectionName) {
         List<String> documentIds = new ArrayList<>();
         try {
             CollectionReference collectionRef = db.collection(collectionName);
@@ -215,26 +197,25 @@ public class Broker {
     //this should send a confirmation to all server then it is booked
     //If there is a failed server then a rollback should be done
     public JSONObject confirm(String email){
-        String[] urls_confirm = {"http://localhost:8100/camping/confirm/", "http://localhost:8110/bus/confirm/",
-                "http://localhost:8090/festival/confirm/"
-        };
-        for(int i = 0 ; i < urls_confirm.length ; i++){
+        for (String s : urls) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.exchange(urls_confirm[i] + email, HttpMethod.PUT, null, String.class);
+                ResponseEntity<String> response = restTemplate.exchange(s + "confirm/" + email, HttpMethod.PUT, null, String.class);
                 int statusCode = response.getStatusCodeValue();
-                if(statusCode != 200){
+                if (statusCode != 200) {
                     remove_order(email);
                     return null;
                 }
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
+                return null;
             }
         }
-
         change_total_confirmed("orders", email);
-        return null;
+        JSONObject JO = new JSONObject();
+        JO.put("succes", "All good");
+        return JO;
     }
 
 
@@ -261,13 +242,13 @@ public class Broker {
             os.flush();
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                System.out.println(url_string);
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                return null;
             }
+
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuilder response = new StringBuilder();
             String line;
+
             while ((line = br.readLine()) != null) {
                 response.append(line);
             }
@@ -279,7 +260,6 @@ public class Broker {
             conn.disconnect();
             return price;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

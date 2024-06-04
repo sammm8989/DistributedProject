@@ -29,7 +29,6 @@ public class MyResponseRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public Enumeration<String> getHeaderNames() {
-        // Create a set of all the header names
         HashSet<String> set = new HashSet<>(headerMap.keySet());
         Enumeration<String> e = ((HttpServletRequest) getRequest()).getHeaderNames();
         while (e.hasMoreElements()) {
