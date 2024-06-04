@@ -145,7 +145,8 @@ function showUnAuthenticated() {
 
 function addContent() {
     const htmlContent = `
-    <div class='login-button' id='getAvailabilities'>Get Availabilities</div>`;
+    <div class='login-button' id='getAvailabilities'>Get Availabilities</div>
+    <div class='login-button' id='AdminPortal'>Admin Portal</div>`;
     document.getElementById("contentdiv").innerHTML = htmlContent;
 
     const prices = {};
@@ -161,6 +162,15 @@ function addContent() {
     }
 
     var available = document.getElementById("getAvailabilities");
+    var AdminPortal = document.getElementById("AdminPortal");
+        AdminPortal.addEventListener("click", function () {
+            fetch(`/api/getAllOrders`, {
+                headers: { Authorization: 'Bearer ' + token }
+            })
+            .then((response) => {
+                return response.json();
+            }).then((data) => console.log(data))
+        })
     available.addEventListener("click", function () {
         fetch(`/broker/getAllAvailable`, {
             headers: { Authorization: 'Bearer ' + token } // Correct token usage

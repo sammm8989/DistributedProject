@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // Add the controller.
 @RestController
 class RequestController {
@@ -34,6 +37,70 @@ class RequestController {
             }
         }
         else{
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+    @GetMapping("/api/getAllCustomers")
+    public ResponseEntity<JSONObject> getAllCustomers(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader("X-Authenticated-User") String email) throws ParseException {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            System.out.println("qsfkb,");
+            return null;
+        } else {
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+    @GetMapping("/api/getAllOrders")
+    public ResponseEntity<JSONObject> getAllOrders(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader("X-Authenticated-User") String email)throws ParseException {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            JSONObject json = new JSONObject();
+            json.put("Good", "No token provided or invalid format");
+            return ResponseEntity.status(200).body(json);
+        } else {
+            JSONObject json = new JSONObject();
+            json.put("Unauthorized", "No token provided or invalid format");
+            return ResponseEntity.status(401).body(json);
+        }
+    }
+
+    // New endpoint to add data to Firestore
+    @GetMapping("/broker/addData/{collectionName}/{documentId}")
+    public ResponseEntity<String> addDataToFirestore(
+            @PathVariable String collectionName,
+            @PathVariable String documentId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", "Sample Item");
+        data.put("description", "This is a sample description");
+
+        String result = broker.addDataToFirestore(collectionName, documentId, data);
+        return ResponseEntity.ok(result);
+    }
+
+    // New endpoint to get data from Firestore
+    @GetMapping("/broker/getData/{collectionName}/{documentId}")
+    public ResponseEntity<JSONObject> getDataFromFirestore(
+            @PathVariable String collectionName,
+            @PathVariable String documentId,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            JSONObject data = broker.getDataFromFirestore(collectionName, documentId);
+            if (data != null) {
+                return ResponseEntity.ok(data);
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("Not Found", "Document not found");
+                return ResponseEntity.status(404).body(json);
+            }
+        } else {
             JSONObject json = new JSONObject();
             json.put("Unauthorized", "No token provided or invalid format");
             return ResponseEntity.status(401).body(json);
@@ -112,7 +179,7 @@ class RequestController {
     //Output on failure: if payment was to late returns http status code of 422
     @GetMapping("/broker/remove/{primary_key}")
     public void removeOrder(
-            @PathVariable int primary_key){
+            @PathVariable String primary_key){
     broker.remove_order(primary_key);
     }
 

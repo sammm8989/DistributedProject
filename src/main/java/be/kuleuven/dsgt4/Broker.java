@@ -3,8 +3,13 @@ package be.kuleuven.dsgt4;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,10 +21,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 
 @Component
 public class Broker {
+
+    @Autowired
+    private Firestore db;
 
     int i = 0;
     JSONParser parser = new JSONParser();
@@ -27,6 +37,11 @@ public class Broker {
     String[] urls = {"http://localhost:8100/camping/tickets/available", "http://localhost:8090/festival/tickets/available",
             "http://localhost:8110/bus/tickets/available"};
     String[] names = {"camping", "festival", "bus"};
+
+    ApiWorker AW = new ApiWorker();
+
+    Thread workerThread = new Thread(AW);
+
 
     //Input: None
     //Output: JSON of all available products to buy
@@ -131,8 +146,36 @@ public class Broker {
             return request;
         }
         else{
-            remove_order(primary_key);
+            remove_order(String.valueOf(primary_key));
             return null;
+        }
+    }
+
+    public String addDataToFirestore(String collectionName, String documentId, Map<String, Object> data) {
+        try {
+            DocumentReference docRef = db.collection(collectionName).document(documentId);
+            WriteResult result = docRef.set(data).get();
+            return "Data added at: " + result.getUpdateTime();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return "Error adding data: " + e.getMessage();
+        }
+    }
+
+    public JSONObject getDataFromFirestore(String collectionName, String documentId) {
+        try {
+            DocumentReference docRef = db.collection(collectionName).document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                return new JSONObject(document.getData());
+            } else {
+                return null;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            JSONObject error = new JSONObject();
+            error.put("error", e.getMessage());
+            return error;
         }
     }
 
@@ -147,9 +190,13 @@ public class Broker {
 
     //INPUT: the order_ids from all suppliers that should be removed
     //Output: none
-    public void remove_order(int primary_key){
-
+    public void remove_order(String primary_key){
+        if(workerThread.getState() == Thread.State.NEW){
+            workerThread.start();
+        }
+        AW.add(primary_key);
     }
+
 
     public Double do_call_with_JSON(String url_string, JSONObject request){
         try {
