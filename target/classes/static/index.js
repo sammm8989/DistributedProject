@@ -164,6 +164,13 @@ function addContent() {
     var available = document.getElementById("getAvailabilities");
     var AdminPortal = document.getElementById("AdminPortal");
         AdminPortal.addEventListener("click", function () {
+            fetch(`/api/getAllCustomers`, {
+                headers: { Authorization: 'Bearer ' + token }
+            })
+            .then((response) => {
+                return response.json();
+            }).then((data) => console.log(data))
+
             fetch(`/api/getAllOrders`, {
                 headers: { Authorization: 'Bearer ' + token }
             })

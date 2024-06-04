@@ -3,13 +3,12 @@ package be.kuleuven.dsgt4;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -112,22 +111,21 @@ public class Broker {
     //Output: the request with the combined price integrated into it
     //the suppliers also returns aN order_id that should be put in the database
     //if a suppliers returns with an error a rollback should be done
-    public JSONObject do_request(JSONObject request, User user){
-        int primary_key = push_to_db(user);
+    public JSONObject do_request(JSONObject request, String email){
         JSONObject camping = (JSONObject) request.get("camping");
         JSONObject bus = (JSONObject) request.get("bus");
         JSONObject ticket = (JSONObject) request.get("ticket");
 
-        bus.put("id", primary_key);
+        bus.put("id", email);
         bus.put("confirmed",false);
         bus.put("price", 0.0);
 
 
-        ticket.put("id", primary_key);
+        ticket.put("id", email);
         ticket.put("confirmed",false);
         ticket.put("price", 0.0);
 
-        camping.put("id", primary_key);
+        camping.put("id", email);
         camping.put("confirmed",false);
         camping.put("price", 0.0);
 
@@ -135,18 +133,21 @@ public class Broker {
         System.out.println(camping);
         System.out.println(bus);
 
+        Map<String, Object> db_info = request;
+        db_info.put("total_confirmed", false);
 
+        addDataToFirestore("orders", email, db_info);
         Double price_ticket = do_call_with_JSON("http://localhost:8090/festival/order",ticket);
         Double price_camping = do_call_with_JSON("http://localhost:8100/camping/order",camping);
         Double price_bus = do_call_with_JSON("http://localhost:8110/bus/order",bus);
 
         if(price_ticket != null && price_camping != null && price_bus != null){
             request.put("price", price_camping + price_ticket + price_bus);
-            System.out.println(request);
             return request;
         }
         else{
-            remove_order(String.valueOf(primary_key));
+            remove_order(email);
+
             return null;
         }
     }
@@ -161,6 +162,21 @@ public class Broker {
             return "Error adding data: " + e.getMessage();
         }
     }
+
+    public void change_total_confirmed(String collectionName, String documentId){
+        try {
+            DocumentReference docRef = db.collection(collectionName).document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                // Update the confirmed_total field to true
+                docRef.update("confirmed_total", true);
+
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public JSONObject getDataFromFirestore(String collectionName, String documentId) {
         try {
@@ -179,12 +195,46 @@ public class Broker {
         }
     }
 
+
+    public List<String> getAllDocumentIds(String collectionName) {
+        List<String> documentIds = new ArrayList<>();
+        try {
+            CollectionReference collectionRef = db.collection(collectionName);
+            ApiFuture<QuerySnapshot> querySnapshot = collectionRef.get();
+            for (QueryDocumentSnapshot document : querySnapshot.get().getDocuments()) {
+                documentIds.add(document.getId());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return documentIds;
+    }
+
     //input: User
     //Output confirmation
     //this should send a confirmation to all server then it is booked
     //If there is a failed server then a rollback should be done
-    public JSONObject confirm(User user){
-        return new JSONObject();
+    public JSONObject confirm(String email){
+        String[] urls_confirm = {"http://localhost:8100/camping/confirm/", "http://localhost:8110/bus/confirm/",
+                "http://localhost:8090/festival/confirm/"
+        };
+        for(int i = 0 ; i < urls_confirm.length ; i++){
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<String> response = restTemplate.exchange(urls_confirm[i] + email, HttpMethod.PUT, null, String.class);
+                int statusCode = response.getStatusCodeValue();
+                if(statusCode != 200){
+                    remove_order(email);
+                    return null;
+                }
+
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+
+        change_total_confirmed("orders", email);
+        return null;
     }
 
 
@@ -233,10 +283,5 @@ public class Broker {
             return null;
         }
     }
-
-    public int push_to_db(User user){
-        return i++;
-    }
-
 
 }

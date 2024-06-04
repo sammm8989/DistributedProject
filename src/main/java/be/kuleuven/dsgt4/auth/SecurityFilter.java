@@ -47,8 +47,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             }
             String email = info.get("email").toString();
 
-            System.out.println(email);
-            System.out.println(role);
+            email = email.replace("\"","");
+            role = role.replace("\"","");
 
             if (email == null || role == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -56,7 +56,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             }
 
             if(requestURI.contains("/api/") && !(role.contains("admin"))){
-                System.out.println("he");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
@@ -72,7 +71,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             System.out.println(e);
-            response.addHeader("X-Authenticated-User", "Sam ");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

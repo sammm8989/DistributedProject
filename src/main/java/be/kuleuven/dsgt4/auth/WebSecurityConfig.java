@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/index.css").permitAll()
                 .antMatchers("/index.js").permitAll()
+                .antMatchers("/broker/remove/*").permitAll()
                 .anyRequest().authenticated() // Require authentication for other endpoints
                 .and()
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

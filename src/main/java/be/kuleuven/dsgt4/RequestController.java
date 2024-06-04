@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +26,15 @@ class RequestController {
     //Outputs: All available products in a JSON
     @GetMapping("/broker/getAllAvailable")
     public ResponseEntity<JSONObject> getAllAvailable(
-            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            JSONObject json = broker.get_all_available();
+        @RequestHeader("Authorization") String authorizationHeader,
+        @RequestHeader("X-Authenticated-User") String email) throws Exception {
+
+        if(!broker.getAllDocumentIds("users").contains(email)){
+            Map<String, Object> data = new HashMap<>();
+            data.put("start_date", LocalDateTime.now().toString());
+            broker.addDataToFirestore("users",email,data);
+        }
+        JSONObject json = broker.get_all_available();
             if(json != null){
                 return ResponseEntity.ok(json);
             }
@@ -36,77 +44,29 @@ class RequestController {
                 return ResponseEntity.status(450).body(json_error);
             }
         }
-        else{
-            JSONObject json = new JSONObject();
-            json.put("Unauthorized", "No token provided or invalid format");
-            return ResponseEntity.status(401).body(json);
-        }
-    }
+
 
     @GetMapping("/api/getAllCustomers")
     public ResponseEntity<JSONObject> getAllCustomers(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestHeader("X-Authenticated-User") String email) throws ParseException {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            System.out.println("qsfkb,");
-            return null;
-        } else {
-            JSONObject json = new JSONObject();
-            json.put("Unauthorized", "No token provided or invalid format");
-            return ResponseEntity.status(401).body(json);
-        }
+        JSONObject json = new JSONObject();
+        json.put("users", broker.getAllDocumentIds("users"));
+        return ResponseEntity.status(200).body(json);
+
     }
 
     @GetMapping("/api/getAllOrders")
     public ResponseEntity<JSONObject> getAllOrders(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestHeader("X-Authenticated-User") String email)throws ParseException {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            JSONObject json = new JSONObject();
-            json.put("Good", "No token provided or invalid format");
-            return ResponseEntity.status(200).body(json);
-        } else {
-            JSONObject json = new JSONObject();
-            json.put("Unauthorized", "No token provided or invalid format");
-            return ResponseEntity.status(401).body(json);
+        JSONObject json = new JSONObject();
+        ArrayList<String> all_documents = (ArrayList<String>) broker.getAllDocumentIds("orders");
+        for (String allDocument : all_documents) {
+            json.put(allDocument, broker.getDataFromFirestore("orders", allDocument));
         }
+        return ResponseEntity.status(200).body(json);
     }
-
-    // New endpoint to add data to Firestore
-    @GetMapping("/broker/addData/{collectionName}/{documentId}")
-    public ResponseEntity<String> addDataToFirestore(
-            @PathVariable String collectionName,
-            @PathVariable String documentId) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", "Sample Item");
-        data.put("description", "This is a sample description");
-
-        String result = broker.addDataToFirestore(collectionName, documentId, data);
-        return ResponseEntity.ok(result);
-    }
-
-    // New endpoint to get data from Firestore
-    @GetMapping("/broker/getData/{collectionName}/{documentId}")
-    public ResponseEntity<JSONObject> getDataFromFirestore(
-            @PathVariable String collectionName,
-            @PathVariable String documentId,
-            @RequestHeader("Authorization") String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            JSONObject data = broker.getDataFromFirestore(collectionName, documentId);
-            if (data != null) {
-                return ResponseEntity.ok(data);
-            } else {
-                JSONObject json = new JSONObject();
-                json.put("Not Found", "Document not found");
-                return ResponseEntity.status(404).body(json);
-            }
-        } else {
-            JSONObject json = new JSONObject();
-            json.put("Unauthorized", "No token provided or invalid format");
-            return ResponseEntity.status(401).body(json);
-        }
-    }
-
 
     //Inputs: all information for one trip + token
     //Output: same as input + combined prices
@@ -117,7 +77,8 @@ class RequestController {
             @PathVariable String festival_type,
             @PathVariable String bus_to_type,
             @PathVariable String bus_from_type,
-            @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader("X-Authenticated-User") String email) throws ParseException {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ) {
 
@@ -137,7 +98,7 @@ class RequestController {
             master_json.put("camping", camping_json);
             master_json.put("ticket", ticket_json);
 
-            JSONObject return_value = broker.do_request(master_json, user_from_token(authorizationHeader.substring(7)));
+            JSONObject return_value = broker.do_request(master_json, email);
             System.out.println(return_value);
             if(return_value != null){
                 return ResponseEntity.ok(return_value);
@@ -161,16 +122,10 @@ class RequestController {
     //Output on failure: if payment was to late returns http status code of 422
     @GetMapping("/broker/paid")
     public ResponseEntity<JSONObject> orderHasBeenPaid(
-            @RequestHeader("Authorization") String authorizationHeader) throws ParseException {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            JSONObject return_value = broker.confirm(user_from_token(authorizationHeader.substring(7)));
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader("X-Authenticated-User") String email) throws ParseException {
+            JSONObject return_value = broker.confirm(email);
             return ResponseEntity.ok(return_value);
-        }
-        else{
-            JSONObject json = new JSONObject();
-            json.put("Unauthorized", "No token provided or invalid format");
-            return ResponseEntity.status(401).body(json);
-        }
     }
 
 
@@ -180,12 +135,7 @@ class RequestController {
     @GetMapping("/broker/remove/{primary_key}")
     public void removeOrder(
             @PathVariable String primary_key){
-    broker.remove_order(primary_key);
+        broker.remove_order(primary_key);
     }
 
-
-    public User user_from_token(String Token){
-
-        return new User("samwinant@gmail.com","superAdmin");
-    }
 }
