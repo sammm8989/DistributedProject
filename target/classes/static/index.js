@@ -162,9 +162,9 @@ function addContent() {
     }
 
     // Function to handle errors and return to the previous state
-    function handleError(error) {
-        console.log(error); // Log the error for debugging
-        alert("An error occurred: " + error.message + " Try again later!"); // Show an alert to the user
+    function handleError(errorCode, errorMessage) {
+        console.log(`Error Code: ${errorCode}, Message: ${errorMessage}`); // Log the error for debugging
+        alert(`Error (${errorCode}): ${errorMessage}`); // Show an alert to the user with the specific message
         addContent(); // Reload the content to show the initial state
     }
 
@@ -182,7 +182,7 @@ function addContent() {
             return response.json();
         })
         .then((data) => console.log(data))
-        .catch(handleError);
+        .catch((error) => handleError(error.message, "Failed to fetch customer data. Please try again later."));
 
         fetch(`/api/getAllOrders`, {
             headers: { Authorization: 'Bearer ' + token }
@@ -194,7 +194,7 @@ function addContent() {
             return response.json();
         })
         .then((data) => console.log(data))
-        .catch(handleError);
+        .catch((error) => handleError(error.message, "Failed to fetch order data. Non-admin user."));
     });
 
     available.addEventListener("click", function () {
@@ -322,15 +322,12 @@ function addContent() {
                             payNow.style.display = 'none';
                             document.getElementById("payStatus").innerHTML = `<div class="selection"><label>Status:</label><span>Paid</span></div>`;
                         })
-                        .catch(function (error) {
-                            console.log(error); // Log any errors
-                            alert("Payment failed. Please try again.");
-                        });
+                        .catch((error) => handleError(error.message, "Payment failed. Please try again."));
                     });
                 })
-                .catch(handleError); // Handle errors
+                .catch((error) => handleError(error.message, "Failed to confirm selection. Please try again."));
             });
         })
-        .catch(handleError); // Handle errors
+        .catch((error) => handleError(error.message, "Failed to fetch availabilities. Please try again later.")); // Handle errors
     });
 }
