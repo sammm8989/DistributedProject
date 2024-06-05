@@ -146,7 +146,7 @@ function showUnAuthenticated() {
 function addContent() {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>
-    <div class='login-button' id='AdminPortal'>Admin Portal</div>`;
+    <div class='login-button signup-button' id='AdminPortal'>Admin Portal</div>`;
     document.getElementById("contentdiv").innerHTML = htmlContent;
 
     const prices = {};
@@ -168,22 +168,37 @@ function addContent() {
         addContent(); // Reload the content to show the initial state
     }
 
+    function showOrders(orders) {
+        if (!Array.isArray(orders)) {
+            console.error('Invalid orders data:', orders);
+            alert('Failed to fetch order data. Non-admin user.');
+            return;
+        }
+
+        let ordersHtml = '<div id="ordersContainer"><h2>All Orders</h2>';
+
+        orders.forEach(order => {
+            ordersHtml += `
+                <div class="order">
+                    <h3>Order ID: ${order.order_id}</h3>
+                    <p>User Email: ${order.user_email}</p>
+                    <p>Items:</p>
+                    <ul>
+                        ${order.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                    <p>Total Price: €${order.total_price}</p>
+                </div>`;
+        });
+
+        ordersHtml += '</div>';
+        document.getElementById("contentdiv").innerHTML = ordersHtml;
+    }
+
+
     var available = document.getElementById("getAvailabilities");
     var AdminPortal = document.getElementById("AdminPortal");
 
     AdminPortal.addEventListener("click", function () {
-        fetch(`/api/getAllCustomers`, {
-            headers: { Authorization: 'Bearer ' + token }
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => console.log(data))
-        .catch((error) => handleError(error.message, "Failed to fetch customer data. Please try again later."));
-
         fetch(`/api/getAllOrders`, {
             headers: { Authorization: 'Bearer ' + token }
         })
@@ -193,7 +208,7 @@ function addContent() {
             }
             return response.json();
         })
-        .then((data) => console.log(data))
+        .then((data) => showOrders(data))
         .catch((error) => handleError(error.message, "Failed to fetch order data. Non-admin user."));
     });
 
@@ -265,7 +280,7 @@ function addContent() {
                 });
 
                 // Construct the request URL based on the selected options
-                const bus_from_dep = requestData.bus_from_festival.extra_information
+                const bus_from_dep = requestData.bus_from_festival.extra_information;
                 const bus_to_dep = requestData.bus_from_festival.extra_information;
                 const bus_from = requestData.bus_from_festival.type;
                 const bus_to = requestData.bus_to_festival.type;
