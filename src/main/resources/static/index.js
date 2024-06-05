@@ -161,23 +161,42 @@ function addContent() {
         document.getElementById("price").innerText = totalPrice;
     }
 
+    // Function to handle errors and return to the previous state
+    function handleError(error) {
+        console.log(error); // Log the error for debugging
+        alert("An error occurred: " + error.message + ", Try again later!"); // Show an alert to the user
+        addContent(); // Reload the content to show the initial state
+    }
+
     var available = document.getElementById("getAvailabilities");
     var AdminPortal = document.getElementById("AdminPortal");
-        AdminPortal.addEventListener("click", function () {
-            fetch(`/api/getAllCustomers`, {
-                headers: { Authorization: 'Bearer ' + token }
-            })
-            .then((response) => {
-                return response.json();
-            }).then((data) => console.log(data))
 
-            fetch(`/api/getAllOrders`, {
-                headers: { Authorization: 'Bearer ' + token }
-            })
-            .then((response) => {
-                return response.json();
-            }).then((data) => console.log(data))
+    AdminPortal.addEventListener("click", function () {
+        fetch(`/api/getAllCustomers`, {
+            headers: { Authorization: 'Bearer ' + token }
         })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => console.log(data))
+        .catch(handleError);
+
+        fetch(`/api/getAllOrders`, {
+            headers: { Authorization: 'Bearer ' + token }
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => console.log(data))
+        .catch(handleError);
+    });
+
     available.addEventListener("click", function () {
         fetch(`/broker/getAllAvailable`, {
             headers: { Authorization: 'Bearer ' + token } // Correct token usage
@@ -201,7 +220,8 @@ function addContent() {
                     data[key].forEach(item => {
                         const extraInfo = item.extra_information ? `, time: ${item.extra_information}` : '';
                         // For dropdowns, we need to handle objects, so we stringify the object for the value
-                    new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}, price: €${item.price}${extraInfo}</option>`;                    });
+                        new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}, price: €${item.price}${extraInfo}</option>`;
+                    });
                     new_text += `</select>
                                 </div>`;
                 } else {
@@ -308,14 +328,9 @@ function addContent() {
                         });
                     });
                 })
-                .catch(function (error) {
-                    console.log("Error getting confirmation of selection:", error); // Log any errors
-                });
+                .catch(handleError); // Handle errors
             });
         })
-        .catch(function (error) {
-            console.log("Error getting available:", error); // Log any errors
-        });
+        .catch(handleError); // Handle errors
     });
 }
-
