@@ -61,6 +61,7 @@ public class FestivalRepository {
                 throw new AvailableTicketsNotFoundExceptionFestival(festival.getType());
             }
         }
+        festival.setPrice(festival.getPrice() + tickets.get().getPrice());
         festival_tickets.put(festival.getId(), festival);
         available_tickets.get(festival.getType()).sellFestivalTicket();
     }

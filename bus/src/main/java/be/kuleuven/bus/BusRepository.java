@@ -160,12 +160,15 @@ public class BusRepository {
                 throw new AvailableTicketsNotFoundException(bus.getType_to());
             }
         }
+        
         Optional<AvailableTickets> ticket_from = findTicket(bus.getType_from());
         if(ticket_from.isPresent()){
             if(!ticket_from.get().isAvailable()){
                 throw new AvailableTicketsNotFoundException(bus.getType_from());
             }
         }
+        bus.setPrice(bus.getPrice() + ticket_to.get().getPrice() + ticket_from.get().getPrice());
+
         bus_tickets.put(bus.getId(), bus);
         available_tickets.get(bus.getType_to()).sellBusTicket();
         available_tickets.get(bus.getType_from()).sellBusTicket();
