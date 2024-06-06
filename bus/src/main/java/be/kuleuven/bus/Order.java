@@ -3,17 +3,17 @@ package be.kuleuven.bus;
 import java.time.LocalDateTime;
 
 public class Order {
-    protected Integer id;
+    protected String id;
     protected String type_to;
     protected String type_from;
     protected Float price;
     protected Boolean confirmed;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

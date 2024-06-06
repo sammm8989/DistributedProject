@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class BusRepository {
-    private static final ConcurrentHashMap<Integer, Order> bus_tickets = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Order> bus_tickets = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -135,7 +135,7 @@ public class BusRepository {
 
     }
 
-    public Optional<Order> findBus(Integer id){
+    public Optional<Order> findBus(String id){
         Assert.notNull(id, "The Bus id must not be null");
         Order bus = bus_tickets.get(id);
         return Optional.ofNullable(bus);
@@ -172,7 +172,7 @@ public class BusRepository {
 
     }
 
-    public synchronized Order updateConfirmed(Integer id) {
+    public synchronized Order updateConfirmed(String id) {
         Order bus = bus_tickets.get(id);
         if (bus == null) {
             throw new BusNotFoundException(id);
@@ -184,7 +184,7 @@ public class BusRepository {
         return bus;
     }
 
-    public synchronized Order remove(Integer id){
+    public synchronized Order remove(String id){
         Order bus = bus_tickets.get(id);
         if(bus == null){
             throw new BusNotFoundException(id);

@@ -27,7 +27,7 @@ public class BusController {
     BusController(BusRepository busRepository){this.busRepository = busRepository;}
 
     @GetMapping("/bus/order/{id}")
-    EntityModel<Order> getBusById(@PathVariable Integer id){
+    EntityModel<Order> getBusById(@PathVariable String id){
         Order bus = busRepository.findBus(id).orElseThrow(() -> new BusNotFoundException(id));
         return busToEntityModel(id, bus);
 
@@ -92,18 +92,18 @@ public class BusController {
     }
 
     @PutMapping("/bus/confirm/{id}")
-    EntityModel<Order> confirmOrder(@PathVariable Integer id){
+    EntityModel<Order> confirmOrder(@PathVariable String id){
         Order bus = busRepository.updateConfirmed(id);
         return busToEntityModel(bus.getId(), bus);
     }
 
     @DeleteMapping("/bus/delete/{id}")
-    EntityModel<Order> deleteBusOrder(@PathVariable Integer id){
+    EntityModel<Order> deleteBusOrder(@PathVariable String id){
         Order bus = busRepository.remove(id);
         return busToEntityModel(id, bus);
     }
 
-    private EntityModel<Order> busToEntityModel(Integer id, Order bus){
+    private EntityModel<Order> busToEntityModel(String id, Order bus){
         return EntityModel.of(bus,
                 linkTo(methodOn(BusController.class).getBusById(id)).withSelfRel(),
                 linkTo(methodOn(BusController.class).getAllBusses()).withRel("bus/order"));

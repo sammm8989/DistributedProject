@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class CampingRepository {
 
-    private static final ConcurrentHashMap<Integer, Order> camping_tickets = new ConcurrentHashMap<>( );
+    private static final ConcurrentHashMap<String, Order> camping_tickets = new ConcurrentHashMap<>( );
     private static final ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -35,7 +35,7 @@ public class CampingRepository {
         available_tickets.put(hotel.getType(), hotel);
 
     }
-    public Optional<Order> findCamping(Integer id){
+    public Optional<Order> findCamping(String id){
         Assert.notNull(id, "The Order id must not be Null");
         Order camping = camping_tickets.get(id);
         return Optional.ofNullable(camping);
@@ -65,7 +65,7 @@ public class CampingRepository {
         available_tickets.get(camping.getType()).sellCampingTicket();
     }
 
-    public synchronized Order updateConfirmed(Integer id) {
+    public synchronized Order updateConfirmed(String id) {
         Order camping = camping_tickets.get(id);
         if (camping == null) {
             throw new CampingNotFoundException(id);
@@ -77,7 +77,7 @@ public class CampingRepository {
         return camping;
     }
 
-    public synchronized Order remove(Integer id){
+    public synchronized Order remove(String id){
         Order camping = camping_tickets.get(id);
         if(camping == null){
             throw new CampingNotFoundException(id);

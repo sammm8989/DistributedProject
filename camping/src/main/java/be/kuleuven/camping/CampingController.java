@@ -27,7 +27,7 @@ public class CampingController {
 
 
     @GetMapping("/camping/order/{id}")
-    EntityModel<Order> getCampingById(@PathVariable Integer id) {
+    EntityModel<Order> getCampingById(@PathVariable String id) {
         Order camping = campingRepository.findCamping(id).orElseThrow(()->new CampingNotFoundException(id));
         return campingToEntityModel(id, camping);
     }
@@ -89,18 +89,18 @@ public class CampingController {
     }
 
     @PutMapping("/camping/confirm/{id}")
-    EntityModel<Order> confirmCampingOrder(@PathVariable Integer id){
+    EntityModel<Order> confirmCampingOrder(@PathVariable String id){
         Order camping = campingRepository.updateConfirmed(id);
         return campingToEntityModel(camping.getId(), camping);
     }
 
     @DeleteMapping("/camping/delete/{id}")
-    EntityModel<Order> deleteCampingOrder(@PathVariable Integer id){
+    EntityModel<Order> deleteCampingOrder(@PathVariable String id){
         Order camping = campingRepository.remove(id);
         return campingToEntityModel(id, camping);
     }
 
-    private EntityModel<Order> campingToEntityModel(Integer id, Order camping){
+    private EntityModel<Order> campingToEntityModel(String id, Order camping){
         return EntityModel.of(camping,
                 linkTo(methodOn(CampingController.class).getCampingById(id)).withSelfRel(),
                 linkTo(methodOn(CampingController.class).getAllCampings()).withRel("camping/order"));

@@ -1,16 +1,16 @@
 package be.kuleuven.festival;
 
 public class Order {
-    protected Integer id;
+    protected String id;
     protected TicketType type;
     protected Float price;
     protected Boolean confirmed;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

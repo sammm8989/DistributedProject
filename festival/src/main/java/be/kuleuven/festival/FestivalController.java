@@ -25,7 +25,7 @@ public class FestivalController {
     FestivalController(FestivalRepository festivalRepository){this.festivalRepository = festivalRepository;}
 
     @GetMapping("/festival/order/{id}")
-    EntityModel<Order> getFestivalById(@PathVariable Integer id) {
+    EntityModel<Order> getFestivalById(@PathVariable String id) {
         Order festival = festivalRepository.findFestival(id).orElseThrow(()->new FestivalNotFoundException(id));
         return festivalToEntityModel(id, festival);
     }
@@ -89,18 +89,18 @@ public class FestivalController {
     }
 
     @PutMapping("/festival/confirm/{id}")
-    EntityModel<Order> confirmFestivalOrder(@PathVariable Integer id){
+    EntityModel<Order> confirmFestivalOrder(@PathVariable String id){
         Order festival = festivalRepository.updateConfirmed(id);
         return festivalToEntityModel(festival.getId(), festival);
     }
 
     @DeleteMapping("/festival/delete/{id}")
-    EntityModel<Order> deleteFestivalOrder(@PathVariable Integer id){
+    EntityModel<Order> deleteFestivalOrder(@PathVariable String id){
         Order festival = festivalRepository.remove(id);
         return festivalToEntityModel(id, festival);
     }
 
-    private EntityModel<Order> festivalToEntityModel(Integer id, Order order){
+    private EntityModel<Order> festivalToEntityModel(String id, Order order){
         return EntityModel.of(order,
                 linkTo(methodOn(FestivalController.class).getFestivalById(id)).withSelfRel(),
                 linkTo(methodOn(FestivalController.class).getAllFestivals()).withRel("festival/order"));
