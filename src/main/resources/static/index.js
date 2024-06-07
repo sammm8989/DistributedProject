@@ -146,7 +146,7 @@ function showUnAuthenticated() {
 function addContent() {
     const htmlContent = `
     <div class='login-button' id='getAvailabilities'>Get Availabilities</div>
-    <div class='login-button' id='AdminPortal'>Admin Portal</div>`;
+    <div class='login-button signup-button' id='AdminPortal'>Admin Portal</div>`;
     document.getElementById("contentdiv").innerHTML = htmlContent;
 
     const prices = {};
@@ -161,23 +161,57 @@ function addContent() {
         document.getElementById("price").innerText = totalPrice;
     }
 
+    // Function to handle errors and return to the previous state
+    function handleError(errorCode, errorMessage) {
+        console.log(`Error Code: ${errorCode}, Message: ${errorMessage}`); // Log the error for debugging
+        alert(`Error (${errorCode}): ${errorMessage}`); // Show an alert to the user with the specific message
+        addContent(); // Reload the content to show the initial state
+    }
+
+    function showOrders(orders) {
+        if (!Array.isArray(orders)) {
+            console.error('Invalid orders data:', orders);
+            alert('Failed to fetch order data. Non-admin user.');
+            return;
+        }
+
+        let ordersHtml = '<div id="ordersContainer"><h2>All Orders</h2>';
+
+        orders.forEach(order => {
+            ordersHtml += `
+                <div class="order">
+                    <h3>Order ID: ${order.order_id}</h3>
+                    <p>User Email: ${order.user_email}</p>
+                    <p>Items:</p>
+                    <ul>
+                        ${order.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                    <p>Total Price: €${order.total_price}</p>
+                </div>`;
+        });
+
+        ordersHtml += '</div>';
+        document.getElementById("contentdiv").innerHTML = ordersHtml;
+    }
+
+
     var available = document.getElementById("getAvailabilities");
     var AdminPortal = document.getElementById("AdminPortal");
-        AdminPortal.addEventListener("click", function () {
-            fetch(`/api/getAllCustomers`, {
-                headers: { Authorization: 'Bearer ' + token }
-            })
-            .then((response) => {
-                return response.json();
-            }).then((data) => console.log(data))
 
-            fetch(`/api/getAllOrders`, {
-                headers: { Authorization: 'Bearer ' + token }
-            })
-            .then((response) => {
-                return response.json();
-            }).then((data) => console.log(data))
+    AdminPortal.addEventListener("click", function () {
+        fetch(`/api/getAllOrders`, {
+            headers: { Authorization: 'Bearer ' + token }
         })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => showOrders(data))
+        .catch((error) => handleError(error.message, "Failed to fetch order data. Non-admin user."));
+    });
+
     available.addEventListener("click", function () {
         fetch(`/broker/getAllAvailable`, {
             headers: { Authorization: 'Bearer ' + token } // Correct token usage
@@ -201,7 +235,8 @@ function addContent() {
                     data[key].forEach(item => {
                         const extraInfo = item.extra_information ? `, time: ${item.extra_information}` : '';
                         // For dropdowns, we need to handle objects, so we stringify the object for the value
-                    new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}, price: €${item.price}${extraInfo}</option>`;                    });
+                        new_text += `<option value='${JSON.stringify(item)}'>${item.type || item.departure_time}, price: €${item.price}${extraInfo}</option>`;
+                    });
                     new_text += `</select>
                                 </div>`;
                 } else {
@@ -245,7 +280,7 @@ function addContent() {
                 });
 
                 // Construct the request URL based on the selected options
-                const bus_from_dep = requestData.bus_from_festival.extra_information
+                const bus_from_dep = requestData.bus_from_festival.extra_information;
                 const bus_to_dep = requestData.bus_from_festival.extra_information;
                 const bus_from = requestData.bus_from_festival.type;
                 const bus_to = requestData.bus_to_festival.type;
@@ -302,20 +337,12 @@ function addContent() {
                             payNow.style.display = 'none';
                             document.getElementById("payStatus").innerHTML = `<div class="selection"><label>Status:</label><span>Paid</span></div>`;
                         })
-                        .catch(function (error) {
-                            console.log(error); // Log any errors
-                            alert("Payment failed. Please try again.");
-                        });
+                        .catch((error) => handleError(error.message, "Payment failed. Please try again."));
                     });
                 })
-                .catch(function (error) {
-                    console.log("Error getting confirmation of selection:", error); // Log any errors
-                });
+                .catch((error) => handleError(error.message, "Failed to confirm selection. Please try again."));
             });
         })
-        .catch(function (error) {
-            console.log("Error getting available:", error); // Log any errors
-        });
+        .catch((error) => handleError(error.message, "Failed to fetch availabilities. Please try again later.")); // Handle errors
     });
 }
-
