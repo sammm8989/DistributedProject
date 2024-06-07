@@ -29,7 +29,7 @@ class RequestController {
         if(!broker.get_all_document_IDs("users").contains(email)){
             Map<String, Object> data = new HashMap<>();
             data.put("start_date", LocalDateTime.now().toString());
-            broker.add_data_to_firestore("users",email,data);
+            broker.add_data_to_firestore("users", email,data);
         }
         JSONObject json = broker.get_all_available();
         if(json != null){
@@ -46,18 +46,32 @@ class RequestController {
     @GetMapping("/api/getAllCustomers")
     public ResponseEntity<JSONObject> getAllCustomers(){
         JSONObject json = new JSONObject();
-        json.put("users", broker.get_all_document_IDs("users"));
-        return ResponseEntity.status(200).body(json);
+        try {
+            json.put("users", broker.get_all_document_IDs("users"));
+            return ResponseEntity.status(200).body(json);
+        }catch(Exception e){
+            JSONObject json_error = new JSONObject();
+            json_error.put("Problem", "A back-end Problem has been found");
+            return ResponseEntity.status(503).body(json_error);
+        }
     }
 
     @GetMapping("/api/getAllOrders")
     public ResponseEntity<JSONObject> getAllOrders(){
         JSONObject json = new JSONObject();
+        //arraylist with the usernames
         ArrayList<String> all_documents = (ArrayList<String>) broker.get_all_document_IDs("orders");
-        for (String allDocument : all_documents) {
-            json.put(allDocument, broker.get_data_from_firestore("orders", allDocument));
+        try{
+            for (String allDocument : all_documents) {
+                json.put(allDocument, broker.get_data_from_firestore("orders", allDocument));
+            }
+            return ResponseEntity.status(200).body(json);
+        }catch(Exception e){
+            JSONObject json_error = new JSONObject();
+            json_error.put("Problem", "A back-end Problem has been found");
+            return ResponseEntity.status(503).body(json_error);
         }
-        return ResponseEntity.status(200).body(json);
+
     }
 
     //Inputs: all information for one trip + token
@@ -85,7 +99,7 @@ class RequestController {
 
         master_json.put("bus", bus_json);
         master_json.put("camping", camping_json);
-        master_json.put("ticket", ticket_json);
+        master_json.put("festival", ticket_json);
 
         JSONObject return_value = broker.do_request(master_json, email);
         if(return_value != null){

@@ -1,6 +1,5 @@
 package be.kuleuven.dsgt4;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
@@ -32,7 +31,7 @@ public class Broker {
 
     JSONParser parser = new JSONParser();
 
-    String[] urls = {"http://localhost:8100/camping/", "http://localhost:8090/festival/", "http://localhost:8110/bus/"};
+    String[] urls = {"http://localhost:8100/", "http://localhost:8090/", "http://localhost:8110/"};
     String[] names = {"camping", "festival", "bus"};
 
     ApiWorker AW = new ApiWorker();
@@ -43,6 +42,7 @@ public class Broker {
     //Input: None
     //Output: JSON of all available products to buy
     //Extra: method should combine different suppliers JSON into one
+
     public JSONObject get_all_available() throws Exception {
         JSONObject master_JSON = new JSONObject();
         for (int i = 0; i < names.length; i++) {
@@ -60,7 +60,7 @@ public class Broker {
         for (int i = 0; i < urls.length; i++) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.getForEntity(urls[i]+"tickets/available", String.class);
+                ResponseEntity<String> response = restTemplate.getForEntity(urls[i] + names[i] + "/tickets/available", String.class);
 
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode rootNode = mapper.readTree(response.getBody());
@@ -108,18 +108,23 @@ public class Broker {
     //Output: the request with the combined price integrated into it
     //the suppliers also returns aN order_id that should be put in the database
     //if a suppliers returns with an error a rollback should be done
+
     public JSONObject do_request(JSONObject request, String email){
         double total_price = 0.0;
 
-        for (String url : urls) {
-            JSONObject request_json = (JSONObject) request.get("camping");
+        for (int i = 0 ; i < names.length ; i++) {
+            System.out.println(request);
+            JSONObject request_json = (JSONObject) request.get(names[i]);
 
             request_json.put("id", email);
             request_json.put("confirmed", false);
             request_json.put("price", 0.0);
 
-            Double price = do_call_with_JSON(url + "order", request_json);
-            if (price != null) {
+            System.out.println(request_json);
+
+            Double price = do_call_with_JSON(urls[i] + names[i] + "/order", request_json);
+
+            if (price == null) {
                 remove_order(email);
                 return null;
             }
@@ -151,7 +156,7 @@ public class Broker {
             DocumentSnapshot document = docRef.get().get();
             if (document.exists()) {
                 // Update the confirmed_total field to true
-                docRef.update("confirmed_total", true);
+                docRef.update("total_confirmed", true);
 
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -177,6 +182,21 @@ public class Broker {
         }
     }
 
+    public void delete_order(String documentId) {
+        try {
+            DocumentReference docRef = db.collection("orders").document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                docRef.delete().get();  // delete the document
+                System.out.println("Document deleted successfully.");
+            } else {
+                System.out.println("Document does not exist.");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Error deleting document: " + e.getMessage());
+        }
+    }
+
 
     public List<String> get_all_document_IDs(String collectionName) {
         List<String> documentIds = new ArrayList<>();
@@ -196,11 +216,12 @@ public class Broker {
     //Output confirmation
     //this should send a confirmation to all server then it is booked
     //If there is a failed server then a rollback should be done
+
     public JSONObject confirm(String email){
-        for (String s : urls) {
+        for(int i = 0 ; i < urls.length ; i++) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.exchange(s + "confirm/" + email, HttpMethod.PUT, null, String.class);
+                ResponseEntity<String> response = restTemplate.exchange(urls[i] + names[i] + "/confirm/" + email, HttpMethod.PUT, null, String.class);
                 int statusCode = response.getStatusCodeValue();
                 if (statusCode != 200) {
                     remove_order(email);
@@ -221,10 +242,12 @@ public class Broker {
 
     //INPUT: the order_ids from all suppliers that should be removed
     //Output: none
+
     public void remove_order(String primary_key){
         if(workerThread.getState() == Thread.State.NEW){
             workerThread.start();
         }
+        delete_order(primary_key);
         AW.add(primary_key);
     }
 
