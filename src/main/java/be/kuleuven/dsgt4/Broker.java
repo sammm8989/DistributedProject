@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +135,7 @@ public class Broker {
         request.put("price", total_price);
 
         request.put("total_confirmed", false);
+        request.put("timestamp", LocalDateTime.now().toString());
         add_data_to_firestore("orders", email, request);
 
         return request;

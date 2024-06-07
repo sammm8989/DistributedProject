@@ -169,6 +169,8 @@ function addContent() {
     }
 
     function showOrders(orders) {
+        console.log(orders);
+
         if (!Array.isArray(orders)) {
             console.error('Invalid orders data:', orders);
             alert('Failed to fetch order data. Non-admin user.');
@@ -199,6 +201,7 @@ function addContent() {
     var AdminPortal = document.getElementById("AdminPortal");
 
     AdminPortal.addEventListener("click", function () {
+    //add also /api/getAllCustomers pls
         fetch(`/api/getAllOrders`, {
             headers: { Authorization: 'Bearer ' + token }
         })
