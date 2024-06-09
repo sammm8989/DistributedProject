@@ -1,8 +1,8 @@
 be/kuleuven/camping/Exceptions/CampingNotFoundException.class
 be/kuleuven/camping/Exceptions/OrderAlreadyExistsAdviceCamping.class
-be/kuleuven/camping/CampingRepository.class
-be/kuleuven/camping/Exceptions/OrderAlreadyExistsExceptionCamping.class
 be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.class
+be/kuleuven/camping/Exceptions/OrderAlreadyExistsExceptionCamping.class
+be/kuleuven/camping/CampingRepository.class
 be/kuleuven/camping/Exceptions/CampingNotFoundAdvice.class
 be/kuleuven/camping/Exceptions/NoAvailableTicketsExceptionCamping.class
 be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundExceptionCamping.class

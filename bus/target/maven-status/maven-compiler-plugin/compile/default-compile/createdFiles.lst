@@ -1,9 +1,11 @@
 be/kuleuven/bus/Exceptions/AvailableTicketsNotFoundException.class
+be/kuleuven/bus/Exceptions/UnauthorizedAdvice.class
 be/kuleuven/bus/BusController.class
 be/kuleuven/bus/BoardingLocation.class
 be/kuleuven/bus/Exceptions/BusNotFoundException.class
 be/kuleuven/bus/Exceptions/NoAvailableTicketsAdvice.class
 be/kuleuven/bus/Exceptions/BusNotFoundAdvice.class
+be/kuleuven/bus/Index.class
 be/kuleuven/bus/Exceptions/NoAvailableTicketsException.class
 be/kuleuven/bus/Exceptions/OrderAlreadyConfirmedException.class
 be/kuleuven/bus/Exceptions/OrderAlreadyConfirmedAdvice.class
@@ -13,4 +15,5 @@ be/kuleuven/bus/Order.class
 be/kuleuven/bus/Exceptions/OrderAlreadyExistsAdvice.class
 be/kuleuven/bus/Exceptions/AvailableTicketsNotFoundAdvice.class
 be/kuleuven/bus/BusRepository.class
+be/kuleuven/bus/Exceptions/UnauthorizedException.class
 be/kuleuven/bus/AvailableTickets.class
