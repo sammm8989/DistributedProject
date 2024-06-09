@@ -1,1 +1,1 @@
-curl -X PUT localhost:8100/camping/confirm/2
+curl -X PUT localhost:8100/camping/confirm/jens.77@live.be -H 'Authorization: Bearer 22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1'
