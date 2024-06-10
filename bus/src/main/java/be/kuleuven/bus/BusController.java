@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,68 +29,101 @@ public class BusController {
     BusController(BusRepository busRepository){this.busRepository = busRepository;}
 
     @GetMapping("/bus/order/{id}")
-    EntityModel<Order> getBusById(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> getBusById(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order bus = busRepository.findBus(id).orElseThrow(() -> new BusNotFoundException(id));
-        return busToEntityModel(id, bus, authorizationHeader);
+        EntityModel<Order> busOrder = busToEntityModel(id, bus, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(busOrder);
 
     }
 
     @GetMapping("/bus/order")
-    CollectionModel<EntityModel<Order>> getAllBusses(@RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<Order>>> getAllBusses(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Collection<Order> bus = busRepository.getAllBusses();
         List<EntityModel<Order>> busEntityModels = new ArrayList<>();
         for (Order b: bus){
-            EntityModel<Order> eb = busToEntityModel(b.getId(), b, authorizationHeader);
+            EntityModel<Order> eb = busToEntityModel(b.getId(), b, auth, num);
             busEntityModels.add(eb);
         }
-        return CollectionModel.of(busEntityModels,
-                linkTo(methodOn(BusController.class).getAllBusses(authorizationHeader)).withSelfRel(),
-            linkTo(methodOn(BusController.class).getIndex(authorizationHeader)).withRel("Index page"));
+        CollectionModel<EntityModel<Order>> collectionModel = CollectionModel.of(busEntityModels,
+                linkTo(methodOn(BusController.class).getAllBusses(auth, num)).withSelfRel(),
+                linkTo(methodOn(BusController.class).getIndex(auth, num)).withRel("Index page"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
 
     }
 
     @GetMapping("/bus/tickets/{type}")
-    EntityModel<AvailableTickets> getTicketByType(@PathVariable String type, @RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<AvailableTickets>> getTicketByType(@PathVariable String type, @RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         AvailableTickets availableTickets = busRepository.findTicket(type).orElseThrow(()->new AvailableTicketsNotFoundException(type));
-        return availableTicketsToEntityModel(type, availableTickets, authorizationHeader);
+        EntityModel<AvailableTickets> ticketsEntity = availableTicketsToEntityModel(type, availableTickets, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(ticketsEntity);
     }
 
     @GetMapping("/bus/tickets")
-    CollectionModel<EntityModel<AvailableTickets>> getAllTickets(@RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestHeader("Authorization") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Collection<AvailableTickets> tickets = busRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at : tickets) {
-            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, authorizationHeader);
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
             availableTicketsEntityModels.add(ea);
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(BusController.class).getAllTickets(authorizationHeader)).withSelfRel(),
-                linkTo(methodOn(BusController.class).getIndex(authorizationHeader)).withRel("Index page"));
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel = CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(BusController.class).getAllTickets(auth, num)).withSelfRel(),
+                linkTo(methodOn(BusController.class).getIndex(auth, num)).withRel("Index page"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
 
     }
 
     @GetMapping("/bus/tickets/available")
-    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(@RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Collection<AvailableTickets> tickets = busRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, authorizationHeader);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
                 availableTicketsEntityModels.add(ea);
             }
         }
@@ -96,76 +131,114 @@ public class BusController {
             System.out.println("empty");
             throw new NoAvailableTicketsException();
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(BusController.class).getAvailableTickets(authorizationHeader)).withSelfRel(),
-                linkTo(methodOn(BusController.class).getIndex(authorizationHeader)).withRel("Index page"));
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel =  CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(BusController.class).getAvailableTickets(auth, num)).withSelfRel(),
+                linkTo(methodOn(BusController.class).getIndex(auth, num)).withRel("Index page"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
 
     }
 
     @PostMapping("/bus/order")
-    EntityModel<Order> addOrder(@RequestBody Order bus, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> addOrder(@RequestBody Order bus, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         if(busRepository.findBus(bus.getId()).isPresent()){
             throw new OrderAlreadyExistsException(bus.getId());
         }
         busRepository.add(bus);
-        return busToEntityModel(bus.getId(), bus, authorizationHeader);
+        EntityModel<Order> busEntity =  busToEntityModel(bus.getId(), bus, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(busEntity);
     }
 
     @PutMapping("/bus/confirm/{id}")
-    EntityModel<Order> confirmOrder(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> confirmOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order bus = busRepository.updateConfirmed(id);
-        return busToEntityModel(bus.getId(), bus, authorizationHeader);
+        EntityModel<Order> busEntity = busToEntityModel(bus.getId(), bus, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(busEntity);
     }
 
     @DeleteMapping("/bus/delete/{id}")
-    EntityModel<Order> deleteBusOrder(@PathVariable String id,@RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> deleteBusOrder(@PathVariable String id,@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order bus = busRepository.remove(id);
-        return busToEntityModel(id, bus, authorizationHeader);
+        EntityModel<Order> busEntity = busToEntityModel(id, bus, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(busEntity);
     }
 
     @GetMapping("/bus")
-    EntityModel<Index> getIndex(@RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Index>> getIndex(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
-        return indexEntityModel(authorizationHeader);
+        num +=1;
+        EntityModel<Index> indexentitymodel = indexEntityModel(auth, num);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(indexentitymodel);
     }
 
-    private EntityModel<Index> indexEntityModel(String auth) {
+    private EntityModel<Index> indexEntityModel(String auth, Integer num) {
 
         Index index = new Index();
         return EntityModel.of(index,
-                linkTo(methodOn(BusController.class).getAllBusses(auth)).withRel("allBusOrders").withType("GET"),
-                linkTo(methodOn(BusController.class).getAllTickets(auth)).withRel("allTicketTypes").withType("GET"),
-                linkTo(methodOn(BusController.class).addOrder(null, auth)).withRel("addOrder").withType("POST"),
-                linkTo(methodOn(BusController.class).getAvailableTickets(auth)).withRel("getAvailableTickets").withType("GET"));
+                linkTo(methodOn(BusController.class).getAllBusses(auth, num)).withRel("allBusOrders").withType("GET"),
+                linkTo(methodOn(BusController.class).getAllTickets(auth, num)).withRel("allTicketTypes").withType("GET"),
+                linkTo(methodOn(BusController.class).addOrder(null, auth, num)).withRel("addOrder").withType("POST"),
+                linkTo(methodOn(BusController.class).getAvailableTickets(auth, num)).withRel("getAvailableTickets").withType("GET"));
     }
 
-    private EntityModel<Order> busToEntityModel(String id, Order bus, String auth    ) {
+    private EntityModel<Order> busToEntityModel(String id, Order bus, String auth , Integer num   ) {
         return EntityModel.of(bus,
-                linkTo(methodOn(BusController.class).getBusById(id, auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(BusController.class).getTicketByType(bus.getType_to(), auth)).withRel("ticketToFestival").withType("GET"),
-                linkTo(methodOn(BusController.class).getTicketByType(bus.getType_from(), auth)).withRel("ticketFromFestival").withType("GET"),
-                linkTo(methodOn(BusController.class).confirmOrder(id, auth)).withRel("confirmOrder").withType("PUT"),
-                linkTo(methodOn(BusController.class).deleteBusOrder(id, auth)).withRel("deleteOrder").withType("DELETE"),
-                linkTo(methodOn(BusController.class).getAllBusses(auth)).withRel("allOrders").withType("GET"),
-                linkTo(methodOn(BusController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(BusController.class).getBusById(id, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(BusController.class).getTicketByType(bus.getType_to(), auth, num)).withRel("ticketToFestival").withType("GET"),
+                linkTo(methodOn(BusController.class).getTicketByType(bus.getType_from(), auth, num)).withRel("ticketFromFestival").withType("GET"),
+                linkTo(methodOn(BusController.class).confirmOrder(id, auth, num)).withRel("confirmOrder").withType("PUT"),
+                linkTo(methodOn(BusController.class).deleteBusOrder(id, auth, num)).withRel("deleteOrder").withType("DELETE"),
+                linkTo(methodOn(BusController.class).getAllBusses(auth, num)).withRel("allOrders").withType("GET"),
+                linkTo(methodOn(BusController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 
-    private EntityModel<AvailableTickets> availableTicketsToEntityModel(String t, AvailableTickets availableTicketsBus, String auth) {
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(String t, AvailableTickets availableTicketsBus, String auth, Integer num) {
         return EntityModel.of(availableTicketsBus,
-                linkTo(methodOn(BusController.class).getTicketByType(t, auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(BusController.class).getAllTickets(auth)).withRel("allTickets").withType("GET"),
-                linkTo(methodOn(BusController.class).getAllBusses(auth)).withRel("allOrders").withType("GET"),
-                linkTo(methodOn(BusController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(BusController.class).getTicketByType(t, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(BusController.class).getAllTickets(auth, num)).withRel("allTickets").withType("GET"),
+                linkTo(methodOn(BusController.class).getAllBusses(auth, num)).withRel("allOrders").withType("GET"),
+                linkTo(methodOn(BusController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 }

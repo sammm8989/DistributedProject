@@ -31,8 +31,8 @@ public class FestivalController {
     ResponseEntity<EntityModel<Order>> getFestivalById(@PathVariable String id, @RequestParam("authentication") String auth,@RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         Order festival = festivalRepository.findFestival(id).orElseThrow(()->new FestivalNotFoundException(id));
         EntityModel<Order> festivalOrder = festivalToEntityModel(id, festival, auth, num);
 
@@ -48,8 +48,8 @@ public class FestivalController {
     ResponseEntity<CollectionModel<EntityModel<Order>>> getAllFestivals(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         Collection<Order> festivals = festivalRepository.getAllFestivals();
         List<EntityModel<Order>> festivalEntityModels = new ArrayList<>();
         for (Order f: festivals){
@@ -70,6 +70,10 @@ public class FestivalController {
 
     @GetMapping("/festival/tickets/{ticketType}")
     ResponseEntity<EntityModel<AvailableTickets>> getTicketByType(@PathVariable TicketType ticketType, @RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
+            throw new UnauthorizedException();
+        }
+        num +=1;
         AvailableTickets availableTickets = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundExceptionFestival(ticketType));
         EntityModel<AvailableTickets> ticketsEntity = availableTicketsToEntityModel(ticketType, availableTickets, auth, num);
 
@@ -85,8 +89,8 @@ public class FestivalController {
     ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         Collection<AvailableTickets> availableTickets = festivalRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at : availableTickets) {
@@ -108,8 +112,8 @@ public class FestivalController {
     ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         Collection<AvailableTickets> tickets = festivalRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at: tickets){
@@ -138,8 +142,8 @@ public class FestivalController {
     ResponseEntity<EntityModel<Order>> addFestivalOrder(@RequestBody Order festival, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         if(festivalRepository.findFestival(festival.getId()).isPresent()){
             throw new OrderAlreadyExistsExceptionFestival(festival.getId());
         }
@@ -158,8 +162,8 @@ public class FestivalController {
     ResponseEntity<EntityModel<Order>> confirmFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
-
         }
+        num +=1;
         Order festival = festivalRepository.updateConfirmed(id);
         EntityModel<Order> festivalEntity = festivalToEntityModel(festival.getId(), festival, auth, num);
 
@@ -172,10 +176,10 @@ public class FestivalController {
     }
 
     @DeleteMapping("/festival/delete/{id}")
-    ResponseEntity<EntityModel<Order>> deleteFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
-        if(!auth.equals(TOKEN)){
-            throw new UnauthorizedException();
-        }
+    ResponseEntity<EntityModel<Order>> deleteFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){ if(!auth.equals(TOKEN)){
+        throw new UnauthorizedException();
+    }
+        num +=1;
         Order festival = festivalRepository.remove(id);
         EntityModel<Order> festivalEntity = festivalToEntityModel(id, festival, auth, num);
 
@@ -192,6 +196,7 @@ public class FestivalController {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         EntityModel<Index> indexentitymodel = indexEntityModel(auth, num);
         HttpHeaders headers = new HttpHeaders();
         headers.add("number", num.toString());
