@@ -48,7 +48,7 @@ public class FestivalController {
             festivalEntityModels.add(ef);
         }
         return CollectionModel.of(festivalEntityModels,
-                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withSelfRel(),
+                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withSelfRel().withType("GET"),
                 linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
     }
 
@@ -71,7 +71,7 @@ public class FestivalController {
             availableTicketsEntityModels.add(ea);
         }
         return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withSelfRel(),
+                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withSelfRel().withType("GET"),
                 linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
     }
 
@@ -94,7 +94,7 @@ public class FestivalController {
             throw new NoAvailableTicketsExceptionFestival();
         }
         return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withSelfRel(),
+                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withSelfRel().withType("GET"),
                 linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
 
     }
@@ -162,8 +162,8 @@ public class FestivalController {
 
     private EntityModel<AvailableTickets> availableTicketsToEntityModel(TicketType t, AvailableTickets availableTickets, String auth){
         return EntityModel.of(availableTickets,
-                linkTo(methodOn(FestivalController.class).getTicketByType(t, auth)).withSelfRel(),
-                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withRel("AllFestivalTickets"),
+                linkTo(methodOn(FestivalController.class).getTicketByType(t, auth)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withRel("AllFestivalTickets").withType("GET"),
                 linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withRel("allFestivalOrders").withType("GET"),
                 linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
     }

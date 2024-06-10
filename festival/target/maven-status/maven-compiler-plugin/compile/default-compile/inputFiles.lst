@@ -11,6 +11,9 @@
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/TicketType.java
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/Exceptions/OrderAlreadyExistsAdviceFestival.java
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundExceptionFestival.java
+/home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/Exceptions/UnauthorizedException.java
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/RestServiceApplication.java
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/AvailableTickets.java
 /home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/FestivalRepository.java
+/home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/Exceptions/UnauthorizedAdvice.java
+/home/jens/Documents/school/dapp/FinalProject/festival/src/main/java/be/kuleuven/festival/Index.java
