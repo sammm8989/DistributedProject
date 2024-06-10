@@ -4,12 +4,15 @@
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/CampingController.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundExceptionCamping.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/CampingRepository.java
+/home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/UnauthorizedAdvice.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedAdviceCamping.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/AvailableTicketsNotFoundAdviceCamping.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/CampingNotFoundAdvice.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Pack.java
+/home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/UnauthorizedException.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyConfirmedExceptionCamping.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/AvailableTickets.java
+/home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Index.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/OrderAlreadyExistsAdviceCamping.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/Exceptions/CampingNotFoundException.java
 /home/jens/Documents/school/dapp/FinalProject/camping/src/main/java/be/kuleuven/camping/RestServiceApplication.java

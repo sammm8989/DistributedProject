@@ -146,7 +146,8 @@ public class FestivalController {
                 linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withRel("allFestivalOrders").withType("GET"),
                 linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withRel("allTicketTypes").withType("GET"),
                 linkTo(methodOn(FestivalController.class).addFestivalOrder(null, auth)).withRel("addOrder").withType("POST"),
-                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withRel("getAvailableTickets").withType("GET"));
+                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withRel("getAvailableTickets").withType("GET"),
+                linkTo(methodOn(CampingController.class).getIndex(auth)).withRel("index").withType("GET"));
     }
 
     private EntityModel<Order> festivalToEntityModel(String id, Order order, String auth){

@@ -5,6 +5,11 @@ public class Order {
         protected Pack type;
         protected Float price;
         protected Boolean confirmed;
+        protected Integer number;
+
+        public Integer getNumber() {return number;}
+
+        public void setNumber(Integer number) {this.number = number;}
 
         public String getId() {
             return id;

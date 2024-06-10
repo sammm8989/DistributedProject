@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.server.core.EmbeddedWrappers;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,61 +32,98 @@ public class CampingController {
 
 
     @GetMapping("/camping/order/{id}")
-    EntityModel<Order> getCampingById(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> getCampingById(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order camping = campingRepository.findCamping(id).orElseThrow(()->new CampingNotFoundException(id));
-        return campingToEntityModel(id, camping, authorizationHeader);
+        camping.setNumber(num);
+        EntityModel<Order> campingOrder =  campingToEntityModel(id, camping, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(campingOrder);
     }
 
     @GetMapping("/camping/order")
-    CollectionModel<EntityModel<Order>> getAllCampings(@RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<Order>>> getAllCampings(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
+
         Collection<Order> campings = campingRepository.getAllCampings();
         List<EntityModel<Order>> campingEntityModels = new ArrayList<>();
         for (Order c: campings){
-            EntityModel<Order> ec = campingToEntityModel(c.getId(), c, authorizationHeader);
+            c.setNumber(num);
+            EntityModel<Order> ec = campingToEntityModel(c.getId(), c, auth, num);
             campingEntityModels.add(ec);
         }
-        return CollectionModel.of(campingEntityModels,
-                linkTo(methodOn(CampingController.class).getAllCampings(authorizationHeader)).withSelfRel());
-     }
+        CollectionModel<EntityModel<Order>> collectionModel = CollectionModel.of(campingEntityModels,
+                linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withSelfRel(),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
+    }
     @GetMapping("/camping/tickets/{pack}")
-    EntityModel<AvailableTickets> getTicketByPackage(@PathVariable Pack pack, @RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<AvailableTickets>> getTicketByPackage(@PathVariable Pack pack, @RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         AvailableTickets availableTickets = campingRepository.findTicket(pack).orElseThrow(()->new AvailableTicketsNotFoundExceptionCamping(pack));
-        return availableTicketsToEntityModel(pack, availableTickets, authorizationHeader);
+        EntityModel<AvailableTickets> ticketsEntity =  availableTicketsToEntityModel(pack, availableTickets, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(ticketsEntity);
     }
     @GetMapping("/camping/tickets")
-    CollectionModel<EntityModel<AvailableTickets>> getAllTickets(@RequestHeader("Authorization") String authorizationHeader) {
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
         Collection<AvailableTickets> tickets = campingRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at : tickets) {
-            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, authorizationHeader);
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
             availableTicketsEntityModels.add(ea);
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(CampingController.class).getAllTickets(authorizationHeader)).withSelfRel());
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel = CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(CampingController.class).getAllTickets(auth, num)).withSelfRel(),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
     }
 
     @GetMapping("/camping/tickets/available")
-    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(@RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Collection<AvailableTickets> tickets = campingRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, authorizationHeader);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
                 availableTicketsEntityModels.add(ea);
             }
         }
@@ -91,72 +131,120 @@ public class CampingController {
             System.out.println("empty");
             throw new NoAvailableTicketsExceptionCamping();
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(CampingController.class).getAvailableTickets(authorizationHeader)).withSelfRel());
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel = CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(CampingController.class).getAvailableTickets(auth, num)).withSelfRel(),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
     }
 
     @PostMapping("/camping/order")
-    EntityModel<Order> addCampingOrder(@RequestBody Order camping, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> addCampingOrder(@RequestBody Order camping,@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         if(campingRepository.findCamping(camping.getId()).isPresent()){
             throw new OrderAlreadyExistsExceptionCamping(camping.getId());
         }
+        camping.setNumber(num);
         campingRepository.add(camping);
-        return campingToEntityModel(camping.getId(), camping, authorizationHeader);
+
+        EntityModel<Order> campingentity = campingToEntityModel(camping.getId(), camping, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(campingentity);
     }
 
     @PutMapping("/camping/confirm/{id}")
-    EntityModel<Order> confirmCampingOrder(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> confirmCampingOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order camping = campingRepository.updateConfirmed(id);
-        return campingToEntityModel(camping.getId(), camping, authorizationHeader);
+        camping.setNumber(num);
+        EntityModel<Order> campingentity = campingToEntityModel(camping.getId(), camping, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(campingentity);
     }
 
     @DeleteMapping("/camping/delete/{id}")
-    EntityModel<Order> deleteCampingOrder(@PathVariable String id, @RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Order>> deleteCampingOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
+        num +=1;
         Order camping = campingRepository.remove(id);
-        return campingToEntityModel(id, camping, authorizationHeader);
+        camping.setNumber(num);
+        EntityModel<Order> campingentity = campingToEntityModel(id, camping, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(campingentity);
     }
 
     @GetMapping("/camping")
-    EntityModel<Index> getIndex(@RequestHeader("Authorization") String authorizationHeader){
-        if(!authorizationHeader.equals("Bearer " + TOKEN)){
+    ResponseEntity<EntityModel<Index>> getIndex(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
+        if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
-        return indexEntityModel(authorizationHeader);
+        num +=1;
+        EntityModel<Index> indexentitymodel = indexEntityModel(auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(indexentitymodel);
+
     }
 
-    private EntityModel<Index> indexEntityModel(String auth) {
+    private EntityModel<Index> indexEntityModel(String auth, Integer num) {
 
         Index index = new Index();
+        index.setNumber(num);
         return EntityModel.of(index,
-                linkTo(methodOn(CampingController.class).getAllCampings(auth)).withRel("allCampingOrders").withType("GET"),
-                linkTo(methodOn(CampingController.class).getAllTickets(auth)).withRel("allTicketTypes").withType("GET"),
-                linkTo(methodOn(CampingController.class).addCampingOrder(null, auth)).withRel("addOrder").withType("POST"),
-                linkTo(methodOn(CampingController.class).getAvailableTickets(auth)).withRel("getAvailableTickets").withType("GET"));
+                linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withRel("allCampingOrders").withType("GET"),
+                linkTo(methodOn(CampingController.class).getAllTickets(auth, num)).withRel("allTicketTypes").withType("GET"),
+                linkTo(methodOn(CampingController.class).addCampingOrder(null, auth, num)).withRel("addOrder").withType("POST"),
+                linkTo(methodOn(CampingController.class).getAvailableTickets(auth, num)).withRel("getAvailableTickets").withType("GET"),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 
-    private EntityModel<Order> campingToEntityModel(String id, Order camping, String auth){
+    private EntityModel<Order> campingToEntityModel(String id, Order camping, String auth, Integer num){
         return EntityModel.of(camping,
-                linkTo(methodOn(CampingController.class).getCampingById(id, auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(CampingController.class).getTicketByPackage(camping.getType(), auth)).withRel("ticketToFestival").withType("GET"),
-                linkTo(methodOn(CampingController.class).confirmCampingOrder(id, auth)).withRel("confirmOrder").withType("PUT"),
-                linkTo(methodOn(CampingController.class).deleteCampingOrder(id, auth)).withRel("deleteOrder").withType("DELETE"),
-                linkTo(methodOn(CampingController.class).getAllCampings(auth)).withRel("allOrders").withType("GET"),
-                linkTo(methodOn(CampingController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(CampingController.class).getCampingById(id, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(CampingController.class).getTicketByPackage(camping.getType(), auth, num)).withRel("ticketToFestival").withType("GET"),
+                linkTo(methodOn(CampingController.class).confirmCampingOrder(id, auth, num)).withRel("confirmOrder").withType("PUT"),
+                linkTo(methodOn(CampingController.class).deleteCampingOrder(id, auth, num)).withRel("deleteOrder").withType("DELETE"),
+                linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withRel("allCampingOrders").withType("GET"),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 
-    private EntityModel<AvailableTickets> availableTicketsToEntityModel(Pack p, AvailableTickets availableTickets, String auth){
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(Pack p, AvailableTickets availableTickets, String auth, Integer num){
         return EntityModel.of(availableTickets,
-                linkTo(methodOn(CampingController.class).getTicketByPackage(p, auth)).withSelfRel(),
-                linkTo(methodOn(CampingController.class).getAllTickets(auth)).withRel("camping/tickets"));
+                linkTo(methodOn(CampingController.class).getTicketByPackage(p, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(CampingController.class).getAllTickets(auth, num)).withRel("allCampingtickets").withType("GET"),
+                linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withRel("allCampingOrders").withType("GET"),
+                linkTo(methodOn(CampingController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 }
