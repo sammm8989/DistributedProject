@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 
@@ -221,7 +220,6 @@ public class CampingController {
     private EntityModel<Index> indexEntityModel(String auth, Integer num) {
 
         Index index = new Index();
-        index.setNumber(num);
         return EntityModel.of(index,
                 linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withRel("allCampingOrders").withType("GET"),
                 linkTo(methodOn(CampingController.class).getAllTickets(auth, num)).withRel("allTicketTypes").withType("GET"),

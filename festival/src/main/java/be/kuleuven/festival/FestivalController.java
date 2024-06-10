@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,17 +28,24 @@ public class FestivalController {
     FestivalController(FestivalRepository festivalRepository){this.festivalRepository = festivalRepository;}
 
     @GetMapping("/festival/order/{id}")
-    EntityModel<Order> getFestivalById(@PathVariable String id, @RequestParam("authentication") String auth) {
+    ResponseEntity<EntityModel<Order>> getFestivalById(@PathVariable String id, @RequestParam("authentication") String auth,@RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
         }
         Order festival = festivalRepository.findFestival(id).orElseThrow(()->new FestivalNotFoundException(id));
-        return festivalToEntityModel(id, festival, auth);
+        EntityModel<Order> festivalOrder = festivalToEntityModel(id, festival, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(festivalOrder);
     }
 
     @GetMapping("/festival/order")
-    CollectionModel<EntityModel<Order>> getAllFestivals(@RequestParam("authentication") String auth) {
+    ResponseEntity<CollectionModel<EntityModel<Order>>> getAllFestivals(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
@@ -44,22 +53,36 @@ public class FestivalController {
         Collection<Order> festivals = festivalRepository.getAllFestivals();
         List<EntityModel<Order>> festivalEntityModels = new ArrayList<>();
         for (Order f: festivals){
-            EntityModel<Order> ef = festivalToEntityModel(f.getId(), f,auth);
+            EntityModel<Order> ef = festivalToEntityModel(f.getId(), f,auth, num);
             festivalEntityModels.add(ef);
         }
-        return CollectionModel.of(festivalEntityModels,
-                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
+        CollectionModel<EntityModel<Order>> collectionModel = CollectionModel.of(festivalEntityModels,
+                linkTo(methodOn(FestivalController.class).getAllFestivals(auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
     }
 
     @GetMapping("/festival/tickets/{ticketType}")
-    EntityModel<AvailableTickets> getTicketByType(@PathVariable TicketType ticketType, @RequestParam("Authentication") String auth) {
+    ResponseEntity<EntityModel<AvailableTickets>> getTicketByType(@PathVariable TicketType ticketType, @RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
         AvailableTickets availableTickets = festivalRepository.findTicket(ticketType).orElseThrow(()->new AvailableTicketsNotFoundExceptionFestival(ticketType));
-        return availableTicketsToEntityModel(ticketType, availableTickets, auth);
+        EntityModel<AvailableTickets> ticketsEntity = availableTicketsToEntityModel(ticketType, availableTickets, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(ticketsEntity);
     }
 
     @GetMapping("/festival/tickets")
-    CollectionModel<EntityModel<AvailableTickets>> getAllTickets(@RequestParam("Authentication") String auth) {
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
@@ -67,16 +90,22 @@ public class FestivalController {
         Collection<AvailableTickets> availableTickets = festivalRepository.getAllTickets();
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at : availableTickets) {
-            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth);
+            EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
             availableTicketsEntityModels.add(ea);
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel = CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(FestivalController.class).getAllTickets(auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
     }
 
     @GetMapping("/festival/tickets/available")
-    CollectionModel<EntityModel<AvailableTickets>> getAvailableTickets(@RequestParam("Authentication") String auth){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
@@ -85,7 +114,7 @@ public class FestivalController {
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at: tickets){
             if (at.isAvailable()){
-                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth);
+                EntityModel<AvailableTickets> ea = availableTicketsToEntityModel(at.getType(), at, auth, num);
                 availableTicketsEntityModels.add(ea);
             }
         }
@@ -93,14 +122,20 @@ public class FestivalController {
             System.out.println("empty");
             throw new NoAvailableTicketsExceptionFestival();
         }
-        return CollectionModel.of(availableTicketsEntityModels,
-                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
+        CollectionModel<EntityModel<AvailableTickets>> collectionModel =  CollectionModel.of(availableTicketsEntityModels,
+                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(collectionModel);
     }
 
     @PostMapping("/festival/order")
-    EntityModel<Order> addFestivalOrder(@RequestBody Order festival, @RequestParam("authentication") String auth){
+    ResponseEntity<EntityModel<Order>> addFestivalOrder(@RequestBody Order festival, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
@@ -109,63 +144,90 @@ public class FestivalController {
             throw new OrderAlreadyExistsExceptionFestival(festival.getId());
         }
         festivalRepository.add(festival);
-        return festivalToEntityModel(festival.getId(), festival, auth);
+        EntityModel<Order> festivalEntity = festivalToEntityModel(festival.getId(), festival, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(festivalEntity);
     }
 
     @PutMapping("/festival/confirm/{id}")
-    EntityModel<Order> confirmFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth){
+    ResponseEntity<EntityModel<Order>> confirmFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
 
         }
         Order festival = festivalRepository.updateConfirmed(id);
-        return festivalToEntityModel(festival.getId(), festival, auth);
+        EntityModel<Order> festivalEntity = festivalToEntityModel(festival.getId(), festival, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(festivalEntity);
     }
 
     @DeleteMapping("/festival/delete/{id}")
-    EntityModel<Order> deleteFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth){
+    ResponseEntity<EntityModel<Order>> deleteFestivalOrder(@PathVariable String id, @RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
         Order festival = festivalRepository.remove(id);
-        return festivalToEntityModel(id, festival, auth);
+        EntityModel<Order> festivalEntity = festivalToEntityModel(id, festival, auth, num);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(festivalEntity);
     }
 
     @GetMapping("/festival")
-    EntityModel<Index> getIndex(@RequestParam("authentication") String auth){
+    ResponseEntity<EntityModel<Index>> getIndex(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
-        return indexEntityModel(auth);
+        EntityModel<Index> indexentitymodel = indexEntityModel(auth, num);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("number", num.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(indexentitymodel);
     }
 
-    private EntityModel<Index> indexEntityModel(String auth) {
+    private EntityModel<Index> indexEntityModel(String auth, Integer num) {
 
         Index index = new Index();
         return EntityModel.of(index,
-                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withRel("allFestivalOrders").withType("GET"),
-                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withRel("allTicketTypes").withType("GET"),
-                linkTo(methodOn(FestivalController.class).addFestivalOrder(null, auth)).withRel("addOrder").withType("POST"),
-                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth)).withRel("getAvailableTickets").withType("GET"),
-                linkTo(methodOn(CampingController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(FestivalController.class).getAllFestivals(auth, num)).withRel("allFestivalOrders").withType("GET"),
+                linkTo(methodOn(FestivalController.class).getAllTickets(auth, num)).withRel("allTicketTypes").withType("GET"),
+                linkTo(methodOn(FestivalController.class).addFestivalOrder(null, auth, num)).withRel("addOrder").withType("POST"),
+                linkTo(methodOn(FestivalController.class).getAvailableTickets(auth, num)).withRel("getAvailableTickets").withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 
-    private EntityModel<Order> festivalToEntityModel(String id, Order order, String auth){
+    private EntityModel<Order> festivalToEntityModel(String id, Order order, String auth, Integer num){
         return EntityModel.of(order,
-                linkTo(methodOn(FestivalController.class).getFestivalById(id, auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(FestivalController.class).getTicketByType(order.getType(), auth)).withRel("ticketToFestival").withType("GET"),
-                linkTo(methodOn(FestivalController.class).confirmFestivalOrder(id, auth)).withRel("confirmOrder").withType("PUT"),
-                linkTo(methodOn(FestivalController.class).deleteFestivalOrder(id, auth)).withRel("deleteOrder").withType("DELETE"),
-                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withRel("allFestivalOrders").withType("GET"),
-                linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(FestivalController.class).getFestivalById(id, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getTicketByType(order.getType(), auth, num)).withRel("ticketToFestival").withType("GET"),
+                linkTo(methodOn(FestivalController.class).confirmFestivalOrder(id, auth, num)).withRel("confirmOrder").withType("PUT"),
+                linkTo(methodOn(FestivalController.class).deleteFestivalOrder(id, auth, num)).withRel("deleteOrder").withType("DELETE"),
+                linkTo(methodOn(FestivalController.class).getAllFestivals(auth, num)).withRel("allFestivalOrders").withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
 
     }
 
-    private EntityModel<AvailableTickets> availableTicketsToEntityModel(TicketType t, AvailableTickets availableTickets, String auth){
+    private EntityModel<AvailableTickets> availableTicketsToEntityModel(TicketType t, AvailableTickets availableTickets, String auth, Integer num){
         return EntityModel.of(availableTickets,
-                linkTo(methodOn(FestivalController.class).getTicketByType(t, auth)).withSelfRel().withType("GET"),
-                linkTo(methodOn(FestivalController.class).getAllTickets(auth)).withRel("AllFestivalTickets").withType("GET"),
-                linkTo(methodOn(FestivalController.class).getAllFestivals(auth)).withRel("allFestivalOrders").withType("GET"),
-                linkTo(methodOn(FestivalController.class).getIndex(auth)).withRel("index").withType("GET"));
+                linkTo(methodOn(FestivalController.class).getTicketByType(t, auth, num)).withSelfRel().withType("GET"),
+                linkTo(methodOn(FestivalController.class).getAllTickets(auth, num)).withRel("AllFestivalTickets").withType("GET"),
+                linkTo(methodOn(FestivalController.class).getAllFestivals(auth, num)).withRel("allFestivalOrders").withType("GET"),
+                linkTo(methodOn(FestivalController.class).getIndex(auth, num)).withRel("index").withType("GET"));
     }
 }
