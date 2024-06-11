@@ -133,6 +133,9 @@ public class BusRepository {
         AvailableTickets aarschot13= new AvailableTickets("Aarschot_13", 50, BoardingLocation.AARSCHOT, aarschot13dateTime, 2.5f , false);
         available_tickets.put(aarschot13.getType(), aarschot13);
 
+        AvailableTickets none = new AvailableTickets("NONE", 50, BoardingLocation.NONE, null, 0.0f , false);
+        available_tickets.put(none.getType(), none);
+
     }
 
     public Optional<Order> findBus(String id){
