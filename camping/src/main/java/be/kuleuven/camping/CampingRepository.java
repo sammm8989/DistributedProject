@@ -25,6 +25,9 @@ public class CampingRepository {
         camper.setPrice(25.0f);
         AvailableTickets hotel = new AvailableTickets(Pack.HOTEL,2);
         hotel.setPrice(60.0f);
+        AvailableTickets none = new AvailableTickets(Pack.NONE,1);
+        none.setPrice(0.0f);
+
 
         hotel.setSold(2);
         tent.setSold(10);
@@ -33,6 +36,8 @@ public class CampingRepository {
         available_tickets.put(tent.getType(), tent);
         available_tickets.put(camper.getType(), camper);
         available_tickets.put(hotel.getType(), hotel);
+        available_tickets.put(none.getType(), none);
+
 
     }
     public Optional<Order> findCamping(String id){
@@ -63,7 +68,12 @@ public class CampingRepository {
         }
         camping.setPrice(camping.getPrice() + tickets.get().getPrice());
         camping_tickets.put(camping.getId(), camping);
-        available_tickets.get(camping.getType()).sellCampingTicket();
+        System.out.println(camping.getType().equals(Pack.NONE));
+        System.out.println(camping.getType());
+        if(!camping.getType().equals(Pack.NONE)){
+            available_tickets.get(camping.getType()).sellCampingTicket();
+        }
+
     }
 
     public synchronized Order updateConfirmed(String id) {
@@ -83,7 +93,9 @@ public class CampingRepository {
         if(camping == null){
             throw new CampingNotFoundException(id);
         }
-        available_tickets.get(camping.getType()).restockCampingTicket();
+        if(!camping.getType().equals(Pack.NONE)){
+            available_tickets.get(camping.getType()).restockCampingTicket();
+        }
         camping_tickets.remove(id);
         return camping;
     }

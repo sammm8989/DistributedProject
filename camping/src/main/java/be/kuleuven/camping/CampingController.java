@@ -231,7 +231,7 @@ public class CampingController {
     private EntityModel<Order> campingToEntityModel(String id, Order camping, String auth, Integer num){
         return EntityModel.of(camping,
                 linkTo(methodOn(CampingController.class).getCampingById(id, auth, num)).withSelfRel().withType("GET"),
-                linkTo(methodOn(CampingController.class).getTicketByPackage(camping.getType(), auth, num)).withRel("ticketToFestival").withType("GET"),
+                linkTo(methodOn(CampingController.class).getTicketByPackage(camping.getType(), auth, num)).withRel("campingTicket").withType("GET"),
                 linkTo(methodOn(CampingController.class).confirmCampingOrder(id, auth, num)).withRel("confirmOrder").withType("PUT"),
                 linkTo(methodOn(CampingController.class).deleteCampingOrder(id, auth, num)).withRel("deleteOrder").withType("DELETE"),
                 linkTo(methodOn(CampingController.class).getAllCampings(auth, num)).withRel("allCampingOrders").withType("GET"),

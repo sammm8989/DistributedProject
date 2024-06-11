@@ -2,5 +2,5 @@ package be.kuleuven.camping;
 
 
 public enum Pack{
-    TENT, CAMPER, HOTEL
+    TENT, CAMPER, HOTEL, NONE
 }
