@@ -197,7 +197,7 @@ function addContent() {
                                 <li>Camping Type: ${order.camping.type}</li>
                                 <li>Festival Type: ${order.festival.type}</li>
                             </ul>
-                            <p>Total Price: €${order.price || 'Unknown'}</p>
+                            <p>Payment confirmed: €${order.total_confirmed || 'Unknown'}</p>
                         </div>`;
                 } else {
                     console.error('Invalid order data:', order);
@@ -207,20 +207,6 @@ function addContent() {
         } else {
             adminHtml += '<p>No orders available.</p>';
         }
-
-        // Display Customers
-        adminHtml += '<div id="customersContainer"><h3>All Customers</h3>';
-        if (Array.isArray(customers.users)) {
-            customers.users.forEach(customerEmail => {
-                adminHtml += `<div class="customer"><p>Email: ${customerEmail}</p></div>`;
-            });
-        } else {
-            console.error('Invalid customers data:', customers);
-        }
-        adminHtml += '</div>';
-
-        adminHtml += '</div>';
-        document.getElementById("contentdiv").innerHTML = adminHtml;
     }
 
     var available = document.getElementById("getAvailabilities");
