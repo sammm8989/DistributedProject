@@ -28,14 +28,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().disable()
                 .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                 .authorizeRequests()
-                .antMatchers("/api/getAllOrders", "/api/getAllCustomers").hasAuthority("manager")
-                .antMatchers("/api/**/*").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/broker/*").authenticated()
+                .antMatchers("/api/*").authenticated()
+                .antMatchers("/").permitAll()
+                .antMatchers("/index.css").permitAll()
+                .antMatchers("/index.js").permitAll()
+                .antMatchers("/images/*").permitAll()
+                .anyRequest().authenticated() // Require authentication for other endpoints
                 .and()
-                .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Disable session creation
     }
 }

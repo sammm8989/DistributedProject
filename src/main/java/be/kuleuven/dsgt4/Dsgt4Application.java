@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.HypermediaWebClientConfigurer;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +23,7 @@ public class Dsgt4Application {
 
 
 	@SuppressWarnings("unchecked")
+
 	public static void main(String[] args)  {
 		//System.setProperty("server.port", System.getenv().getOrDefault("PORT", "8080"));
 		SpringApplication.run(Dsgt4Application.class, args);

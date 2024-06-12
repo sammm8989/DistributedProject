@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c588d11-a658-4e1b-878b-0d3e2dd93c63" name="Changes" comment="Initial commit" />
+    <list default="true" id="7c588d11-a658-4e1b-878b-0d3e2dd93c63" name="Changes" comment="Initial commit">
+      <change afterPath="$PROJECT_DIR$/../src/main/java/be/kuleuven/dsgt4/ApiWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../firebase-debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/../firebase-debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../firestore-debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/../firestore-debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/be/kuleuven/dsgt4/Broker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/be/kuleuven/dsgt4/Broker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/be/kuleuven/dsgt4/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/be/kuleuven/dsgt4/RequestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../target/classes/be/kuleuven/dsgt4/Broker.class" beforeDir="false" afterPath="$PROJECT_DIR$/../target/classes/be/kuleuven/dsgt4/Broker.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,19 +38,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.dsgt4 [org.springframework.boot:spring-boot-maven-plugin:2.7.3:run].executor": "Run",
-    "Maven.dsgt4 [org.springframework.boot:spring-boot-maven-plugin:2.7.3:start].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "SamBranch",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/sam/Desktop/Distributed/DistributedProject",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.dsgt4 [org.springframework.boot:spring-boot-maven-plugin:2.7.3:run].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dsgt4 [org.springframework.boot:spring-boot-maven-plugin:2.7.3:start].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SamBranch&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sam/Desktop/Distributed/DistributedProject&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="dsgt4start" />
@@ -56,13 +65,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="jdk-17.0.9-semeru-17.0.9-ec33d87e4238-1f902878" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

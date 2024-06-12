@@ -1,18 +1,28 @@
 package be.kuleuven.dsgt4;
 
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.WriteResult;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
 
 @Component
 public class Broker {
@@ -22,43 +32,142 @@ public class Broker {
 
     JSONParser parser = new JSONParser();
 
-    String camping_string_all = "[{\"type\": \"TENT\"}, {\"type\": \"CAMPER\"}, {\"type\": \"HOTEL\"}]";
-    String bus_string_all = "[{\"departure_time\": \"2023-05-27T15:30:00Z\", \"round_trip\": true, \"start_place\": \"LEUVEN\"}, {\"departure_time\": \"2023-05-27T16:30:00Z\", \"round_trip\": true, \"start_place\": \"HOEGAARDEN\"}]";
-    String ticket_string_all = "[{\"type\": \"COMBI\"}, {\"type\": \"FRIDAY\"}, {\"type\": \"SATURDAY\"}, {\"type\": \"SUNDAY\"}, {\"type\": \"MONDAY\"}]";
-    String all_available_string = "{"
-            + "\"camping\": " + camping_string_all + ", "
-            + "\"bus\": " + bus_string_all + ", "
-            + "\"ticket\": " + ticket_string_all
-            + "}";
+    String[] urls = {"http://localhost:8100/", "http://localhost:8090/", "http://localhost:8110/"};
+    String[] names = {"camping", "festival", "bus"};
 
-    public JSONObject get_all_available() throws ParseException {
-        return (JSONObject) parser.parse(all_available_string);
+    ApiWorker AW = new ApiWorker();
+
+    Thread workerThread = new Thread(AW);
+
+
+    //Input: None
+    //Output: JSON of all available products to buy
+    //Extra: method should combine different suppliers JSON into one
+
+    public JSONObject get_all_available() throws Exception {
+        JSONObject master_JSON = new JSONObject();
+        for (int i = 0; i < names.length; i++) {
+            List<JSONObject> JO_list = new ArrayList<>();
+            if(names[i].equals("bus")){
+                master_JSON.put("bus_to_festival",JO_list);
+                List<JSONObject> JO_list1 = new ArrayList<>();
+                master_JSON.put("bus_from_festival",JO_list1);
+            }
+            else{
+                master_JSON.put(names[i],JO_list);
+            }
+        }
+
+        for (int i = 0; i < urls.length; i++) {
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<String> response = restTemplate.getForEntity(urls[i] + names[i] + "/tickets/available", String.class);
+
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode rootNode = mapper.readTree(response.getBody());
+                JsonNode ticketsNode = rootNode.path("_embedded").path("availableTicketsList");
+
+                List<JSONObject> tickets = mapper.convertValue(ticketsNode, mapper.getTypeFactory().constructCollectionType(List.class, JSONObject.class));
+
+                for (JSONObject element : tickets) {
+                    element.remove("_links");
+                    element.remove("available");
+                    element.remove("sold");
+                    element.remove("total");
+                    if (element.keySet().size() != 2) {
+                        JSONObject JO = new JSONObject();
+                        JO.put("price", element.get("price"));
+                        JO.put("type", element.get("type"));
+                        JO.put("extra_information", element.get("dateTime"));
+
+                        if ((Boolean) element.get("toFestival")) {
+                            List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_to_festival");
+                            list.add(JO);
+                        } else {
+                            List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_from_festival");
+                            list.add(JO);
+
+                        }
+                    } else {
+                        List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get(names[i]);
+                        list.add(element);
+                    }
+                }
+
+
+            } catch (Exception e) {
+                System.out.println(e);
+                return null;
+            }
+
+        }
+        return master_JSON;
     }
 
-    public JSONObject do_request(JSONObject request, User user) {
-        request.put("price", 20.0f);
+
+    //Input: User, data of all requested
+    //Output: the request with the combined price integrated into it
+    //the suppliers also returns aN order_id that should be put in the database
+    //if a suppliers returns with an error a rollback should be done
+
+    public JSONObject do_request(JSONObject request, String email){
+        double total_price = 0.0;
+
+        for (int i = 0 ; i < names.length ; i++) {
+            System.out.println(request);
+            JSONObject request_json = (JSONObject) request.get(names[i]);
+
+            request_json.put("id", email);
+            request_json.put("confirmed", false);
+            request_json.put("price", 0.0);
+
+            System.out.println(request_json);
+
+            Double price = do_call_with_JSON(urls[i] + names[i] + "/order", request_json);
+
+            if (price == null) {
+                remove_order(email);
+                return null;
+            }
+            total_price += price;
+        }
+
+        request.put("price", total_price);
+
+        request.put("total_confirmed", false);
+        request.put("timestamp", LocalDateTime.now().toString());
+        add_data_to_firestore("orders", email, request);
+
         return request;
     }
 
-    public JSONObject confirm(User user) {
-        return new JSONObject();
-    }
 
-    public void remove_order(String bus, String ticket, String camping) {
-    }
 
-    public String addDataToFirestore(String collectionName, String documentId, Map<String, Object> data) {
+    public void add_data_to_firestore(String collectionName, String documentId, Map<String, Object> data) {
         try {
             DocumentReference docRef = db.collection(collectionName).document(documentId);
             WriteResult result = docRef.set(data).get();
-            return "Data added at: " + result.getUpdateTime();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return "Error adding data: " + e.getMessage();
         }
     }
 
-    public JSONObject getDataFromFirestore(String collectionName, String documentId) {
+    public void change_total_confirmed(String collectionName, String documentId){
+        try {
+            DocumentReference docRef = db.collection(collectionName).document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                // Update the confirmed_total field to true
+                docRef.update("total_confirmed", true);
+
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public JSONObject get_data_from_firestore(String collectionName, String documentId) {
         try {
             DocumentReference docRef = db.collection(collectionName).document(documentId);
             DocumentSnapshot document = docRef.get().get();
@@ -74,4 +183,110 @@ public class Broker {
             return error;
         }
     }
+
+    public void delete_order(String documentId) {
+        try {
+            DocumentReference docRef = db.collection("orders").document(documentId);
+            DocumentSnapshot document = docRef.get().get();
+            if (document.exists()) {
+                docRef.delete().get();  // delete the document
+                System.out.println("Document deleted successfully.");
+            } else {
+                System.out.println("Document does not exist.");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Error deleting document: " + e.getMessage());
+        }
+    }
+
+
+    public List<String> get_all_document_IDs(String collectionName) {
+        List<String> documentIds = new ArrayList<>();
+        try {
+            CollectionReference collectionRef = db.collection(collectionName);
+            ApiFuture<QuerySnapshot> querySnapshot = collectionRef.get();
+            for (QueryDocumentSnapshot document : querySnapshot.get().getDocuments()) {
+                documentIds.add(document.getId());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return documentIds;
+    }
+
+    //input: User
+    //Output confirmation
+    //this should send a confirmation to all server then it is booked
+    //If there is a failed server then a rollback should be done
+
+    public JSONObject confirm(String email){
+        for(int i = 0 ; i < urls.length ; i++) {
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<String> response = restTemplate.exchange(urls[i] + names[i] + "/confirm/" + email, HttpMethod.PUT, null, String.class);
+                int statusCode = response.getStatusCodeValue();
+                if (statusCode != 200) {
+                    remove_order(email);
+                    return null;
+                }
+
+            } catch (Exception e) {
+                System.out.println(e);
+                return null;
+            }
+        }
+        change_total_confirmed("orders", email);
+        JSONObject JO = new JSONObject();
+        JO.put("succes", "All good");
+        return JO;
+    }
+
+
+    //INPUT: the order_ids from all suppliers that should be removed
+    //Output: none
+
+    public void remove_order(String primary_key){
+        if(workerThread.getState() == Thread.State.NEW){
+            workerThread.start();
+        }
+        delete_order(primary_key);
+        AW.add(primary_key);
+    }
+
+
+    public Double do_call_with_JSON(String url_string, JSONObject request){
+        try {
+            URL url = new URL(url_string);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(request.toString().getBytes());
+            os.flush();
+
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+
+            JSONObject json = (JSONObject) parser.parse(response.toString());
+            Double price = (Double) json.get("price");
+            br.close();
+
+            conn.disconnect();
+            return price;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
