@@ -5,41 +5,46 @@ import be.kuleuven.camping.Exceptions.CampingNotFoundException;
 import be.kuleuven.camping.Exceptions.OrderAlreadyConfirmedExceptionCamping;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 
 @Component
 public class CampingRepository {
 
-    private static final ConcurrentHashMap<String, Order> camping_tickets = new ConcurrentHashMap<>( );
-    private static final ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
+    private  ConcurrentHashMap<String, Order> camping_tickets = new ConcurrentHashMap<>( );
+    private  ConcurrentHashMap<Pack, AvailableTickets> available_tickets = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void initData(){
-        AvailableTickets tent = new AvailableTickets(Pack.TENT, 10);
-        tent.setPrice(20.0f);
-        AvailableTickets camper = new AvailableTickets(Pack.CAMPER, 5);
-        camper.setPrice(25.0f);
-        AvailableTickets hotel = new AvailableTickets(Pack.HOTEL,2);
-        hotel.setPrice(60.0f);
-        AvailableTickets none = new AvailableTickets(Pack.NONE,1);
-        none.setPrice(0.0f);
 
+        Gson gson = new Gson();
+        try (FileReader campingReader = new FileReader("camping_tickets.json");
+             FileReader availableTicketsReader = new FileReader("available_tickets.json")) {
 
-        hotel.setSold(2);
-        tent.setSold(10);
-        camper.setSold(4);
+            Type camping_tickets_type = new TypeToken<ConcurrentHashMap<String, Order>>() {}.getType();
+            Type available_tickets_type = new TypeToken<ConcurrentHashMap<Pack, AvailableTickets>>() {}.getType();
 
-        available_tickets.put(tent.getType(), tent);
-        available_tickets.put(camper.getType(), camper);
-        available_tickets.put(hotel.getType(), hotel);
-        available_tickets.put(none.getType(), none);
+            camping_tickets = gson.fromJson(campingReader, camping_tickets_type);
+            available_tickets = gson.fromJson(availableTicketsReader, available_tickets_type);
 
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
+
     public Optional<Order> findCamping(String id){
         Assert.notNull(id, "The Order id must not be Null");
         Order camping = camping_tickets.get(id);
@@ -73,6 +78,7 @@ public class CampingRepository {
         if(!camping.getType().equals(Pack.NONE)){
             available_tickets.get(camping.getType()).sellCampingTicket();
         }
+        updateJSONs(camping_tickets, available_tickets);
 
     }
 
@@ -85,6 +91,7 @@ public class CampingRepository {
             throw new OrderAlreadyConfirmedExceptionCamping(id);
         }
         camping.setConfirmed(true);
+        updateJSONs(camping_tickets, available_tickets);
         return camping;
     }
 
@@ -97,7 +104,18 @@ public class CampingRepository {
             available_tickets.get(camping.getType()).restockCampingTicket();
         }
         camping_tickets.remove(id);
+        updateJSONs(camping_tickets, available_tickets);
         return camping;
     }
 
+    public synchronized void updateJSONs(ConcurrentHashMap<String, Order> camping_tickets, ConcurrentHashMap<Pack, AvailableTickets> available_tickets) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter campingWriter = new FileWriter("camping_tickets.json");
+             FileWriter availableTicketsWriter = new FileWriter("available_tickets.json")) {
+            gson.toJson(camping_tickets, campingWriter);
+            gson.toJson(available_tickets, availableTicketsWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

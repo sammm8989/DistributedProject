@@ -69,7 +69,7 @@ public class FestivalController {
     }
 
     @GetMapping("/festival/tickets/{ticketType}")
-    ResponseEntity<EntityModel<AvailableTickets>> getTicketByType(@PathVariable TicketType ticketType, @RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
+    ResponseEntity<EntityModel<AvailableTickets>> getTicketByType(@PathVariable TicketType ticketType, @RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
@@ -86,7 +86,7 @@ public class FestivalController {
     }
 
     @GetMapping("/festival/tickets")
-    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num) {
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
@@ -109,7 +109,7 @@ public class FestivalController {
     }
 
     @GetMapping("/festival/tickets/available")
-    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("Authentication") String auth, @RequestParam("number") Integer num){
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAvailableTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num){
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
