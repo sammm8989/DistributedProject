@@ -7,6 +7,8 @@ import com.google.cloud.firestore.*;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,11 +18,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 
@@ -33,17 +38,24 @@ public class Broker {
     JSONParser parser = new JSONParser();
 
     String[] urls = {"http://localhost:8100/", "http://localhost:8090/", "http://localhost:8110/"};
+    String api_key = "22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1";
     String[] names = {"camping", "festival", "bus"};
 
     ApiWorker AW = new ApiWorker();
 
     Thread workerThread = new Thread(AW);
 
+    public int random_number_generator(){
+        Random random = new Random();
+
+        return random.nextInt(100);
+    }
+
+
 
     //Input: None
     //Output: JSON of all available products to buy
     //Extra: method should combine different suppliers JSON into one
-
     public JSONObject get_all_available() throws Exception {
         JSONObject master_JSON = new JSONObject();
         for (int i = 0; i < names.length; i++) {
@@ -59,47 +71,74 @@ public class Broker {
         }
 
         for (int i = 0; i < urls.length; i++) {
+
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.getForEntity(urls[i] + names[i] + "/tickets/available", String.class);
 
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode rootNode = mapper.readTree(response.getBody());
-                JsonNode ticketsNode = rootNode.path("_embedded").path("availableTicketsList");
+                int random = random_number_generator();
+                String url = String.format("%s%s/tickets/available?authentication=%s&number=%d",
+                        urls[i], names[i],
+                        api_key,
+                        random);
 
-                List<JSONObject> tickets = mapper.convertValue(ticketsNode, mapper.getTypeFactory().constructCollectionType(List.class, JSONObject.class));
+                HttpHeaders headers = new HttpHeaders();
 
-                for (JSONObject element : tickets) {
-                    element.remove("_links");
-                    element.remove("available");
-                    element.remove("sold");
-                    element.remove("total");
-                    if (element.keySet().size() != 2) {
-                        JSONObject JO = new JSONObject();
-                        JO.put("price", element.get("price"));
-                        JO.put("type", element.get("type"));
-                        JO.put("extra_information", element.get("dateTime"));
+                HttpEntity<String> entity = new HttpEntity<>(headers);
 
-                        if ((Boolean) element.get("toFestival")) {
-                            List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_to_festival");
-                            list.add(JO);
-                        } else {
-                            List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_from_festival");
-                            list.add(JO);
+                ResponseEntity<Map> response = restTemplate.exchange(
+                        new URI(url),
+                        HttpMethod.GET,
+                        entity,
+                        Map.class
+                );
 
-                        }
-                    } else {
-                        List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get(names[i]);
-                        list.add(element);
-                    }
+                String number_header = response.getHeaders().getFirst("number");
+                if(Integer.valueOf(number_header) != random + 1){
+                    return null;
                 }
 
+                Map<String, Object> responseBody = response.getBody();
 
+                if (responseBody != null) {
+                    Map<String, Object> embedded = (Map<String, Object>) responseBody.get("_embedded");
+                    ArrayList<Map<String, Object>> tickets = (ArrayList<Map<String, Object>>) embedded.get("availableTicketsList");
+
+                    for (Map<String, Object> element : tickets) {
+                        element.remove("_links");
+                        element.remove("available");
+                        element.remove("sold");
+                        element.remove("total");
+
+                        if (element.keySet().size() != 2) {
+                            JSONObject JO = new JSONObject();
+                            JO.put("price", element.get("price"));
+                            JO.put("type", element.get("type"));
+                            JO.put("extra_information", element.get("dateTime"));
+
+                            if ((Boolean) element.get("toFestival")) {
+                                List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_to_festival");
+                                list.add(JO);
+                            } else {
+                                List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get("bus_from_festival");
+                                list.add(JO);
+                            }
+                        } else {
+                            JSONObject jsonElement = new JSONObject(element);  // Convert Map to JSONObject
+                            List<JSONObject> list = (ArrayList<JSONObject>) master_JSON.get(names[i]);
+                            list.add(jsonElement);
+                        }
+                    }
+                } else {
+                    return null;
+                }
+
+            } catch (URISyntaxException e) {
+                System.out.println("Invalid URL syntax: " + e.getMessage());
+                return null;
             } catch (Exception e) {
                 System.out.println(e);
                 return null;
             }
-
         }
         return master_JSON;
     }
@@ -109,11 +148,11 @@ public class Broker {
     //Output: the request with the combined price integrated into it
     //the suppliers also returns aN order_id that should be put in the database
     //if a suppliers returns with an error a rollback should be done
-
     public JSONObject do_request(JSONObject request, String email){
         double total_price = 0.0;
 
         for (int i = 0 ; i < names.length ; i++) {
+
             System.out.println(request);
             JSONObject request_json = (JSONObject) request.get(names[i]);
 
@@ -122,8 +161,16 @@ public class Broker {
             request_json.put("price", 0.0);
 
             System.out.println(request_json);
+            int random = random_number_generator();
 
-            Double price = do_call_with_JSON(urls[i] + names[i] + "/order", request_json);
+            String url = String.format("%s%s/order?authentication=%s&number=%d",
+                    urls[i], names[i],
+                    api_key,
+                    random);
+
+            System.out.println(url);
+
+            Double price = do_call_with_JSON(url, request_json, email, random + 1);
 
             if (price == null) {
                 remove_order(email);
@@ -231,6 +278,7 @@ public class Broker {
                 }
 
             } catch (Exception e) {
+                remove_order(email);
                 System.out.println(e);
                 return null;
             }
@@ -254,17 +302,21 @@ public class Broker {
     }
 
 
-    public Double do_call_with_JSON(String url_string, JSONObject request){
+    public Double do_call_with_JSON(String url_string, JSONObject request, String email, int check_number){
         try {
+
             URL url = new URL(url_string);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
 
+
             OutputStream os = conn.getOutputStream();
             os.write(request.toString().getBytes());
             os.flush();
+
+            Map<String, List<String>> headers = conn.getHeaderFields();
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 return null;
@@ -278,13 +330,19 @@ public class Broker {
                 response.append(line);
             }
 
+
             JSONObject json = (JSONObject) parser.parse(response.toString());
             Double price = (Double) json.get("price");
+            if(!json.get("id").equals(email) || Integer.valueOf(headers.get("number").get(0)) != check_number){
+                System.out.println("here");
+                return null;
+            }
             br.close();
 
             conn.disconnect();
             return price;
         } catch (Exception e) {
+            System.out.println(e);
             return null;
         }
     }

@@ -15,6 +15,8 @@ class ApiWorker implements Runnable {
 
     ConcurrentLinkedQueue<String>[] queue_list = new ConcurrentLinkedQueue[]{message_queue_bus, message_queue_camping,message_queue_festival};
 
+    String api_key = "22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1";
+
     String[] urls_delete = {"http://localhost:8100/camping/delete/", "http://localhost:8090/festival/delete/",
             "http://localhost:8110/bus/delete/"};
     @Override
@@ -41,7 +43,7 @@ class ApiWorker implements Runnable {
 
     private boolean sendDeleteRequest(String url_name, String id) {
         try {
-            URL url = new URL(url_name + id);
+            URL url = new URL(url_name + id + "?authentication=" + api_key + "&number=56421");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Accept", "application/json");

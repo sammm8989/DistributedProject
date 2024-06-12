@@ -503,3 +503,331 @@ INFO: Detected non-HTTP/2 connection.
 [debug] [2024-06-07T09:00:21.257Z] Jun 07, 2024 11:00:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected non-HTTP/2 connection.
  {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 07, 2024 11:00:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:05:36.484Z] ----------------------------------------------------------------------
+[debug] [2024-06-12T16:05:36.485Z] Command:       /usr/local/bin/firebase /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start --project demo-distributed-systems-kul
+[debug] [2024-06-12T16:05:36.486Z] CLI Version:   13.5.0
+[debug] [2024-06-12T16:05:36.486Z] Platform:      linux
+[debug] [2024-06-12T16:05:36.486Z] Node Version:  v18.5.0
+[debug] [2024-06-12T16:05:36.488Z] Time:          Wed Jun 12 2024 18:05:36 GMT+0200 (Central European Summer Time)
+[debug] [2024-06-12T16:05:36.488Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-06-12T16:05:36.490Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-06-12T16:05:36.560Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-06-12T16:05:36.560Z] > authorizing via signed-in user (samwinant@gmail.com)
+[debug] [2024-06-12T16:05:36.586Z] openjdk version "17.0.11" 2024-04-16
+OpenJDK Runtime Environment (build 17.0.11+9-Ubuntu-122.04.1)
+OpenJDK 64-Bit Server VM (build 17.0.11+9-Ubuntu-122.04.1, mixed mode, sharing)
+
+[debug] [2024-06-12T16:05:36.589Z] Parsed Java major version: 17
+[info] i  emulators: Starting emulators: auth, functions, firestore, pubsub {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, pubsub"}}
+[info] i  emulators: Detected demo project ID "demo-distributed-systems-kul", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail. {"metadata":{"emulator":{"name":"hub"},"message":"Detected demo project ID \"demo-distributed-systems-kul\", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail."}}
+[debug] [2024-06-12T16:05:36.592Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-12T16:05:36.593Z] assigned listening specs for emulators {"user":{"ui":[{"address":"0.0.0.0","family":"IPv4","port":8081}],"auth":[{"address":"0.0.0.0","family":"IPv4","port":8082}],"firestore":[{"address":"0.0.0.0","family":"IPv4","port":8084}],"firestore.websocket":[{"address":"0.0.0.0","family":"IPv4","port":9150}],"pubsub":[{"address":"0.0.0.0","family":"IPv4","port":8083}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-06-12T16:05:36.596Z] [hub] writing locator at /tmp/hub-demo-distributed-systems-kul.json
+[debug] [2024-06-12T16:05:36.599Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-12T16:05:36.600Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-12T16:05:36.600Z] late-assigned ports for functions and eventarc emulators {"user":{"ui":[{"address":"0.0.0.0","family":"IPv4","port":8081}],"auth":[{"address":"0.0.0.0","family":"IPv4","port":8082}],"firestore":[{"address":"0.0.0.0","family":"IPv4","port":8084}],"firestore.websocket":[{"address":"0.0.0.0","family":"IPv4","port":9150}],"pubsub":[{"address":"0.0.0.0","family":"IPv4","port":8083}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[debug] [2024-06-12T16:05:36.601Z] defaultcredentials: writing to file /home/sam/.config/firebase/samwinant_gmail_com_application_default_credentials.json
+[debug] [2024-06-12T16:05:36.602Z] Setting GAC to /home/sam/.config/firebase/samwinant_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /home/sam/.config/firebase/samwinant_gmail_com_application_default_credentials.json"}}
+[debug] [2024-06-12T16:05:36.608Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-12T16:05:36.608Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-06-12T16:05:36.609Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/home/sam/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.3.jar","--host","0.0.0.0","--port",8084,"--websocket_port",9150,"--project_id","demo-distributed-systems-kul","--rules","/home/sam/Desktop/Distributed/DistributedProject/firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/home/sam/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.3.jar\",\"--host\",\"0.0.0.0\",\"--port\",8084,\"--websocket_port\",9150,\"--project_id\",\"demo-distributed-systems-kul\",\"--rules\",\"/home/sam/Desktop/Distributed/DistributedProject/firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2024-06-12T16:05:36.865Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-06-12T16:05:36.865Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-06-12T16:05:37.378Z] Jun 12, 2024 6:05:37 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://0.0.0.0:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:05:37 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://0.0.0.0:9150\n"}}
+[debug] [2024-06-12T16:05:37.428Z] API endpoint: http://0.0.0.0:8084
+ {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://0.0.0.0:8084\n"}}
+[debug] [2024-06-12T16:05:37.429Z] If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=0.0.0.0:8084
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=0.0.0.0:8084
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=0.0.0.0:8084\n\nIf you are running a Firestore in Datastore Mode project, run:\n\n   export DATASTORE_EMULATOR_HOST=0.0.0.0:8084\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2024-06-12T16:05:42.708Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"pubsub"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2024-06-12T16:05:42.708Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"pubsub"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-12T16:05:42.708Z] Starting Pub/Sub Emulator with command {"binary":"/home/sam/.cache/firebase/emulators/pubsub-emulator-0.7.1/pubsub-emulator/bin/cloud-pubsub-emulator","args":["--host=0.0.0.0","--port=8083"],"optionalArgs":["port","host"],"joinArgs":true} {"metadata":{"emulator":{"name":"pubsub"},"message":"Starting Pub/Sub Emulator with command {\"binary\":\"/home/sam/.cache/firebase/emulators/pubsub-emulator-0.7.1/pubsub-emulator/bin/cloud-pubsub-emulator\",\"args\":[\"--host=0.0.0.0\",\"--port=8083\"],\"optionalArgs\":[\"port\",\"host\"],\"joinArgs\":true}"}}
+[info] i  pubsub: Pub/Sub Emulator logging to pubsub-debug.log {"metadata":{"emulator":{"name":"pubsub"},"message":"Pub/Sub Emulator logging to \u001b[1mpubsub-debug.log\u001b[22m"}}
+[debug] [2024-06-12T16:05:42.785Z] This is the Google Pub/Sub fake.
+Implementation may be incomplete or differ from the real system.
+ {"metadata":{"emulator":{"name":"pubsub"},"message":"This is the Google Pub/Sub fake.\nImplementation may be incomplete or differ from the real system.\n"}}
+[debug] [2024-06-12T16:05:42.816Z] Jun 12, 2024 6:05:42 PM com.google.cloud.pubsub.testing.v1.Main main
+INFO: IAM integration is disabled. IAM policy methods and ACL checks are not supported
+ {"metadata":{"emulator":{"name":"pubsub"},"message":"Jun 12, 2024 6:05:42 PM com.google.cloud.pubsub.testing.v1.Main main\nINFO: IAM integration is disabled. IAM policy methods and ACL checks are not supported\n"}}
+[debug] [2024-06-12T16:05:42.932Z] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+ {"metadata":{"emulator":{"name":"pubsub"},"message":"SLF4J: Failed to load class \"org.slf4j.impl.StaticLoggerBinder\".\nSLF4J: Defaulting to no-operation (NOP) logger implementation\nSLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.\n"}}
+[debug] [2024-06-12T16:05:43.268Z] Jun 12, 2024 6:05:43 PM com.google.cloud.pubsub.testing.v1.Main main
+INFO: Server started, listening on 8083
+ {"metadata":{"emulator":{"name":"pubsub"},"message":"Jun 12, 2024 6:05:43 PM com.google.cloud.pubsub.testing.v1.Main main\nINFO: Server started, listening on 8083\n"}}
+[debug] [2024-06-12T16:05:43.491Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-12T16:05:43.491Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-06-12T16:05:43.492Z] Starting Emulator UI with command {"binary":"node","args":["/home/sam/.cache/firebase/emulators/ui-v1.11.7/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/home/sam/.cache/firebase/emulators/ui-v1.11.7/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-06-12T16:05:43.652Z] Web / API server started at 0.0.0.0:8081
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 0.0.0.0:8081\n"}}
+[info] i  functions: Watching "/home/sam/Desktop/Distributed/DistributedProject/my-functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/home/sam/Desktop/Distributed/DistributedProject/my-functions\" for Cloud Functions..."}}
+[debug] [2024-06-12T16:05:43.777Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2024-06-12T16:05:43.778Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/gcp/cloudfunctions.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/backend.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/controller.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/commandUtils.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/database-get.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/index.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/index.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/gcp/cloudfunctions.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/backend.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/controller.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/commandUtils.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/database-get.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/index.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/index.js","/home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2024-06-12T16:05:43.779Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2024-06-12T16:05:43.779Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-06-12T16:05:43.780Z] Building nodejs source
+[debug] [2024-06-12T16:05:43.780Z] Failed to find version of module node: reached end of search path /home/sam/Desktop/Distributed/DistributedProject/my-functions/node_modules
+[info] ✔  functions: Using node@18 from host. 
+[debug] [2024-06-12T16:05:43.782Z] Could not parse firebase-functions version '' into semver. Falling back to parseTriggers.
+[error] ⬢  functions: Failed to load function definition from source: FirebaseError: Error parsing triggers: Cannot find module 'firebase-functions'
+Require stack:
+- /home/sam/Desktop/Distributed/DistributedProject/my-functions/index.js
+- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/triggerParser.js
+1) If you want to compile the package/file into executable, please pay attention to compilation warnings and specify a literal in 'require' call. 2) If you don't want to compile the package/file into executable and want to 'require' it from filesystem (likely plugin), specify an absolute path in 'require' call using process.cwd() or process.execPath.
+
+Try running "npm install" in your functions directory before deploying. {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Error parsing triggers: Cannot find module 'firebase-functions'\nRequire stack:\n- /home/sam/Desktop/Distributed/DistributedProject/my-functions/index.js\n- /home/sam/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/triggerParser.js\n1) If you want to compile the package/file into executable, please pay attention to compilation warnings and specify a literal in 'require' call. 2) If you don't want to compile the package/file into executable and want to 'require' it from filesystem (likely plugin), specify an absolute path in 'require' call using process.cwd() or process.execPath.\n\nTry running \"npm install\" in your functions directory before deploying."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:8081/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ 0.0.0.0:8082   │ http://127.0.0.1:8081/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:8081/functions │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ 0.0.0.0:8084   │ http://127.0.0.1:8081/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Pub/Sub        │ 0.0.0.0:8083   │ n/a                             │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-06-12T16:36:48.803Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:36:48.804Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"e443a11f-3f4e-4cfb-aff4-d95f539aef7e","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:36:48.803Z","data":{"uid":"32MVOBkbEltVS1sATDHmeGAMo7Uc","email":"sam@sd","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:36:48.802Z","lastSignInTime":"2024-06-12T16:36:48.802Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sam@sd","federatedId":"sam@sd","rawId":"sam@sd"}]}}
+[debug] [2024-06-12T16:36:48.813Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:36:48.813Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:36:50.165Z] Jun 12, 2024 6:36:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:36:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:38:40.063Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:38:40.063Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"1a5be952-b166-4adc-bfdc-af0ac441eabc","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:38:40.062Z","data":{"uid":"MILrJu0CfmTGSPj7dtTNwmIsPrDF","email":"qsrhf@dg,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:38:40.062Z","lastSignInTime":"2024-06-12T16:38:40.062Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"qsrhf@dg,","federatedId":"qsrhf@dg,","rawId":"qsrhf@dg,"}]}}
+[debug] [2024-06-12T16:38:40.077Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:38:40.077Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:38:41.343Z] Jun 12, 2024 6:38:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:38:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:39:53.305Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:39:53.305Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"198eb3e2-96f1-4ad9-b79a-950fe4b144bf","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:39:53.305Z","data":{"uid":"JHRKo083dJZJJntiembF3gdoM7kb","email":"sdetj@dghj","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:39:53.304Z","lastSignInTime":"2024-06-12T16:39:53.304Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sdetj@dghj","federatedId":"sdetj@dghj","rawId":"sdetj@dghj"}]}}
+[debug] [2024-06-12T16:39:53.316Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:39:53.316Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:39:54.769Z] Jun 12, 2024 6:39:54 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:39:54 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:46:35.198Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:46:35.199Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"88436fb2-54f8-4eac-9d33-3fe3681a8ab0","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:46:35.197Z","data":{"uid":"a0yt8iAR3Gaae9Crhsck4iUBaAsr","email":"sazzegf@qsdf","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:46:35.196Z","lastSignInTime":"2024-06-12T16:46:35.196Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sazzegf@qsdf","federatedId":"sazzegf@qsdf","rawId":"sazzegf@qsdf"}]}}
+[debug] [2024-06-12T16:46:35.209Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:46:35.209Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:46:37.163Z] Jun 12, 2024 6:46:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:46:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:50:04.199Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:50:04.200Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"1afa6117-3d7a-4cce-b646-28919ec60fb9","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:50:04.199Z","data":{"uid":"acvbS8cb2twEg8e5Lom3zfcmBl7G","email":"dhgf@hjg","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:50:04.198Z","lastSignInTime":"2024-06-12T16:50:04.198Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"dhgf@hjg","federatedId":"dhgf@hjg","rawId":"dhgf@hjg"}]}}
+[debug] [2024-06-12T16:50:04.211Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:50:04.211Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:50:06.198Z] Jun 12, 2024 6:50:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:50:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:52:37.501Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T16:52:37.502Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"6dcd4104-1719-439a-8763-23a7b45a2961","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T16:52:37.500Z","data":{"uid":"tfq26JNVady3Yw32t00kQJjMf6CM","email":"zeg@thyt","emailVerified":false,"metadata":{"creationTime":"2024-06-12T16:52:37.500Z","lastSignInTime":"2024-06-12T16:52:37.500Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"zeg@thyt","federatedId":"zeg@thyt","rawId":"zeg@thyt"}]}}
+[debug] [2024-06-12T16:52:37.511Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T16:52:37.512Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T16:52:38.951Z] Jun 12, 2024 6:52:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:52:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:53:19.686Z] Jun 12, 2024 6:53:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:53:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:54:17.396Z] Jun 12, 2024 6:54:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:54:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:55:38.928Z] Jun 12, 2024 6:55:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:55:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T16:57:12.416Z] Jun 12, 2024 6:57:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 6:57:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T17:00:25.026Z] Jun 12, 2024 7:00:25 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 7:00:25 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T17:00:36.685Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T17:00:36.686Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"86066a2a-a688-4a49-9ea9-f86215a99047","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T17:00:36.685Z","data":{"uid":"ejlZmFCnZYkZuHxQsl8uXNXE3mSI","email":"yjtxf@fsd,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T17:00:36.684Z","lastSignInTime":"2024-06-12T17:00:36.684Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"yjtxf@fsd,","federatedId":"yjtxf@fsd,","rawId":"yjtxf@fsd,"}]}}
+[debug] [2024-06-12T17:00:36.697Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T17:00:36.697Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T17:01:58.359Z] Jun 12, 2024 7:01:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 7:01:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T17:12:21.786Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T17:12:21.786Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"2c7c2b56-4dd8-4395-ae14-c64716a34bc0","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T17:12:21.786Z","data":{"uid":"RGkxQ1I4AYmCxiCxZPeWGfnVV6cf","email":"ysjr@gh,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T17:12:21.786Z","lastSignInTime":"2024-06-12T17:12:21.786Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"ysjr@gh,","federatedId":"ysjr@gh,","rawId":"ysjr@gh,"}]}}
+[debug] [2024-06-12T17:12:21.792Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T17:12:21.792Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T17:12:23.253Z] Jun 12, 2024 7:12:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 7:12:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T17:13:46.607Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T17:13:46.608Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"5f1aa87c-31c0-4ff2-892a-f51798806450","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T17:13:46.607Z","data":{"uid":"Wvaka5lGxLchbI9JAo2qXMTACNXe","email":"ftktuk@dgk;jdgku","emailVerified":false,"metadata":{"creationTime":"2024-06-12T17:13:46.606Z","lastSignInTime":"2024-06-12T17:13:46.606Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"ftktuk@dgk;jdgku","federatedId":"ftktuk@dgk;jdgku","rawId":"ftktuk@dgk;jdgku"}]}}
+[debug] [2024-06-12T17:13:46.618Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T17:13:46.619Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T17:13:48.197Z] Jun 12, 2024 7:13:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 7:13:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T17:48:46.607Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T17:48:46.608Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"f0fe8c06-cd37-4423-bd86-6fdee60a125a","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T17:48:46.607Z","data":{"uid":"FrhnVoDurEd3kfwjvWsrnFwg9uHN","email":"sergh@qsgf","emailVerified":false,"metadata":{"creationTime":"2024-06-12T17:48:46.606Z","lastSignInTime":"2024-06-12T17:48:46.606Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sergh@qsgf","federatedId":"sergh@qsgf","rawId":"sergh@qsgf"}]}}
+[debug] [2024-06-12T17:48:46.620Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T17:48:46.620Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T17:48:49.205Z] Jun 12, 2024 7:48:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 7:48:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:29:59.474Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:29:59.474Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"7b89f812-8fea-46d7-a8b4-28d426193ac3","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:29:59.473Z","data":{"uid":"uBKwDfZW3GG62gup2KTIHTdr4UZG","email":"stj@dgh,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:29:59.473Z","lastSignInTime":"2024-06-12T18:29:59.473Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"stj@dgh,","federatedId":"stj@dgh,","rawId":"stj@dgh,"}]}}
+[debug] [2024-06-12T18:29:59.484Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:29:59.484Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:30:00.721Z] Jun 12, 2024 8:30:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:30:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:31:16.994Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:31:16.994Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"0c4f0db7-d00f-4ec6-8add-823ddb206e8b","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:31:16.993Z","data":{"uid":"9GfLAhoqQX2Df40oUT7Ewhq0FkZ0","email":"fysj@ghjk,gtk","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:31:16.993Z","lastSignInTime":"2024-06-12T18:31:16.993Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"fysj@ghjk,gtk","federatedId":"fysj@ghjk,gtk","rawId":"fysj@ghjk,gtk"}]}}
+[debug] [2024-06-12T18:31:17.003Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:31:17.003Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:31:18.571Z] Jun 12, 2024 8:31:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:31:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:31:55.011Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:31:55.011Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"7d50d4a8-a47f-4acd-9c53-510a7762f8d9","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:31:55.011Z","data":{"uid":"j1Rvh7b8rN3ZGBpEQ0vLsTlnVaXx","email":"srjt@hjg;","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:31:55.010Z","lastSignInTime":"2024-06-12T18:31:55.010Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"srjt@hjg;","federatedId":"srjt@hjg;","rawId":"srjt@hjg;"}]}}
+[debug] [2024-06-12T18:31:55.021Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:31:55.022Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:31:56.165Z] Jun 12, 2024 8:31:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:31:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:32:56.555Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:32:56.555Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"61c5cbef-ecd8-4b9a-9f28-f445ef72c170","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:32:56.554Z","data":{"uid":"Tn6pxpimAT0pR2h6wF5D5mSfgTEe","email":"estjéghk@gtj;,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:32:56.554Z","lastSignInTime":"2024-06-12T18:32:56.554Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"estjéghk@gtj;,","federatedId":"estjéghk@gtj;,","rawId":"estjéghk@gtj;,"}]}}
+[debug] [2024-06-12T18:32:56.564Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:32:56.564Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:32:57.608Z] Jun 12, 2024 8:32:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:32:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:33:32.024Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:33:32.024Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"1c371fc4-f6b1-4424-814c-5f7eb5f243ec","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:33:32.024Z","data":{"uid":"wNZ1Qn5AV1PljvwB2PzsItEiqSqO","email":"etdhj@gj;h","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:33:32.023Z","lastSignInTime":"2024-06-12T18:33:32.023Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"etdhj@gj;h","federatedId":"etdhj@gj;h","rawId":"etdhj@gj;h"}]}}
+[debug] [2024-06-12T18:33:32.033Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:33:32.033Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:33:33.231Z] Jun 12, 2024 8:33:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:33:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:34:08.331Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:34:08.332Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"c8cea795-3f45-4fca-81f0-f3c07588125d","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:34:08.331Z","data":{"uid":"li2CAnbbGuFCRlT7BsmofSLGzQBf","email":"zerg@gj;","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:34:08.331Z","lastSignInTime":"2024-06-12T18:34:08.331Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"zerg@gj;","federatedId":"zerg@gj;","rawId":"zerg@gj;"}]}}
+[debug] [2024-06-12T18:34:08.340Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:34:08.340Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:34:09.421Z] Jun 12, 2024 8:34:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:34:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:35:22.334Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:35:22.334Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"ceab0198-b565-42c0-831a-9f99f7f4a277","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:35:22.333Z","data":{"uid":"gqT5wpS3WXUpURiTzX04BbcGSwEf","email":"qzerh@gfh,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:35:22.333Z","lastSignInTime":"2024-06-12T18:35:22.333Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"qzerh@gfh,","federatedId":"qzerh@gfh,","rawId":"qzerh@gfh,"}]}}
+[debug] [2024-06-12T18:35:22.343Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:35:22.344Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:35:24.090Z] Jun 12, 2024 8:35:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:35:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:36:15.027Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:36:15.028Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"21914f53-3db2-4666-b3b3-6e449e5b149d","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:36:15.027Z","data":{"uid":"kGFibZTAbk327ot28QjxXx5buywk","email":"zrhyg@gh,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:36:15.026Z","lastSignInTime":"2024-06-12T18:36:15.026Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"zrhyg@gh,","federatedId":"zrhyg@gh,","rawId":"zrhyg@gh,"}]}}
+[debug] [2024-06-12T18:36:15.036Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:36:15.036Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:36:16.471Z] Jun 12, 2024 8:36:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:36:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:37:01.189Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:37:01.190Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"063a686f-d8c0-4a9c-a2d2-9db7ea913304","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:37:01.189Z","data":{"uid":"HnkiymmDLkqUunvNoNK2JyGqtQoN","email":"ertj@gt;j","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:37:01.189Z","lastSignInTime":"2024-06-12T18:37:01.189Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"ertj@gt;j","federatedId":"ertj@gt;j","rawId":"ertj@gt;j"}]}}
+[debug] [2024-06-12T18:37:01.198Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:37:01.199Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:37:02.363Z] Jun 12, 2024 8:37:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:37:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:38:04.527Z] Jun 12, 2024 8:38:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:38:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T18:38:17.771Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:38:17.771Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"c2ee66ca-cf4d-4b20-a431-7f4ea607c476","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:38:17.770Z","data":{"uid":"NC0UxVd8L1S3hWBLIGBPOUgOdAH3","email":"eqt@gh,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:38:17.770Z","lastSignInTime":"2024-06-12T18:38:17.770Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"eqt@gh,","federatedId":"eqt@gh,","rawId":"eqt@gh,"}]}}
+[debug] [2024-06-12T18:38:17.773Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:38:17.773Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:39:16.307Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T18:39:16.307Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"8d7210db-0482-4564-ac38-4bf96d9dab9a","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T18:39:16.307Z","data":{"uid":"yAjf4sT0QnFA3UA1xDmPZCuL7nyI","email":"kk@hk;","emailVerified":false,"metadata":{"creationTime":"2024-06-12T18:39:16.307Z","lastSignInTime":"2024-06-12T18:39:16.307Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"kk@hk;","federatedId":"kk@hk;","rawId":"kk@hk;"}]}}
+[debug] [2024-06-12T18:39:16.318Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T18:39:16.318Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T18:39:17.398Z] Jun 12, 2024 8:39:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 8:39:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T19:11:50.304Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T19:11:50.305Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"6cbfce25-5981-491d-8334-8c300b6e8282","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T19:11:50.304Z","data":{"uid":"slRNcphtyOxA6BOUFNDZ62ew0VHA","email":"qdhr@f,nf,","emailVerified":false,"metadata":{"creationTime":"2024-06-12T19:11:50.304Z","lastSignInTime":"2024-06-12T19:11:50.304Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"qdhr@f,nf,","federatedId":"qdhr@f,nf,","rawId":"qdhr@f,nf,"}]}}
+[debug] [2024-06-12T19:11:50.306Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T19:11:50.306Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T19:11:51.830Z] Jun 12, 2024 9:11:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 9:11:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-12T19:17:31.166Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T19:17:31.166Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"d956c97e-5c5b-43aa-9f91-ee19c91952bc","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T19:17:31.166Z","data":{"uid":"vWeldJ7OyT6wjLkHT8cdrdxnp0Sp","email":"srthyu@fdh,gdyh","emailVerified":false,"metadata":{"creationTime":"2024-06-12T19:17:31.165Z","lastSignInTime":"2024-06-12T19:17:31.165Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"srthyu@fdh,gdyh","federatedId":"srthyu@fdh,gdyh","rawId":"srthyu@fdh,gdyh"}]}}
+[debug] [2024-06-12T19:17:31.174Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T19:17:31.175Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T19:18:49.623Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-12T19:18:49.623Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"d606f910-43d2-48d2-b56c-eca4001e1b7b","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-12T19:18:49.622Z","data":{"uid":"BLuhVvtXI3oBoWWkdUf822GDJYeK","email":"zsqerh@fsgn","emailVerified":false,"metadata":{"creationTime":"2024-06-12T19:18:49.622Z","lastSignInTime":"2024-06-12T19:18:49.622Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"zsqerh@fsgn","federatedId":"zsqerh@fsgn","rawId":"zsqerh@fsgn"}]}}
+[debug] [2024-06-12T19:18:49.633Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-12T19:18:49.633Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-12T19:18:51.067Z] Jun 12, 2024 9:18:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 9:18:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
