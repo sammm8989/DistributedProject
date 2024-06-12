@@ -168,51 +168,77 @@ function addContent() {
         addContent(); // Reload the content to show the initial state
     }
 
-    function showOrders(orders) {
-        console.log(orders);
+    function showAdminData(orders, customers) {
+        console.log('Orders:', orders);
+        console.log('Customers:', customers);
 
-        if (!Array.isArray(orders)) {
-            console.error('Invalid orders data:', orders);
-            alert('Failed to fetch order data. Non-admin user.');
+        if (!orders || typeof orders !== 'object' || !customers || typeof customers !== 'object') {
+            console.error('Invalid admin data:', { orders, customers });
+            alert('Failed to fetch admin data. Non-admin user.');
             return;
         }
 
-        let ordersHtml = '<div id="ordersContainer"><h2>All Orders</h2>';
+        let adminHtml = '<div id="adminContainer"><h2>Admin Portal</h2>';
 
-        orders.forEach(order => {
-            ordersHtml += `
-                <div class="order">
-                    <h3>Order ID: ${order.order_id}</h3>
-                    <p>User Email: ${order.user_email}</p>
-                    <p>Items:</p>
-                    <ul>
-                        ${order.items.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                    <p>Total Price: €${order.total_price}</p>
-                </div>`;
-        });
+        // Display Orders
 
-        ordersHtml += '</div>';
-        document.getElementById("contentdiv").innerHTML = ordersHtml;
+        if (Object.keys(orders).length > 0) {
+            adminHtml += '<div id="ordersContainer"><h3>All Orders</h3>';
+            Object.entries(orders).forEach(([orderId, order]) => {
+                if (order && typeof order === 'object') {
+                    adminHtml += `
+                        <div class="order">
+                            <h4>Order ID: ${orderId}</h4>
+                            <p>User Email: ${order.email || 'Unknown'}</p>
+                            <p>Items:</p>
+                            <ul>
+                                <li>Bus From: ${order.bus.type_from}</li>
+                                <li>Bus To: ${order.bus.type_to}</li>
+                                <li>Camping Type: ${order.camping.type}</li>
+                                <li>Festival Type: ${order.festival.type}</li>
+                            </ul>
+                            <p>Payment confirmed: €${order.total_confirmed || 'Unknown'}</p>
+                        </div>`;
+                } else {
+                    console.error('Invalid order data:', order);
+                }
+            });
+            adminHtml += '</div>';
+        } else {
+            adminHtml += '<p>No orders available.</p>';
+        }
     }
-
 
     var available = document.getElementById("getAvailabilities");
     var AdminPortal = document.getElementById("AdminPortal");
 
     AdminPortal.addEventListener("click", function () {
-    //add also /api/getAllCustomers pls
-        fetch(`/api/getAllOrders`, {
-            headers: { Authorization: 'Bearer ' + token }
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        Promise.all([
+            fetch(`/api/getAllOrders`, {
+                headers: { Authorization: 'Bearer ' + token }
+            }),
+            fetch(`/api/getAllCustomers`, {
+                headers: { Authorization: 'Bearer ' + token }
+            })
+        ])
+        .then((responses) => {
+            const ordersResponse = responses[0];
+            const customersResponse = responses[1];
+
+            if (!ordersResponse.ok) {
+                throw new Error(`HTTP error for orders! status: ${ordersResponse.status}`);
             }
-            return response.json();
+            if (!customersResponse.ok) {
+                throw new Error(`HTTP error for customers! status: ${customersResponse.status}`);
+            }
+
+            return Promise.all([ordersResponse.json(), customersResponse.json()]);
         })
-        .then((data) => showOrders(data))
-        .catch((error) => handleError(error.message, "Failed to fetch order data. Non-admin user."));
+        .then((data) => {
+            console.log('Data received:', data); // Log the data received
+            showAdminData(data[0], data[1]);
+        })
+        .catch((error) => handleError(error.message, "Failed to fetch admin data. Non-admin user."));
     });
 
     available.addEventListener("click", function () {
@@ -227,6 +253,8 @@ function addContent() {
             return response.json();
         })
         .then((data) => {
+            console.log('Availabilities:', data); // Log the data received
+
             let new_text = `<div id="responseContainer">`;
 
             // Iterate over each key in the JSON object and create dropdowns or display values
@@ -302,7 +330,7 @@ function addContent() {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data); // Log the response from the server
+                    console.log('Request Data:', data); // Log the response from the server
 
                     // Update the screen with the chosen data and price
                     let confirmation_text = `
@@ -334,7 +362,7 @@ function addContent() {
                             return response.json();
                         })
                         .then((data) => {
-                            console.log(data); // Log the response from the server
+                            console.log('Payment Data:', data); // Log the response from the server
                             alert("Payment successful! Confirmation received.");
                             // Remove the "Pay" button after successful payment
                             payNow.style.display = 'none';
