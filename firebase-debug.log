@@ -831,3 +831,32 @@ INFO: Detected HTTP/2 connection.
 [debug] [2024-06-12T19:18:51.067Z] Jun 12, 2024 9:18:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
  {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 12, 2024 9:18:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:26:45.240Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-13T07:26:45.240Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"33f977e9-87c4-4a57-97fb-654a6d06eb93","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-13T07:26:45.239Z","data":{"uid":"hqnHiJOzl7foGVSPdXqmJsoY9bAP","email":"sam@rvz","emailVerified":false,"metadata":{"creationTime":"2024-06-13T07:26:45.239Z","lastSignInTime":"2024-06-13T07:26:45.239Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sam@rvz","federatedId":"sam@rvz","rawId":"sam@rvz"}]}}
+[debug] [2024-06-13T07:26:45.250Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-13T07:26:45.250Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-13T07:26:46.355Z] Jun 13, 2024 9:26:46 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:26:46 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:27:38.303Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast [none]
+[debug] [2024-06-13T07:27:38.304Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"eventId":"24e8ad63-2bcb-4959-a9da-d77a1ca91a34","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-distributed-systems-kul","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-06-13T07:27:38.303Z","data":{"uid":"EhNHGfzKzMMdlRkwr9PugSRo1R79","email":"sam@123","emailVerified":false,"metadata":{"creationTime":"2024-06-13T07:27:38.303Z","lastSignInTime":"2024-06-13T07:27:38.303Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sam@123","federatedId":"sam@123","rawId":"sam@123"}]}}
+[debug] [2024-06-13T07:27:38.306Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast 200
+[debug] [2024-06-13T07:27:38.306Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-distributed-systems-kul/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-06-13T07:27:41.549Z] Jun 13, 2024 9:27:41 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:27:41 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2024-06-13T07:32:26.007Z] Jun 13, 2024 9:32:26 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:32:26 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:37:32.062Z] Jun 13, 2024 9:37:32 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:37:32 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:38:14.299Z] Jun 13, 2024 9:38:14 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:38:14 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:41:29.734Z] Jun 13, 2024 9:41:29 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:41:29 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2024-06-13T07:42:32.936Z] Jun 13, 2024 9:42:32 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 13, 2024 9:42:32 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}

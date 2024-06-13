@@ -172,7 +172,7 @@ function addContent() {
         console.log('Orders:', orders);
         console.log('Customers:', customers);
 
-        if (!orders || typeof orders !== 'object' || !customers || typeof customers !== 'object') {
+        if (!orders || typeof orders !== 'object' || !Array.isArray(customers)) {
             console.error('Invalid admin data:', { orders, customers });
             alert('Failed to fetch admin data. Non-admin user.');
             return;
@@ -181,15 +181,15 @@ function addContent() {
         let adminHtml = '<div id="adminContainer"><h2>Admin Portal</h2>';
 
         // Display Orders
-
         if (Object.keys(orders).length > 0) {
             adminHtml += '<div id="ordersContainer"><h3>All Orders</h3>';
             Object.entries(orders).forEach(([orderId, order]) => {
                 if (order && typeof order === 'object') {
+                    console.log(order);
                     adminHtml += `
                         <div class="order">
                             <h4>Order ID: ${orderId}</h4>
-                            <p>User Email: ${order.email || 'Unknown'}</p>
+                            <p>User Email: ${orderId || 'Unknown'}</p>
                             <p>Items:</p>
                             <ul>
                                 <li>Bus From: ${order.bus.type_from}</li>
@@ -197,7 +197,8 @@ function addContent() {
                                 <li>Camping Type: ${order.camping.type}</li>
                                 <li>Festival Type: ${order.festival.type}</li>
                             </ul>
-                            <p>Payment confirmed: €${order.total_confirmed || 'Unknown'}</p>
+                            <p>Total Price: ${String(order.price) || 'Unknown'}</p>
+                            <p>Payment confirmed: ${String(order.total_confirmed) || 'Unknown'}</p>
                         </div>`;
                 } else {
                     console.error('Invalid order data:', order);
@@ -207,6 +208,22 @@ function addContent() {
         } else {
             adminHtml += '<p>No orders available.</p>';
         }
+
+        // Display Customers
+        adminHtml += '<div id="customersContainer"><h3>All Customers</h3>';
+        if (customers.length > 0) {
+            customers.forEach(customerEmail => {
+                adminHtml += `
+                    <div class="customer">
+                        <h4>Customer Email: ${customerEmail}</h4>
+                    </div>`;
+            });
+        } else {
+            adminHtml += '<p>No customers available.</p>';
+        }
+        adminHtml += '</div></div>';
+
+        document.getElementById("contentdiv").innerHTML = adminHtml;
     }
 
     var available = document.getElementById("getAvailabilities");
@@ -236,7 +253,9 @@ function addContent() {
         })
         .then((data) => {
             console.log('Data received:', data); // Log the data received
-            showAdminData(data[0], data[1]);
+            const orders = data[0];
+            const customers = data[1].users;
+            showAdminData(orders, customers);
         })
         .catch((error) => handleError(error.message, "Failed to fetch admin data. Non-admin user."));
     });

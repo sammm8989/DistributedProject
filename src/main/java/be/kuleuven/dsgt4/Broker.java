@@ -270,8 +270,31 @@ public class Broker {
         for(int i = 0 ; i < urls.length ; i++) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.exchange(urls[i] + names[i] + "/confirm/" + email, HttpMethod.PUT, null, String.class);
+                int random = random_number_generator();
+                String url = urls[i] + names[i] + "/confirm/" + email + "?authentication=" + api_key + "&number=" + random;
+                HttpHeaders headers = new HttpHeaders();
+
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+                ResponseEntity<Map> response = restTemplate.exchange(
+                        new URI(url),
+                        HttpMethod.PUT,
+                        entity,
+                        Map.class
+                );
                 int statusCode = response.getStatusCodeValue();
+
+                String number_header = response.getHeaders().getFirst("number");
+                if(Integer.valueOf(number_header) != random + 1){
+                    return null;
+                }
+
+                Map<String, Object> responseBody = response.getBody();
+
+                if(!responseBody.get("id").equals(email)){
+                    remove_order(email);
+                    return null;
+                }
+
                 if (statusCode != 200) {
                     remove_order(email);
                     return null;
