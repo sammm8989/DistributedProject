@@ -1,7 +1,5 @@
 package be.kuleuven.dsgt4;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import net.minidev.json.JSONObject;
@@ -45,9 +43,12 @@ public class Broker {
 
     Thread workerThread = new Thread(AW);
 
+
+    //random number generator this is given with the request
+    //Suppliers should add one en returns this number
+    //is an extra security feature
     public int random_number_generator(){
         Random random = new Random();
-
         return random.nextInt(100);
     }
 
@@ -56,8 +57,18 @@ public class Broker {
     //Input: None
     //Output: JSON of all available products to buy
     //Extra: method should combine different suppliers JSON into one
-    public JSONObject get_all_available() throws Exception {
+    public JSONObject get_all_available(String email) throws Exception {
         JSONObject master_JSON = new JSONObject();
+
+        if(get_all_document_IDs("orders").contains(email)){
+            if(Boolean.valueOf((Boolean) get_data_from_firestore("orders", email).get("total_confirmed"))){
+                return null;
+            }
+            else{
+                remove_order(email);
+            }
+        }
+
         for (int i = 0; i < names.length; i++) {
             List<JSONObject> JO_list = new ArrayList<>();
             if(names[i].equals("bus")){
@@ -153,14 +164,12 @@ public class Broker {
 
         for (int i = 0 ; i < names.length ; i++) {
 
-            System.out.println(request);
             JSONObject request_json = (JSONObject) request.get(names[i]);
 
             request_json.put("id", email);
             request_json.put("confirmed", false);
             request_json.put("price", 0.0);
 
-            System.out.println(request_json);
             int random = random_number_generator();
 
             String url = String.format("%s%s/order?authentication=%s&number=%d",
@@ -168,7 +177,6 @@ public class Broker {
                     api_key,
                     random);
 
-            System.out.println(url);
 
             Double price = do_call_with_JSON(url, request_json, email, random + 1);
 
@@ -191,12 +199,9 @@ public class Broker {
 
 
     public void add_data_to_firestore(String collectionName, String documentId, Map<String, Object> data) {
-        try {
-            DocumentReference docRef = db.collection(collectionName).document(documentId);
-            WriteResult result = docRef.set(data).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        DocumentReference docRef = db.collection(collectionName).document(documentId);
+        docRef.set(data);
+
     }
 
     public void change_total_confirmed(String collectionName, String documentId){
@@ -265,7 +270,6 @@ public class Broker {
     //Output confirmation
     //this should send a confirmation to all server then it is booked
     //If there is a failed server then a rollback should be done
-
     public JSONObject confirm(String email){
         for(int i = 0 ; i < urls.length ; i++) {
             try {
@@ -357,7 +361,6 @@ public class Broker {
             JSONObject json = (JSONObject) parser.parse(response.toString());
             Double price = (Double) json.get("price");
             if(!json.get("id").equals(email) || Integer.valueOf(headers.get("number").get(0)) != check_number){
-                System.out.println("here");
                 return null;
             }
             br.close();

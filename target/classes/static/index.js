@@ -382,7 +382,7 @@ function addContent() {
                         })
                         .then((data) => {
                             console.log('Payment Data:', data); // Log the response from the server
-                            alert("Payment successful! Confirmation received.");
+                            alert("Payment successful! Confirmation received. A confirmation email has been sent");
                             // Remove the "Pay" button after successful payment
                             payNow.style.display = 'none';
                             document.getElementById("payStatus").innerHTML = `<div class="selection"><label>Status:</label><span>Paid</span></div>`;
@@ -393,6 +393,6 @@ function addContent() {
                 .catch((error) => handleError(error.message, "Failed to confirm selection. Please try again."));
             });
         })
-        .catch((error) => handleError(error.message, "Failed to fetch availabilities. Please try again later.")); // Handle errors
+        .catch((error) => handleError(error.message, "Failed to fetch availabilities or you already have an order. Please try again later.")); // Handle errors
     });
 }
