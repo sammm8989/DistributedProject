@@ -27,3 +27,10 @@ send request: dsgt.canadacentral.cloudapp.azure.com:8100/request
 ssh: azureresource@dsgt.uksouth.cloudapp.azure.com
 password dsgt2024UKSouth
 send request: dsgt.uksouth.cloudapp.azure.com:8110/request
+
+### run docker
+
+
+sudo docker load -i camping.tar
+
+sudo docker run -t camping
