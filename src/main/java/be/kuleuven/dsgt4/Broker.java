@@ -35,7 +35,9 @@ public class Broker {
 
     JSONParser parser = new JSONParser();
 
-    String[] urls = {"http://localhost:8100/", "http://localhost:8090/", "http://localhost:8110/"};
+    //String[] urls = {"http://localhost:8100/", "http://localhost:8090/", "http://localhost:8110/"};
+    String[] urls = {"http://dsgt.canadacentral.cloudapp.azure.com:8100/", "http://dsgt2024team13.japaneast.cloudapp.azure.com:8090/", "http://dsgt.uksouth.cloudapp.azure.com:8110/"};
+
     String api_key = "22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1";
     String[] names = {"camping", "festival", "bus"};
 
