@@ -6,7 +6,7 @@
     "toFestival" : false,
     "price" : 2.5,
     "total" : 50,
-    "sold" : 1,
+    "sold" : 2,
     "available" : true
   },
   "Leuven_12" : {
@@ -157,7 +157,7 @@
     "price" : 0.0,
     "total" : 1,
     "sold" : 0,
-    "available" : false
+    "available" : true
   },
   "Leuven_5" : {
     "type" : "Leuven_5",

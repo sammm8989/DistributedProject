@@ -4,6 +4,6 @@
     "type_to" : "NONE",
     "type_from" : "Leuven_13",
     "price" : 7.5,
-    "confirmed" : false
+    "confirmed" : true
   }
 }

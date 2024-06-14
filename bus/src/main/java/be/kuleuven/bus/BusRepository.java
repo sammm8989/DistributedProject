@@ -208,10 +208,11 @@ public class BusRepository {
 
         bus_tickets.put(bus.getId(), bus);
 
-        if(!bus.getType_from().equals(BoardingLocation.NONE)){
+        if(!bus.getType_from().equals("NONE")){
             available_tickets.get(bus.getType_from()).sellBusTicket();
         }
-        if(!bus.getType_to().equals(BoardingLocation.NONE)){
+
+        if(!bus.getType_to().equals("NONE")){
             available_tickets.get(bus.getType_to()).sellBusTicket();
         }
         updateJSONs();
@@ -235,10 +236,10 @@ public class BusRepository {
         if(bus == null){
             throw new BusNotFoundException(id);
         }
-        if(!bus.getType_from().equals(BoardingLocation.NONE)){
+        if(!bus.getType_from().equals("NONE")){
             available_tickets.get(bus.getType_from()).restockBusTicket();
         }
-        if(!bus.getType_to().equals(BoardingLocation.NONE)){
+        if(!bus.getType_to().equals("NONE")){
             available_tickets.get(bus.getType_to()).restockBusTicket();
         }
         bus_tickets.remove(id);
