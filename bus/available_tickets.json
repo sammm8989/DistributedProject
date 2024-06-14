@@ -156,7 +156,7 @@
     "toFestival" : false,
     "price" : 0.0,
     "total" : 1,
-    "sold" : 1,
+    "sold" : 0,
     "available" : false
   },
   "Leuven_5" : {
