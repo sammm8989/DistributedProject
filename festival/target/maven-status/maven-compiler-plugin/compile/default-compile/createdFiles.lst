@@ -6,6 +6,7 @@ be/kuleuven/festival/RestServiceApplication.class
 be/kuleuven/festival/Exceptions/UnauthorizedAdvice.class
 be/kuleuven/festival/Order.class
 be/kuleuven/festival/Exceptions/NoAvailableTicketsExceptionFestival.class
+be/kuleuven/festival/FestivalRepository$1.class
 be/kuleuven/festival/TicketType.class
 be/kuleuven/festival/FestivalRepository.class
 be/kuleuven/festival/Exceptions/FestivalNotFoundAdvice.class
@@ -15,5 +16,6 @@ be/kuleuven/festival/Exceptions/NoAvailableTicketsAdviceFestival.class
 be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundExceptionFestival.class
 be/kuleuven/festival/Exceptions/UnauthorizedException.class
 be/kuleuven/festival/Exceptions/AvailableTicketsNotFoundAdviceFestival.class
+be/kuleuven/festival/FestivalRepository$2.class
 be/kuleuven/festival/Index.class
 be/kuleuven/festival/AvailableTickets.class

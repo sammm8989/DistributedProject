@@ -1,0 +1,26 @@
+{
+  "SUNDAY": {
+    "type": "SUNDAY",
+    "price": 50.0,
+    "total": 200,
+    "sold": 0
+  },
+  "FRIDAY": {
+    "type": "FRIDAY",
+    "price": 40.0,
+    "total": 100,
+    "sold": 0
+  },
+  "SATURDAY": {
+    "type": "SATURDAY",
+    "price": 50.0,
+    "total": 200,
+    "sold": 0
+  },
+  "COMBI": {
+    "type": "COMBI",
+    "price": 100.0,
+    "total": 500,
+    "sold": 1
+  }
+}
