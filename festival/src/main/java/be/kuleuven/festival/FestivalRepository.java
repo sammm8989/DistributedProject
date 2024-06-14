@@ -29,34 +29,34 @@ public class FestivalRepository {
     @PostConstruct
     public void initData() {
 
-        Gson gson = new Gson();
-        try (FileReader festivalReader = new FileReader("festival_tickets.json");
-             FileReader availableTicketsReader = new FileReader("available_tickets.json")) {
-
-            Type festival_tickets_type = new TypeToken<ConcurrentHashMap<String, Order>>() {}.getType();
-            Type available_tickets_type = new TypeToken<ConcurrentHashMap<TicketType, AvailableTickets>>() {}.getType();
-
-            festival_tickets = gson.fromJson(festivalReader, festival_tickets_type);
-            available_tickets = gson.fromJson(availableTicketsReader, available_tickets_type);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        //Leave for manual initialisation
-//        AvailableTickets combi = new AvailableTickets(TicketType.COMBI, 500);
-//        AvailableTickets friday = new AvailableTickets(TicketType.FRIDAY, 100);
-//        AvailableTickets saturday = new AvailableTickets(TicketType.SATURDAY, 200);
-//        AvailableTickets sunday = new AvailableTickets(TicketType.SUNDAY, 200);
+//        Gson gson = new Gson();
+//        try (FileReader festivalReader = new FileReader("festival_tickets.json");
+//             FileReader availableTicketsReader = new FileReader("available_tickets.json")) {
 //
-//        combi.setPrice(100.0f);
-//        friday.setPrice(40.0f);
-//        saturday.setPrice(50.0f);
-//        sunday.setPrice(50.0f);
+//            Type festival_tickets_type = new TypeToken<ConcurrentHashMap<String, Order>>() {}.getType();
+//            Type available_tickets_type = new TypeToken<ConcurrentHashMap<TicketType, AvailableTickets>>() {}.getType();
 //
-//        available_tickets.put(combi.getType(), combi);
-//        available_tickets.put(friday.getType(), friday);
-//        available_tickets.put(saturday.getType(), saturday);
-//        available_tickets.put(sunday.getType(), sunday);
+//            festival_tickets = gson.fromJson(festivalReader, festival_tickets_type);
+//            available_tickets = gson.fromJson(availableTicketsReader, available_tickets_type);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        //Leave for manual initialisation
+        AvailableTickets combi = new AvailableTickets(TicketType.COMBI, 500);
+        AvailableTickets friday = new AvailableTickets(TicketType.FRIDAY, 100);
+        AvailableTickets saturday = new AvailableTickets(TicketType.SATURDAY, 200);
+        AvailableTickets sunday = new AvailableTickets(TicketType.SUNDAY, 200);
+
+        combi.setPrice(100.0f);
+        friday.setPrice(40.0f);
+        saturday.setPrice(50.0f);
+        sunday.setPrice(50.0f);
+
+        available_tickets.put(combi.getType(), combi);
+        available_tickets.put(friday.getType(), friday);
+        available_tickets.put(saturday.getType(), saturday);
+        available_tickets.put(sunday.getType(), sunday);
 //
 //        updateJSONs(festival_tickets, available_tickets);
     }
@@ -88,7 +88,7 @@ public class FestivalRepository {
         festival.setPrice(festival.getPrice() + tickets.get().getPrice());
         festival_tickets.put(festival.getId(), festival);
         available_tickets.get(festival.getType()).sellFestivalTicket();
-        updateJSONs(festival_tickets,available_tickets);
+//        updateJSONs(festival_tickets,available_tickets);
     }
 
     public synchronized Order updateConfirmed(String id) {
@@ -100,7 +100,7 @@ public class FestivalRepository {
             throw new OrderAlreadyConfirmedExceptionFestival(id);
         }
         festival.setConfirmed(true);
-        updateJSONs(festival_tickets, available_tickets);
+//        updateJSONs(festival_tickets, available_tickets);
         return festival;
     }
 
@@ -111,19 +111,19 @@ public class FestivalRepository {
         }
         available_tickets.get(festival.getType()).restockFestivalTicket();
         festival_tickets.remove(id);
-        updateJSONs(festival_tickets, available_tickets);
+//        updateJSONs(festival_tickets, available_tickets);
         return festival;
     }
 
-    public synchronized void updateJSONs(ConcurrentHashMap<String, Order> festival_tickets, ConcurrentHashMap<TicketType, AvailableTickets> available_tickets) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter festivalWriter = new FileWriter("festival_tickets.json");
-             FileWriter availableTicketsWriter = new FileWriter("available_tickets.json")) {
-            gson.toJson(festival_tickets, festivalWriter);
-            gson.toJson(available_tickets, availableTicketsWriter);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public synchronized void updateJSONs(ConcurrentHashMap<String, Order> festival_tickets, ConcurrentHashMap<TicketType, AvailableTickets> available_tickets) {
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        try (FileWriter festivalWriter = new FileWriter("festival_tickets.json");
+//             FileWriter availableTicketsWriter = new FileWriter("available_tickets.json")) {
+//            gson.toJson(festival_tickets, festivalWriter);
+//            gson.toJson(available_tickets, availableTicketsWriter);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

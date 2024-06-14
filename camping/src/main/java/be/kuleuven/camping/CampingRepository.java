@@ -27,19 +27,39 @@ public class CampingRepository {
     @PostConstruct
     public void initData(){
 
-        Gson gson = new Gson();
-        try (FileReader campingReader = new FileReader("camping_tickets.json");
-             FileReader availableTicketsReader = new FileReader("available_tickets.json")) {
+//        Gson gson = new Gson();
+//        try (FileReader campingReader = new FileReader("camping_tickets.json");
+//             FileReader availableTicketsReader = new FileReader("available_tickets.json")) {
+//
+//            Type camping_tickets_type = new TypeToken<ConcurrentHashMap<String, Order>>() {}.getType();
+//            Type available_tickets_type = new TypeToken<ConcurrentHashMap<Pack, AvailableTickets>>() {}.getType();
+//
+//            camping_tickets = gson.fromJson(campingReader, camping_tickets_type);
+//            available_tickets = gson.fromJson(availableTicketsReader, available_tickets_type);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            Type camping_tickets_type = new TypeToken<ConcurrentHashMap<String, Order>>() {}.getType();
-            Type available_tickets_type = new TypeToken<ConcurrentHashMap<Pack, AvailableTickets>>() {}.getType();
+        AvailableTickets tent = new AvailableTickets(Pack.TENT, 10);
+        tent.setPrice(20.0f);
+        AvailableTickets camper = new AvailableTickets(Pack.CAMPER, 5);
+        camper.setPrice(25.0f);
+        AvailableTickets hotel = new AvailableTickets(Pack.HOTEL,2);
+        hotel.setPrice(60.0f);
+        AvailableTickets none = new AvailableTickets(Pack.NONE,1);
+        none.setPrice(0.0f);
 
-            camping_tickets = gson.fromJson(campingReader, camping_tickets_type);
-            available_tickets = gson.fromJson(availableTicketsReader, available_tickets_type);
+        hotel.setSold(2);
+        tent.setSold(10);
+        camper.setSold(4);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        available_tickets.put(tent.getType(), tent);
+        available_tickets.put(camper.getType(), camper);
+        available_tickets.put(hotel.getType(), hotel);
+        available_tickets.put(none.getType(), none);
+
+        updateJSONs(camping_tickets, available_tickets);
     }
 
 

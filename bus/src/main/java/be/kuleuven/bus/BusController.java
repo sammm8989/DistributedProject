@@ -89,7 +89,7 @@ public class BusController {
     }
 
     @GetMapping("/bus/tickets")
-    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestHeader("Authorization") String auth, @RequestParam("number") Integer num) {
+    ResponseEntity<CollectionModel<EntityModel<AvailableTickets>>> getAllTickets(@RequestParam("authentication") String auth, @RequestParam("number") Integer num) {
         if(!auth.equals(TOKEN)){
             throw new UnauthorizedException();
         }
@@ -120,6 +120,7 @@ public class BusController {
         }
         num +=1;
         Collection<AvailableTickets> tickets = busRepository.getAllTickets();
+        System.out.println(tickets);
         List<EntityModel<AvailableTickets>> availableTicketsEntityModels = new ArrayList<>();
         for (AvailableTickets at: tickets){
             if (at.isAvailable()){
