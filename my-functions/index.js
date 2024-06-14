@@ -10,7 +10,10 @@ exports.scheduledFunction = functions.pubsub.schedule('every 1 minutes').onRun(a
   const ordersRef = db.collection('orders');
   const now = admin.firestore.Timestamp.now();
 
-  const snapshot = await ordersRef.where('timestamp', '<=', new Date(now.toMillis() - 15 * 60 * 1000)).get();
+  const snapshot = await ordersRef
+      .where('total_confirmed', '==', false)
+      .where('timestamp', '<=', new Date(now.toMillis() - 15 * 60 * 1000))
+      .get();
 
   const promises = snapshot.docs.map(async (doc) => {
     const orderData = doc.data();
