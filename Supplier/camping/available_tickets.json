@@ -1,0 +1,26 @@
+{
+  "TENT": {
+    "type": "TENT",
+    "price": 20.0,
+    "total": 10,
+    "sold": 10
+  },
+  "CAMPER": {
+    "type": "CAMPER",
+    "price": 25.0,
+    "total": 5,
+    "sold": 4
+  },
+  "NONE": {
+    "type": "NONE",
+    "price": 0.0,
+    "total": 1,
+    "sold": 0
+  },
+  "HOTEL": {
+    "type": "HOTEL",
+    "price": 60.0,
+    "total": 2,
+    "sold": 2
+  }
+}

@@ -1,1 +1,16 @@
 Web / API server started at 0.0.0.0:8081
+/usr/local/bin/firebase[279062]: ../src/node.cc:776:void node::ResetStdio(): Assertion `!(err != 0) || (err == -1 && (*__errno_location ()) == 1)' failed.
+ 1: 0x9ff550 node::Abort() [/usr/local/bin/firebase]
+ 2: 0x9ff5cc  [/usr/local/bin/firebase]
+ 3: 0x9c52e9 node::ResetStdio() [/usr/local/bin/firebase]
+ 4: 0x9c53a8 node::SignalExit(int, siginfo_t*, void*) [/usr/local/bin/firebase]
+ 5: 0x79deea242520  [/lib/x86_64-linux-gnu/libc.so.6]
+ 6: 0x79deea325e2e epoll_wait [/lib/x86_64-linux-gnu/libc.so.6]
+ 7: 0xb8add3  [/usr/local/bin/firebase]
+ 8: 0x11a8d48  [/usr/local/bin/firebase]
+ 9: 0x95a173 node::SpinEventLoop(node::Environment*) [/usr/local/bin/firebase]
+10: 0xa4802c node::NodeMainInstance::Run() [/usr/local/bin/firebase]
+11: 0x9d0227 node::Start(int, char**) [/usr/local/bin/firebase]
+12: 0x79deea229d90  [/lib/x86_64-linux-gnu/libc.so.6]
+13: 0x79deea229e40 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+14: 0x94abfc  [/usr/local/bin/firebase]
