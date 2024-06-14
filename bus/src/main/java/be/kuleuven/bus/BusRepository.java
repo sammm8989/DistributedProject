@@ -55,7 +55,7 @@ public class BusRepository {
         }
 //      // LEAVE THIS IF SOMETHING GOES WRONG WITH THE JSON!!!
 //    // to and from Leuven
-//    //Friday, still have to adjust the amount so that they make sense
+    //Friday, still have to adjust the amount so that they make sense
 //        LocalDateTime leuven1dateTime = LocalDateTime.of(2024, 6, 21, 10, 0, 0, 0);
 //        AvailableTickets leuven1 = new AvailableTickets("Leuven_1", 50, BoardingLocation.LEUVEN, leuven1dateTime, 2.5f , true);
 //        available_tickets.put(leuven1.getType(), leuven1);

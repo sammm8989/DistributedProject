@@ -1,0 +1,272 @@
+{
+  "Leuven_13" : {
+    "type" : "Leuven_13",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-24T11:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_12" : {
+    "type" : "Leuven_12",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-24T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_11" : {
+    "type" : "Leuven_11",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-23T11:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_10" : {
+    "type" : "Leuven_10",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-23T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_10" : {
+    "type" : "Aarschot_10",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-23T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_12" : {
+    "type" : "Aarschot_12",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-24T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_11" : {
+    "type" : "Aarschot_11",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-23T11:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_13" : {
+    "type" : "Aarschot_13",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-22T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_1" : {
+    "type" : "Leuven_1",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-21T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_2" : {
+    "type" : "Leuven_2",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-21T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_3" : {
+    "type" : "Leuven_3",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-21T12:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_8" : {
+    "type" : "Leuven_8",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-23T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_9" : {
+    "type" : "Leuven_9",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-23T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_4" : {
+    "type" : "Leuven_4",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-22T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_3" : {
+    "type" : "Aarschot_3",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-21T12:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "NONE" : {
+    "type" : "NONE",
+    "boardingLocation" : "NONE",
+    "dateTime" : null,
+    "toFestival" : false,
+    "price" : 0.0,
+    "total" : 1,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_5" : {
+    "type" : "Leuven_5",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-22T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_2" : {
+    "type" : "Aarschot_2",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-21T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_6" : {
+    "type" : "Leuven_6",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-22T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_1" : {
+    "type" : "Aarschot_1",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-21T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Leuven_7" : {
+    "type" : "Leuven_7",
+    "boardingLocation" : "LEUVEN",
+    "dateTime" : "2024-06-22T11:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_7" : {
+    "type" : "Aarschot_7",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-22T11:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_6" : {
+    "type" : "Aarschot_6",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-22T11:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_5" : {
+    "type" : "Aarschot_5",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-22T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_4" : {
+    "type" : "Aarschot_4",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-22T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_9" : {
+    "type" : "Aarschot_9",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-23T10:00:00",
+    "toFestival" : false,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  },
+  "Aarschot_8" : {
+    "type" : "Aarschot_8",
+    "boardingLocation" : "AARSCHOT",
+    "dateTime" : "2024-06-23T10:00:00",
+    "toFestival" : true,
+    "price" : 2.5,
+    "total" : 50,
+    "sold" : 0,
+    "available" : true
+  }
+}
