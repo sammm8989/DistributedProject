@@ -1,0 +1,2 @@
+#curl -X DELETE "localhost:8100/camping/delete/sam.77@live.beeee?authentication=22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1&number=8456" -H 'Content-type: application/json' -d @new-order.json -v
+curl -X DELETE "dsgt.canadacentral.cloudapp.azure.com:8100/camping/delete/jens.77@live.be?authentication=22a2856ae257c55c390215f69bb4c071862c2f3d0ede762058f3508f95f482a1&number=8456" -H 'Content-type: application/json' -d @new-order.json -v
